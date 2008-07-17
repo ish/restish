@@ -1,13 +1,22 @@
+import webob
+
+
 class Request(object):
 
-    def __init__(self, environ):
-        self.environ = environ
+    def __init__(self, app, environ):
+        self.app = app
+        self._request = webob.Request(environ)
 
+    @property
     def path(self):
-        return self.environ["PATH_INFO"].decode("utf-8")
+        return self._request.path
+
+    @property
+    def headers(self):
+        return self._request.headers
 
     def path_segments(self):
-        segments = self.path().split("/")[1:]
+        segments = self.path.split("/")[1:]
         if segments == [""]:
             segments = []
         return segments
@@ -16,9 +25,19 @@ class Request(object):
 class Response(object):
 
     def __init__(self, status, headers, content):
-        self.status = status
-        self.headers = list(headers)
-        self.content = content
+        self._response = webob.Response(content, status, headers)
+
+    @property
+    def status(self):
+        return self._response.status
+
+    @property
+    def headers(self):
+        return self._response.headerlist
+
+    @property
+    def content(self):
+        return self._response.body
 
 
 def ok(headers, content):

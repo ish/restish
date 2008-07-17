@@ -9,7 +9,7 @@ class RestismApp(object):
         self.root = root_resource
 
     def __call__(self, environ, start_response):
-        request = http.Request(environ)
+        request = http.Request(self, environ)
         resource = self.locate_resource(request)
         response = resource(request)
         start_response(response.status, response.headers)
