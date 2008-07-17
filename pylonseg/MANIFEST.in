@@ -1,0 +1,3 @@
+include pylonseg/config/deployment.ini_tmpl
+recursive-include pylonseg/public *
+recursive-include pylonseg/templates *
