@@ -7,10 +7,10 @@ from paste.deploy.converters import asbool
 from pylons import config
 from pylons.middleware import ErrorHandler, StaticJavascripts, \
     StatusCodeRedirect
-from pylons.wsgiapp import PylonsApp
-from routes.middleware import RoutesMiddleware
+from restism.app import RestismApp
 
 from pylonseg.config.environment import load_environment
+from pylonseg.resources.root import RootResource
 
 def make_app(global_conf, full_stack=True, **app_conf):
     """Create a Pylons WSGI application and return it
@@ -34,12 +34,11 @@ def make_app(global_conf, full_stack=True, **app_conf):
     load_environment(global_conf, app_conf)
 
     # The Pylons WSGI app
-    app = PylonsApp()
+    app = RestismApp(RootResource())
     
     # CUSTOM MIDDLEWARE HERE (filtered by error handling middlewares)
     
     # Routing/Session/Cache Middleware
-    app = RoutesMiddleware(app, config['routes.map'])
     app = SessionMiddleware(app, config)
     app = CacheMiddleware(app, config)
     
