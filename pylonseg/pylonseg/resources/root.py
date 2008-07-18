@@ -10,6 +10,12 @@ class RootResource(resource.Resource):
     def resource_child(self, request, segments):
         if segments[0] == 'foo':
             return FooResource(), segments[1:]
+        elif segments[0] == 'bang-bang':
+            bang
+        elif segments[0] == 'bang':
+            def f(request):
+                bang
+            return f, segments[1:]
         return None, segments
 
 
