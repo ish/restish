@@ -1,4 +1,4 @@
-from restism import http
+from restish import http
 
 
 class Resource(object):

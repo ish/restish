@@ -2,7 +2,7 @@
 Templating support.
 """
 
-from restism import http
+from restish import http
 
 
 def _mako_renderer(lookup):
@@ -51,7 +51,7 @@ def render(request, template, args={}):
     @param args:
         Dictionary of args to pass to the template renderer.
     """
-    templating = request.environ['restism.templating']
+    templating = request.environ['restish.templating']
     return renderer(templating)(template, args)
 
 

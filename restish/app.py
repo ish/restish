@@ -1,7 +1,7 @@
-from restism import http, resource
+from restish import http, resource
 
 
-class RestismApp(object):
+class RestishApp(object):
 
     not_found_factory = resource.NotFound
 
@@ -33,17 +33,17 @@ class RestismApp(object):
         return resource
 
 
-class PylonsRestismApp(RestismApp):
+class PylonsRestishApp(RestishApp):
 
     def __init__(self, root_resource):
-        self._app = RestismApp(root_resource)
+        self._app = RestishApp(root_resource)
 
     def __call__(self, environ, start_response):
         import pylons.config
         # Collect the bits from the Pylons environment we need, so we never
         # have to touch the thread local stuff again.
         environ = dict(environ)
-        environ['restism.templating'] = {
+        environ['restish.templating'] = {
                 'engine': 'mako',
                 'lookup': pylons.config['pylons.app_globals'].mako_lookup,
                 }

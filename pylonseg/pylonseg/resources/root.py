@@ -1,4 +1,4 @@
-from restism import http, resource, templating
+from restish import http, resource, templating
 
 
 class RootResource(resource.Resource):

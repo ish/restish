@@ -1,4 +1,4 @@
-from restism import app, http, resource
+from restish import app, http, resource
 
 
 class Foo(resource.Resource):
@@ -26,5 +26,5 @@ def root_func(request):
 
 
 root = Resource([])
-app = app.RestismApp(root)
+app = app.RestishApp(root)
 
