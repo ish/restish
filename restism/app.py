@@ -9,9 +9,13 @@ class RestismApp(object):
         self.root = root_resource
 
     def __call__(self, environ, start_response):
-        request = http.Request(self, environ)
+        # Create a request object.
+        request = http.Request(environ)
+        # Locate the resource.
         resource = self.locate_resource(request)
+        # Call the resource to get the response.
         response = resource(request)
+        # Send the response to the WSGI parent.
         start_response(response.status, response.headers)
         return response.content
 
@@ -27,4 +31,21 @@ class RestismApp(object):
             if resource is None:
                 return self.not_found_factory()
         return resource
+
+
+class PylonsRestismApp(RestismApp):
+
+    def __init__(self, root_resource):
+        self._app = RestismApp(root_resource)
+
+    def __call__(self, environ, start_response):
+        import pylons.config
+        # Collect the bits from the Pylons environment we need, so we never
+        # have to touch the thread local stuff again.
+        environ = dict(environ)
+        environ['restism.templating'] = {
+                'engine': 'mako',
+                'lookup': pylons.config['pylons.app_globals'].mako_lookup,
+                }
+        return self._app(environ, start_response)
 

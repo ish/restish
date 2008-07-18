@@ -7,7 +7,7 @@ from paste.deploy.converters import asbool
 from pylons import config
 from pylons.middleware import ErrorHandler, StaticJavascripts, \
     StatusCodeRedirect
-from restism.app import RestismApp
+from restism.app import PylonsRestismApp
 
 from pylonseg.config.environment import load_environment
 from pylonseg.resources.root import RootResource
@@ -34,7 +34,7 @@ def make_app(global_conf, full_stack=True, **app_conf):
     load_environment(global_conf, app_conf)
 
     # The Pylons WSGI app
-    app = RestismApp(RootResource())
+    app = PylonsRestismApp(RootResource())
     
     # CUSTOM MIDDLEWARE HERE (filtered by error handling middlewares)
     

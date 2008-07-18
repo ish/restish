@@ -3,9 +3,12 @@ import webob
 
 class Request(object):
 
-    def __init__(self, app, environ):
-        self.app = app
+    def __init__(self, environ):
         self._request = webob.Request(environ)
+
+    @property
+    def environ(self):
+        return self._request.environ
 
     @property
     def path(self):
