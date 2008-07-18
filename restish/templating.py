@@ -60,8 +60,8 @@ def template(template, content_type='text/html'):
     Decorator that renders renders the returned dict of args using the
     template by calling render(request, template, args).
 
-    The decorator can only be used on methods with a (self, request) signature
-    where request is an http.Request instance.
+    The decorated method's first argument must be a http.Request instance. All
+    arguments (including the request) are passed on as-is.
 
     The decorated method must return a dict that will be passed to the
     render(request, template, args) function.
@@ -72,8 +72,8 @@ def template(template, content_type='text/html'):
         Optional content type, defaults to 'text/html'
     """
     def decorator(func):
-        def decorated(self, request):
-            args = func(self, request)
+        def decorated(self, request, *a, **k):
+            args = func(self, request, *a, **k)
             return http.ok(
                     [('Content-Type', content_type)],
                     render(request, template, args=args)
