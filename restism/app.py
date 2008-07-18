@@ -16,8 +16,8 @@ class RestismApp(object):
         # Call the resource to get the response.
         response = resource(request)
         # Send the response to the WSGI parent.
-        start_response(response.status, response.headers)
-        return response.content
+        start_response(response.status, response.headerlist)
+        return response.body
 
     def locate_resource(self, request):
         segments = request.path_segments()

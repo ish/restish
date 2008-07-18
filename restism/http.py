@@ -6,17 +6,8 @@ class Request(object):
     def __init__(self, environ):
         self._request = webob.Request(environ)
 
-    @property
-    def environ(self):
-        return self._request.environ
-
-    @property
-    def path(self):
-        return self._request.path
-
-    @property
-    def headers(self):
-        return self._request.headers
+    def __getattr__(self, name):
+        return getattr(self._request, name)
 
     def path_segments(self):
         segments = self.path.split("/")[1:]
@@ -30,17 +21,9 @@ class Response(object):
     def __init__(self, status, headers, content):
         self._response = webob.Response(content, status, headers)
 
-    @property
-    def status(self):
-        return self._response.status
+    def __getattr__(self, name):
+        return getattr(self._response, name)
 
-    @property
-    def headers(self):
-        return self._response.headerlist
-
-    @property
-    def content(self):
-        return self._response.body
 
 
 def ok(headers, content):
