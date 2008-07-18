@@ -1,4 +1,4 @@
-from restism import app, http, resource, pattern
+from restism import app, http, resource
 
 
 class Foo(resource.Resource):
