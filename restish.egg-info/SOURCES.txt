@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+restish/__init__.py
+restish.egg-info/PKG-INFO
+restish.egg-info/SOURCES.txt
+restish.egg-info/dependency_links.txt
+restish.egg-info/entry_points.txt
+restish.egg-info/not-zip-safe
+restish.egg-info/top_level.txt
