@@ -32,32 +32,35 @@ class Resource(object):
 
     def __call__(self, request):
         dispatchers = self.request_dispatchers.get(request.method)
+        print request.method, dispatchers
         if dispatchers is not None:
             callable = _best_dispatcher(dispatchers, request)
             if callable is not None:
                 return callable(self, request)
-        return http.method_not_allowed(', '.join(self.dispatchers))
+        return http.method_not_allowed(', '.join(self.request_dispatchers))
 
 
 def _best_dispatcher(dispatchers, request):
     """
     Find the best dispatcher for the request.
     """
-    dispatcher = _best_accept_dispatcher(dispatchers, request)
-    if dispatcher:
-        return dispatcher[0]
+    dispatchers = _best_accept_dispatchers(dispatchers, request)
+    dispatchers = list(dispatchers)
+    if dispatchers:
+        return dispatchers[0][0]
     return None
 
 
-def _best_accept_dispatcher(dispatchers, request):
+def _best_accept_dispatchers(dispatchers, request):
     """
-    Find the best dispatcher that matches an Accept header item.
+    Return a (generate) list of dispatchers that match the request's accept
+    header, ordered by the client's preferrence.
     """
     for accept in request.accept.best_matches():
         for (callable, match) in dispatchers:
-            if match.get('accept') == accept:
-                return (callable, match)
-    return None
+            match_accept = match.get('accept')
+            if match_accept is None or match_accept == accept:
+                yield (callable, match)
 
 
 class NotFound(Resource):
