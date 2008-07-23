@@ -42,7 +42,6 @@ class PylonsRestishApp(RestishApp):
         import pylons.config
         # Collect the bits from the Pylons environment we need, so we never
         # have to touch the thread local stuff again.
-        environ = dict(environ)
         environ['restish.templating'] = {
                 'engine': 'mako',
                 'lookup': pylons.config['pylons.app_globals'].mako_lookup,
