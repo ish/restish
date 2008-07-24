@@ -55,7 +55,7 @@ def render(request, template, args={}):
     return renderer(templating)(template, args)
 
 
-def template(template, content_type='text/html'):
+def template(template, content_type='text/html; charset=utf-8'):
     """
     Decorator that renders renders the returned dict of args using the
     template by calling render(request, template, args).
