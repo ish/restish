@@ -2,8 +2,6 @@
 Templating support.
 """
 
-from restish import http
-
 
 def _mako_renderer(lookup):
     """
@@ -53,31 +51,4 @@ def render(request, template, args={}):
     """
     templating = request.environ['restish.templating']
     return renderer(templating)(template, args)
-
-
-def template(template, content_type='text/html; charset=utf-8'):
-    """
-    Decorator that renders renders the returned dict of args using the
-    template by calling render(request, template, args).
-
-    The decorated method's first argument must be a http.Request instance. All
-    arguments (including the request) are passed on as-is.
-
-    The decorated method must return a dict that will be passed to the
-    render(request, template, args) function.
-
-    @param template:
-        Name of the template file.
-    @param content_type:
-        Optional content type, defaults to 'text/html'
-    """
-    def decorator(func):
-        def decorated(self, request, *a, **k):
-            args = func(self, request, *a, **k)
-            return http.ok(
-                    [('Content-Type', content_type)],
-                    render(request, template, args=args)
-                    )
-        return decorated
-    return decorator
 

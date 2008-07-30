@@ -9,31 +9,57 @@ _RESTISH_MATCH = "restish_match"
 
 
 class _metaResource(type):
-    def __init__(cls, name, bases, clsattrs):
-        cls.__classinit__(clsattrs)
+    """
+    Resource meta class that gathers all annotations for easy access.
+    """
+    def __new__(cls, name, bases, clsattrs):
+        cls = type.__new__(cls, name, bases, clsattrs)
+        _gather_request_dispatchers(cls, clsattrs)
+        _gather_child_factories(cls, clsattrs)
+        return cls
+
+
+def _gather_request_dispatchers(cls, clsattrs):
+    """
+    Find the methods marked as request dispatchers and return them as a mapping
+    of name to (callable, match) tuples.
+    """
+    cls.request_dispatchers = dict(getattr(cls, 'request_dispatchers', {}))
+    for (name, callable) in clsattrs.iteritems():
+        if not inspect.isroutine(callable):
+            continue
+        method = getattr(callable, _RESTISH_METHOD, None)
+        if method is None:
+            continue
+        match = getattr(callable, _RESTISH_MATCH)
+        cls.request_dispatchers.setdefault(method, []).append((callable, match))
+
+
+def _gather_child_factories(cls, clsattrs):
+    """
+    Find the methods marked as child factories and return them as a mapping of
+    name to callable.
+    """
+    cls.child_factories = dict(getattr(cls, 'child_factories', {}))
+    for (name, callable) in clsattrs.iteritems():
+        if not inspect.isroutine(callable):
+            continue
+        child = getattr(callable, _RESTISH_CHILD, None)
+        if child is None:
+            continue
+        cls.child_factories[child] = callable
 
 
 class Resource(object):
+    """
+    Base class for additional resource types.
+
+    Provides the basic API required of a resource (resource_child(request,
+    segments) and __call__(request)), possibly dispatching to annotated methods
+    of the class (using metaclass magic).
+    """
 
     __metaclass__ = _metaResource
-
-    @classmethod
-    def __classinit__(cls, clsattrs):
-        # Find the request dispatchers.
-        cls.request_dispatchers = {}
-        for (name, callable) in inspect.getmembers(cls, inspect.ismethod):
-            method = getattr(callable, _RESTISH_METHOD, None)
-            if method is None:
-                continue
-            match = getattr(callable, _RESTISH_MATCH)
-            cls.request_dispatchers.setdefault(method, []).append((callable, match))
-        # Find the child factories
-        cls.child_factories = {}
-        for (name, callable) in inspect.getmembers(cls, inspect.ismethod):
-            child = getattr(callable, _RESTISH_CHILD, None)
-            if child is None:
-                continue
-            cls.child_factories[child] = callable
 
     def resource_child(self, request, segments):
         factory = self.child_factories.get(segments[0])
