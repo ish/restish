@@ -13,8 +13,15 @@ _RESTISH_ELEMENT = 'restish_element'
 
 def element(name):
     def decorator(func):
-        setattr(func, _RESTISH_ELEMENT, name)
-        return func
+        def f(self, request, *a, **k):
+            cache = element_cache(request, self)
+            try:
+                element = cache[name]
+            except KeyError:
+                element = cache[name] = func(self, request, *a, **k)
+            return element
+        setattr(f, _RESTISH_ELEMENT, name)
+        return f
     return decorator
 
 
@@ -48,18 +55,30 @@ def _gather_element_factories(cls, clsattrs):
         cls.element_factories[name] = callable
 
 
-class LocateElementMixin(object):
-    def page_element(self, request, segments):
+def element_cache(request, parent):
+    cache = request.environ.setdefault('restish.page.element_cache', {})
+    return cache.setdefault(parent, {})
+
+
+class ElementMixin(object):
+
+    def set_element_parent(self, parent):
+        self.element_parent = parent
+
+    def element_child(self, request, segments):
+        if isinstance(segments, str):
+            segments = segments.split('.')
+        if not segments:
+            raise ValueError('segments')
         factory = self.element_factories[segments[0]]
-        element = factory(self, request)
-        return element
+        return factory(self, request)
 
 
-class Page(LocateElementMixin, resource.Resource):
+class Page(ElementMixin, resource.Resource):
     __metaclass__ = _metaPage
 
 
-class Element(LocateElementMixin, object):
+class Element(ElementMixin, object):
     __metaclass__ = _metaElement
 
 
