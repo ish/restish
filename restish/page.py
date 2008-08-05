@@ -99,8 +99,8 @@ def _tags(request, resource):
     Return a dictionary of tags useful for templating.
     """
     def page_element(name):
-        return RequestBoundCallable(resource.page_element(request, name.split('.')), request)
-    return {'page_element': page_element}
+        return RequestBoundCallable(resource.element_child(request, name.split('.')), request)
+    return {'element': page_element}
 
 
 class RequestBoundCallable(object):
