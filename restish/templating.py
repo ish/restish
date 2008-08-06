@@ -120,7 +120,7 @@ def _tags(request, resource):
     """
     def page_element(name):
         return util.RequestBoundCallable(
-                resource.element_child(request, name.split('.')),
+                resource.element(request, name),
                 request)
     return {'element': page_element}
 

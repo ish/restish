@@ -10,26 +10,13 @@ from restish import resource
 _RESTISH_ELEMENT = 'restish_element'
 
 
-def _element_name(parent_name, child_name):
-    if parent_name is None:
-        element_name = child_name
-    else:
-        element_name = '%s.%s' % (parent_name, child_name)
-    return element_name
-
-
 def element(name):
+    """
+    Decorator to mark a method as an element factory.
+    """
     def decorator(func):
-        def f(self, request, *a, **k):
-            cache = element_cache(request, self)
-            try:
-                element = cache[name]
-            except KeyError:
-                element = cache[name] = func(self, request, *a, **k)
-                element.element_name = _element_name(self.element_name, name)
-            return element
-        setattr(f, _RESTISH_ELEMENT, name)
-        return f
+        setattr(func, _RESTISH_ELEMENT, name)
+        return func
     return decorator
 
 
@@ -62,22 +49,28 @@ def _gather_element_factories(cls, clsattrs):
         cls.element_factories[name] = callable
 
 
-def element_cache(request, parent):
-    cache = request.environ.setdefault('restish.page.element_cache', {})
-    return cache.setdefault(parent, {})
-
-
 class ElementMixin(object):
 
     element_name = None
 
-    def element_child(self, request, segments):
-        if isinstance(segments, str):
-            segments = segments.split('.')
-        if not segments:
-            raise ValueError('segments')
-        factory = self.element_factories[segments[0]]
-        return factory(self, request)
+    def element(self, request, name):
+        """
+        Locate an element by name.
+
+        The element is cached for the duration of the request to ensure that
+        the same object is returned if the element is located again later.
+        """
+        cache = _element_cache(request, self)
+        try:
+            element = cache[name]
+        except KeyError:
+            try:
+                factory = self.element_factories[name]
+            except KeyError:
+                raise ElementNotFound(name)
+            element = cache[name] = factory(self, request)
+        element.element_name = _element_name(self.element_name, name)
+        return element
 
 
 class Page(ElementMixin, resource.Resource):
@@ -86,4 +79,27 @@ class Page(ElementMixin, resource.Resource):
 
 class Element(ElementMixin, object):
     __metaclass__ = _metaElement
+
+
+class ElementNotFound(Exception):
+    pass
+
+
+def _element_name(parent_name, child_name):
+    """
+    Return the new, abosolute element name
+    """
+    if parent_name is None:
+        element_name = child_name
+    else:
+        element_name = '%s.%s' % (parent_name, child_name)
+    return element_name
+
+
+def _element_cache(request, parent):
+    """
+    Return the element cache for the parent.
+    """
+    cache = request.environ.setdefault('restish.page.element_cache', {})
+    return cache.setdefault(parent, {})
 
