@@ -10,6 +10,14 @@ from restish import resource
 _RESTISH_ELEMENT = 'restish_element'
 
 
+def _element_name(parent_name, child_name):
+    if parent_name is None:
+        element_name = child_name
+    else:
+        element_name = '%s.%s' % (parent_name, child_name)
+    return element_name
+
+
 def element(name):
     def decorator(func):
         def f(self, request, *a, **k):
@@ -18,6 +26,7 @@ def element(name):
                 element = cache[name]
             except KeyError:
                 element = cache[name] = func(self, request, *a, **k)
+                element.element_name = _element_name(self.element_name, name)
             return element
         setattr(f, _RESTISH_ELEMENT, name)
         return f
@@ -25,7 +34,6 @@ def element(name):
 
 
 class _metaPage(resource._metaResource):
-
     def __new__(cls, name, bases, clsattrs):
         cls = resource._metaResource.__new__(cls, name, bases, clsattrs)
         _gather_element_factories(cls, clsattrs)
@@ -61,8 +69,7 @@ def element_cache(request, parent):
 
 class ElementMixin(object):
 
-    def set_element_parent(self, parent):
-        self.element_parent = parent
+    element_name = None
 
     def element_child(self, request, segments):
         if isinstance(segments, str):
