@@ -31,6 +31,9 @@ class Response(object):
 def ok(headers, content):
     return Response("200 OK", headers, content)
 
+def created(location, content):
+    return Response("201 Created", [('Location', location)], content)
+
 
 # Redirection 3xx
 
