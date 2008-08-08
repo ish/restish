@@ -70,9 +70,19 @@ class Resource(object):
     def __call__(self, request):
         dispatchers = self.request_dispatchers.get(request.method)
         if dispatchers is not None:
-            callable = _best_dispatcher(dispatchers, request)
-            if callable is not None:
-                return callable(self, request)
+            # Look up the best dispatcher
+            dispatcher = _best_dispatcher(dispatchers, request)
+            if dispatcher is not None:
+                (callable, match) = dispatcher
+                response = callable(self, request)
+                # If we matched an 'Accept' header and the content type has not
+                # been set explicitly then fill it in on behalf of the
+                # application.
+                if match.get('accept') and response.headers.get('content-type') is None:
+                    print "Setting header to", match['accept']
+                    response.headers['Content-Type'] = match['accept']
+                return response
+        # No dispatcher, return the list of allowed methods.
         return http.method_not_allowed(', '.join(self.request_dispatchers))
 
 
@@ -83,7 +93,7 @@ def _best_dispatcher(dispatchers, request):
     dispatchers = _best_accept_dispatchers(dispatchers, request)
     dispatchers = list(dispatchers)
     if dispatchers:
-        return dispatchers[0][0]
+        return dispatchers[0]
     return None
 
 

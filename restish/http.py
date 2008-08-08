@@ -10,7 +10,8 @@ class Request(object):
         return getattr(self._request, name)
 
     def path_segments(self):
-        segments = self.path.split("/")[1:]
+        path = self.url[len(self.application_url):]
+        segments = path.split("/")[1:]
         if segments == [""]:
             segments = []
         return segments
@@ -29,6 +30,9 @@ class Response(object):
 
 def ok(headers, content):
     return Response("200 OK", headers, content)
+
+def created(location, content):
+    return Response("201 Created", [('Location', location)], content)
 
 
 # Redirection 3xx
@@ -56,4 +60,7 @@ def not_found(headers, content):
 
 def method_not_allowed(allow):
     return Response("405 Method Not Allowed", [('Allow', allow)], "405 Method Not Allowed")
+
+def conflict(headers, content):
+    return Response("409 Conflict", headers, content)
 
