@@ -10,7 +10,8 @@ class Request(object):
         return getattr(self._request, name)
 
     def path_segments(self):
-        segments = self.path.split("/")[1:]
+        path = self.url[len(self.application_url):]
+        segments = path.split("/")[1:]
         if segments == [""]:
             segments = []
         return segments
