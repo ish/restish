@@ -55,6 +55,9 @@ def not_modified():
 def bad_request():
     return Response("400 Bad Request", [], "")
 
+def forbidden(content):
+    return Response("403 Forbidden", [], content)
+
 def not_found(headers, content):
     return Response("404 Not Found", headers, content)
 
