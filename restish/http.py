@@ -58,3 +58,6 @@ def not_found(headers, content):
 def method_not_allowed(allow):
     return Response("405 Method Not Allowed", [('Allow', allow)], "405 Method Not Allowed")
 
+def conflict(headers, content):
+    return Response("409 Conflict", headers, content)
+
