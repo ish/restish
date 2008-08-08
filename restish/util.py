@@ -20,3 +20,6 @@ class RequestBoundCallable(object):
     def __call__(self, *a, **k):
         return literal(self.callable(self.request, *a, **k))
 
+    def __getattr__(self, name):
+        return getattr(self.callable, name)
+
