@@ -181,6 +181,12 @@ class URL(object):
         q = self.queryList()
         q.append((name, value))
         return self._pathMod(self.pathList(copy=False), q)
+    
+    def add_queries(self, queryList):
+        q = self.queryList()
+        for k,v in queryList:
+            q.append((k,v))
+        return self._pathMod(self.pathList(copy=False), q)
 
     def replace_query(self, name, value=None):
         if value is not None:
