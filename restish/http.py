@@ -10,7 +10,7 @@ class Request(object):
         return getattr(self._request, name)
 
     def path_segments(self):
-        path = self.url[len(self.application_url):]
+        path = self.url[len(self.application_url):].split('?')[0]
         segments = path.split("/")[1:]
         if segments == [""]:
             segments = []
@@ -19,8 +19,8 @@ class Request(object):
 
 class Response(object):
 
-    def __init__(self, status, headers, content):
-        self._response = webob.Response(content, status, headers)
+    def __init__(self, status, headers, content, content_type='text/html', charset='utf-8'):
+        self._response = webob.Response(content, status, headers, content_type=content_type, charset=charset)
 
     def __getattr__(self, name):
         return getattr(self._response, name)
@@ -55,8 +55,8 @@ def not_modified():
 def bad_request():
     return Response("400 Bad Request", [], "")
 
-def forbidden(content):
-    return Response("403 Forbidden", [], content)
+def forbidden(headers, content):
+    return Response("403 Forbidden", headers, content)
 
 def not_found(headers, content):
     return Response("404 Not Found", headers, content)
