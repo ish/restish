@@ -19,8 +19,8 @@ class Request(object):
 
 class Response(object):
 
-    def __init__(self, status, headers, content, content_type='text/html', charset='utf-8'):
-        self._response = webob.Response(content, status, headers, content_type=content_type, charset=charset)
+    def __init__(self, status, headers, content):
+        self._response = webob.Response(content, status, headers)
 
     def __getattr__(self, name):
         return getattr(self._response, name)
