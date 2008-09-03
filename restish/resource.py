@@ -79,7 +79,6 @@ class Resource(object):
                 # been set explicitly then fill it in on behalf of the
                 # application.
                 if match.get('accept') and response.headers.get('content-type') is None:
-                    print "Setting header to", match['accept']
                     response.headers['Content-Type'] = match['accept']
                 return response
         # No dispatcher, return the list of allowed methods.
