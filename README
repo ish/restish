@@ -1,0 +1,111 @@
+
+
+Deploying a Restish Application
+-------------------------------
+
+
+
+##
+# run ..
+paster create --template=pylons
+
+
+# You can now either apply the pylons_to_restish.patch file or do it manually as follows ...
+
+##
+# <project>/config/middleware.py
+
+# replace ...
+
+from pylons.wsgiapp import PylonsApp
+from routes.middleware import RoutesMiddleware
+
+# ... with ...
+
+from restish.app import PylonsRestishApp
+from pylonseg.resources.root import RootResource
+
+# replace ...
+
+    app = PylonsApp()
+
+# ... with ...
+
+    app = PylonsRestishApp(RootResource())
+
+# remove ...
+
+    app = RoutesMiddleware(app, config['routes.map'])
+
+##
+# remove ...
+# <project>/public
+
+##
+# create ...
+# 
+# <project>/resources
+
+# <project>/resources/__init__.py
+
+# <project>/resources/root.py
+from restish import http, resource, templating
+
+class RootResource(resource.Resource):
+
+    def __call__(self, request):
+        return http.ok([('Content-Type', 'text/html')], templating.render(
+            request, 'root.html', args={'message': "I'm a RootResource"}))
+
+    def resource_child(self, request, segments):
+        if segments[0] == 'foo':
+            return FooResource(), segments[1:]
+        elif segments[0] == 'bang-bang':
+            bang
+        elif segments[0] == 'bang':
+            def f(request):
+                bang
+            return f, segments[1:]
+        return None, segments
+
+class FooResource(resource.Resource):
+
+    def __call__(self, request):
+        return http.ok([('Content-Type', 'text/html')], "<p>I'm a <strong>FooResource</strong>!</p>")
+
+##
+# create ...
+#
+# <project>/template/base.html
+<html>
+  <head>
+    <title>Root Resource</title>
+  </head>
+  <body>
+    <div id="header">
+      I'm the header.
+    </div>
+    <div id="content">
+      ${self.body()}
+    </div>
+  </body>
+</html>
+
+##
+# create ...
+#
+# <project>/template/root.html
+<%inherit file="base.html"/>
+
+<p>Yikes, it works! And the message was ... "${message}".</p>
+
+<p>There are a few resources hanging off the root resource:</p>
+
+<ul>
+  <li><a href="/foo">foo</a> -- a valid resource.</li>
+  <li><a href="/404">404</a> -- a missing resource.</li>
+  <li><a href="/bang">bang</a> -- a resource than contains an error.</li>
+  <li><a href="/bang-bang">bang-bang</a> -- an error that causes child loojup to fail.</li>
+</ul>
+
+
