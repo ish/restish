@@ -2,7 +2,7 @@
 Templating support.
 """
 
-from restish import http, util
+from restish import http, url, util
 
 
 def _mako_renderer(lookup):
@@ -52,7 +52,9 @@ def render(request, template, args={}):
         Dictionary of args to pass to the template renderer.
     """
     templating = request.environ['restish.templating']
-    return renderer(templating)(template, args)
+    args_ = {'url': url.URLAccessor(request)}
+    args_.update(args)
+    return renderer(templating)(template, args_)
 
 
 def page(template, content_type='text/html; charset=utf-8'):
