@@ -297,6 +297,37 @@ class URL(str):
         """
         return self.clone(fragment=anchor)
 
+
+class URLAccessor(object):
+    """
+    URL accessor, provides access to useful URLs constructed from the
+    accessor's request.
+    """
+
+    def __init__(self, request):
+        self.request = request
+
+    @property
+    def here(self):
+        """
+        Return the current, i.e. requested, URL.
+        """
+        return URL(self.request.url)
+
+    @property
+    def host(self):
+        """
+        Return the host's URL, i.e. the URL of the HTTP server.
+        """
+        return URL(self.request.host_url)
+
+    @property
+    def application(self):
+        """
+        Return the WSGI application's URL.
+        """
+        return URL(self.request.application_url)
+
     
 def normalise_path(path):
     """

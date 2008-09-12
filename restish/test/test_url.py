@@ -3,8 +3,10 @@
 # Copyright (c) 2004-2007 Divmod.
 # See LICENSE for details.
 
-from restish import url
 import unittest
+import webob
+
+from restish import url
 
 POUND = '£'.decode('utf-8')
 
@@ -433,4 +435,26 @@ class Serialization(unittest.TestCase):
 #            print link
 #            self.failUnlessEqual(result, base.click(link))
 #    test_rfc1808.todo = 'Many of these fail miserably at the moment; often with a / where there shouldn\'t be'
+
+
+class TestURLAccessor(unittest.TestCase):
+
+    def setUp(self):
+        self.host_url = url.URL("http://localhost:1234")
+        self.application_url = self.host_url.child('app')
+        self.here_url = self.application_url.child('resource')
+        request = webob.Request.blank('/resource', base_url=self.application_url)
+        self.url_accessor = url.URLAccessor(request)
+
+    def test_here(self):
+        self.assertEquals(self.url_accessor.here, self.here_url)
+        self.assertTrue(isinstance(self.url_accessor.here, url.URL))
+
+    def test_host(self):
+        self.assertEquals(self.url_accessor.host, self.host_url)
+        self.assertTrue(isinstance(self.url_accessor.host, url.URL))
+
+    def test_application(self):
+        self.assertEquals(self.url_accessor.application, self.application_url)
+        self.assertTrue(isinstance(self.url_accessor.application, url.URL))
 
