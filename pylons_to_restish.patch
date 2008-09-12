@@ -1,0 +1,223 @@
+diff -Naur pylonseg/data/.gitignore /home/tim/git/restish/pylonseg/data/.gitignore
+--- pylonseg/data/.gitignore	1970-01-01 01:00:00.000000000 +0100
++++ /home/tim/git/restish/pylonseg/data/.gitignore	2008-07-18 16:30:45.000000000 +0100
+@@ -0,0 +1 @@
++*
+diff -Naur pylonseg/pylonseg/config/middleware.py /home/tim/git/restish/pylonseg/pylonseg/config/middleware.py
+--- pylonseg/pylonseg/config/middleware.py	2008-09-05 14:20:08.000000000 +0100
++++ /home/tim/git/restish/pylonseg/pylonseg/config/middleware.py	2008-07-18 16:30:45.000000000 +0100
+@@ -7,10 +7,10 @@
+ from pylons import config
+ from pylons.middleware import ErrorHandler, StaticJavascripts, \
+     StatusCodeRedirect
+-from pylons.wsgiapp import PylonsApp
+-from routes.middleware import RoutesMiddleware
++from restish.app import PylonsRestishApp
+ 
+ from pylonseg.config.environment import load_environment
++from pylonseg.resources.root import RootResource
+ 
+ def make_app(global_conf, full_stack=True, **app_conf):
+     """Create a Pylons WSGI application and return it
+@@ -34,12 +34,11 @@
+     load_environment(global_conf, app_conf)
+ 
+     # The Pylons WSGI app
+-    app = PylonsApp()
++    app = PylonsRestishApp(RootResource())
+     
+     # CUSTOM MIDDLEWARE HERE (filtered by error handling middlewares)
+     
+     # Routing/Session/Cache Middleware
+-    app = RoutesMiddleware(app, config['routes.map'])
+     app = SessionMiddleware(app, config)
+     app = CacheMiddleware(app, config)
+     
+diff -Naur pylonseg/pylonseg/public/index.html /home/tim/git/restish/pylonseg/pylonseg/public/index.html
+--- pylonseg/pylonseg/public/index.html	2008-09-05 14:20:08.000000000 +0100
++++ /home/tim/git/restish/pylonseg/pylonseg/public/index.html	1970-01-01 01:00:00.000000000 +0100
+@@ -1,108 +0,0 @@
+-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+-   "http://www.w3.org/TR/html4/loose.dtd">
+-<html>
+-<head>
+-  <title>Pylons Default Page</title>
+-  <style>
+-    body { background-color: #fff; color: #333; }
+-
+-    body, p {
+-      font-family: verdana, arial, helvetica, sans-serif;
+-      font-size:   12px;
+-      line-height: 18px;
+-    }
+-    pre {
+-      background-color: #eee;
+-      padding: 10px;
+-      font-size: 11px;
+-      line-height: 13px;
+-    }
+-
+-    a { color: #000; }
+-    a:visited { color: #666; }
+-    a:hover { color: #fff; background-color:#000; }
+-  </style>
+-</head>
+-<body>
+-
+-<h1>Welcome to your Pylons Web Application</h1>
+-
+-<h2>Weren't expecting to see this page?</h2>
+-
+-<p>The <tt>pylonseg/public/</tt> directory is searched for static files
+- <i>before</i> your controllers are run. Remove this file (<tt>pylonseg/public/index.html</tt>)
+-  and edit the routes in <tt>pylonseg/config/routing.py</tt> to point the
+-  <a href="/">root path</a> to a 'hello' controller we'll create below:
+-  <pre> map.connect('', controller='hello', action='index')</pre>
+-</p>
+-
+-<h2>Getting Started</h2>
+-<p>You're now ready to start creating your own web application. To create a 'hello' controller,
+-  run the following command in your project's root directory: 
+-<pre>
+-pylonseg$ paster controller hello
+-</pre>
+-
+-  This generates the following the following code in <tt>pylonseg/controllers/hello.py</tt>:
+-<pre>
+-import logging
+-
+-from pylonseg.lib.base import *
+-
+-log = logging.getLogger(__name__)
+-
+-class HelloController(BaseController):
+-
+-    def index(self):
+-        # Return a rendered template
+-        #   return render('/some/template.mako)
+-        # or, Return a response
+-        return 'Hello World'
+-</pre>
+-</p>
+-<p>This controller simply prints out 'Hello World' to the browser. Pylons' default routes
+-  automatically set up this controller to respond at the <a href="/hello">/hello</a> URL.
+-  With the additional route described above, this controller will also respond at the
+-  <a href="/">root path</a>.
+-</p>
+-
+-<h3>Using a template</h3>
+-<p>To call a template and do something a little more complex, this following example
+-   shows how to print out some request information from a
+-  <a href="http://www.makotemplates.org">Mako</a> template.
+-</p>
+-<p>Create a <tt>serverinfo.mako</tt> file in your project's <tt>pylonseg/templates/</tt>
+-  directory with the following contents:
+-</p>  
+-<pre>
+-&lt;h2&gt;
+-Server info for ${request.host}
+-&lt;/h2&gt;
+-
+-&lt;p&gt;
+-The URL you called: ${h.url_for()}
+-&lt;/p&gt;
+-
+-&lt;p&gt;
+-The name you set: ${c.name}
+-&lt;/p&gt;
+-
+-&lt;p&gt;The WSGI environ:&lt;br /&gt;
+-&lt;pre&gt;${c.pretty_environ}&lt;/pre&gt;
+-&lt;/p&gt;
+-</pre>
+-
+-Then add the following to your 'hello' controller class:
+-<pre>
+-    def serverinfo(self):
+-        import cgi
+-        import pprint
+-        c.pretty_environ = cgi.escape(pprint.pformat(request.environ))
+-        c.name = 'The Black Knight'
+-        return render('/serverinfo.mako')
+-</pre>
+-
+-You can now view the page at: <tt><a href="/hello/serverinfo">/hello/serverinfo</a></tt>
+-</p>
+-</body>
+-</html>
+diff -Naur pylonseg/pylonseg/resources/root.py /home/tim/git/restish/pylonseg/pylonseg/resources/root.py
+--- pylonseg/pylonseg/resources/root.py	1970-01-01 01:00:00.000000000 +0100
++++ /home/tim/git/restish/pylonseg/pylonseg/resources/root.py	2008-07-18 16:30:45.000000000 +0100
+@@ -0,0 +1,26 @@
++from restish import http, resource, templating
++
++
++class RootResource(resource.Resource):
++
++    def __call__(self, request):
++        return http.ok([('Content-Type', 'text/html')], templating.render(
++            request, 'root.html', args={'message': "I'm a RootResource"}))
++
++    def resource_child(self, request, segments):
++        if segments[0] == 'foo':
++            return FooResource(), segments[1:]
++        elif segments[0] == 'bang-bang':
++            bang
++        elif segments[0] == 'bang':
++            def f(request):
++                bang
++            return f, segments[1:]
++        return None, segments
++
++
++class FooResource(resource.Resource):
++
++    def __call__(self, request):
++        return http.ok([('Content-Type', 'text/html')], "<p>I'm a <strong>FooResource</strong>!</p>")
++
+diff -Naur pylonseg/pylonseg/templates/base.html /home/tim/git/restish/pylonseg/pylonseg/templates/base.html
+--- pylonseg/pylonseg/templates/base.html	1970-01-01 01:00:00.000000000 +0100
++++ /home/tim/git/restish/pylonseg/pylonseg/templates/base.html	2008-07-18 16:30:45.000000000 +0100
+@@ -0,0 +1,25 @@
++<html>
++  <head>
++    <title>Root Resource</title>
++    <style type="text/css">
++      #content {
++        border-bottom: 2px solid #ccc;
++        border-top: 2px solid #ccc;
++        margin-bottom: 1em;
++        margin-top: 1em;
++      }
++    </style>
++  </head>
++  <body>
++    <div id="header">
++      I'm the header.
++    </div>
++    <div id="content">
++      ${self.body()}
++    </div>
++    <div id="footer">
++      I'm the footer.
++    </div>
++  </body>
++</html>
++
+diff -Naur pylonseg/pylonseg/templates/root.html /home/tim/git/restish/pylonseg/pylonseg/templates/root.html
+--- pylonseg/pylonseg/templates/root.html	1970-01-01 01:00:00.000000000 +0100
++++ /home/tim/git/restish/pylonseg/pylonseg/templates/root.html	2008-07-18 16:30:45.000000000 +0100
+@@ -0,0 +1,13 @@
++<%inherit file="base.html"/>
++
++<p>Yikes, it works! And the message was ... "${message}".</p>
++
++<p>There are a few resources hanging off the root resource:</p>
++
++<ul>
++  <li><a href="/foo">foo</a> -- a valid resource.</li>
++  <li><a href="/404">404</a> -- a missing resource.</li>
++  <li><a href="/bang">bang</a> -- a resource than contains an error.</li>
++  <li><a href="/bang-bang">bang-bang</a> -- an error that causes child loojup to fail.</li>
++</ul>
++
