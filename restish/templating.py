@@ -78,11 +78,12 @@ def page(template, content_type='text/html; charset=utf-8'):
             # Collect the args from the callable.
             args = func(self, request, *a, **k)
             # Add common tags.
-            args.update(_tags(request, self))
+            args_ = _tags(request, self)
+            args_.update(args)
             # Render the template and return a response.
             return http.ok(
                     [('Content-Type', content_type)],
-                    render(request, template, args=args)
+                    render(request, template, args=args_)
                     )
         return decorated
     return decorator
