@@ -1,4 +1,4 @@
-from restish import http, resource
+from restish import error, http, resource
 
 
 class RestishApp(object):
@@ -11,10 +11,13 @@ class RestishApp(object):
     def __call__(self, environ, start_response):
         # Create a request object.
         request = http.Request(environ)
-        # Locate the resource.
-        resource = self.locate_resource(request)
-        # Call the resource to get the response.
-        response = resource(request)
+        try:
+            # Locate the resource.
+            resource = self.locate_resource(request)
+            # Call the resource to get the response.
+            response = resource(request)
+        except error.HTTPClientError, e:
+            response = e.make_response()
         # Send the response to the WSGI parent.
         start_response(response.status, response.headerlist)
         return response.body

@@ -1,5 +1,7 @@
 import webob
 
+from restish import error
+
 
 class Request(object):
 
@@ -55,15 +57,30 @@ def not_modified():
 def bad_request():
     return Response("400 Bad Request", [], "")
 
+class BadRequestError(error.HTTPClientError):
+    response_factory = staticmethod(bad_request)
+
 def forbidden(headers, content):
     return Response("403 Forbidden", headers, content)
+
+class ForbiddenError(error.HTTPClientError):
+    response_factory = staticmethod(forbidden)
 
 def not_found(headers, content):
     return Response("404 Not Found", headers, content)
 
+class NotFoundError(error.HTTPClientError):
+    response_factory = staticmethod(not_found)
+
 def method_not_allowed(allow):
     return Response("405 Method Not Allowed", [('Allow', allow)], "405 Method Not Allowed")
 
+class MethodNotAllowedError(error.HTTPClientError):
+    response_factory = staticmethod(method_not_allowed)
+
 def conflict(headers, content):
     return Response("409 Conflict", headers, content)
+
+class ConflictError(error.HTTPClientError):
+    response_factory = staticmethod(conflict)
 
