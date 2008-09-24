@@ -1,7 +1,9 @@
+README
 setup.cfg
 setup.py
 restish/__init__.py
 restish/app.py
+restish/error.py
 restish/http.py
 restish/page.py
 restish/resource.py
