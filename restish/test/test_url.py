@@ -172,6 +172,8 @@ class TestURL(unittest.TestCase):
         urlpath = url.URL("http://example.com/-_.!*'()?baz=quux#foo")
         self.assertEqual(urlpath.path, "/-_.!*'()")
 
+    def test_root(self):
+        self.assertEqual(url.URL("http://example.com/foo/barr").root(), "http://example.com/")
 
     def test_child(self):
         urlpath = url.URL(theurl)

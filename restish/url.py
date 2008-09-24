@@ -160,6 +160,12 @@ class URL(str):
     
     ## path manipulations ##
 
+    def root(self):
+        """
+        Contruct a URL to the root of the web server.
+        """
+        return self.clone(path='/')
+
     def sibling(self, segment):
         """Construct a url where the given path segment is a sibling of this url
         """
