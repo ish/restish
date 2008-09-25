@@ -1,6 +1,6 @@
 import webob
 
-from restish import error
+from restish import error, url
 
 
 class Request(object):
@@ -10,6 +10,22 @@ class Request(object):
 
     def __getattr__(self, name):
         return getattr(self._request, name)
+
+    @property
+    def host_url(self):
+        return url.URL(self._request.host_url)
+
+    @property
+    def application_url(self):
+        return url.URL(self._request.application_url)
+
+    @property
+    def path_url(self):
+        return url.URL(self._request.path_url)
+
+    @property
+    def url(self):
+        return url.URL(self._request.url)
 
     def path_segments(self):
         path = self.url[len(self.application_url):].split('?')[0]
