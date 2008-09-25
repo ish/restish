@@ -222,11 +222,11 @@ class URL(str):
         return self.clone(scheme=scheme, netloc=netloc, path=path, query=query, fragment=fragment) 
     
     def add_query(self, name, value=None):
-        if value is not None:
-            value = unicode(value)
         """Add a query argument with the given value
         None indicates that the argument has no value
         """
+        if value is not None:
+            value = unicode(value)
         q = list(self.query_list)
         q.append((name, value))
         return self.clone(query=join_query(q))
