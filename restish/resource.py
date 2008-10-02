@@ -111,7 +111,7 @@ def _best_accept_dispatchers(dispatchers, request):
 class NotFound(Resource):
 
     def __call__(self, request):
-        return http.not_found([], "404")
+        return http.not_found([('Content-Type', 'text/plain')], "404 Not Found")
 
 
 def child(name):
