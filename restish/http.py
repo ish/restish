@@ -95,7 +95,7 @@ class NotFoundError(error.HTTPClientError):
     response_factory = staticmethod(not_found)
 
 def method_not_allowed(allow):
-    return Response("405 Method Not Allowed", [('Allow', allow)], "405 Method Not Allowed")
+    return Response("405 Method Not Allowed", [('Content-Type', 'text/plain'), ('Allow', allow)], "405 Method Not Allowed")
 
 class MethodNotAllowedError(error.HTTPClientError):
     response_factory = staticmethod(method_not_allowed)
