@@ -76,6 +76,12 @@ def bad_request():
 class BadRequestError(error.HTTPClientError):
     response_factory = staticmethod(bad_request)
 
+def unauthorized():
+    return Response("401 Unauthorized", [('Content-Type', 'text/plain')], "401 Unauthorized")
+
+class UnauthorizedError(error.HTTPClientError):
+    response_factory = staticmethod(unauthorized)
+
 def forbidden(headers, content):
     return Response("403 Forbidden", headers, content)
 
