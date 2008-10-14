@@ -37,8 +37,8 @@ class Request(object):
 
 class Response(object):
 
-    def __init__(self, status, headers, content):
-        self._response = webob.Response(content, status, headers)
+    def __init__(self, status, headers, body):
+        self._response = webob.Response(body, status, headers)
 
     def __getattr__(self, name):
         return getattr(self._response, name)
@@ -46,11 +46,11 @@ class Response(object):
 
 # Successful 2xx
 
-def ok(headers, content):
-    return Response("200 OK", headers, content)
+def ok(headers, body):
+    return Response("200 OK", headers, body)
 
-def created(location, content):
-    return Response("201 Created", [('Location', location)], content)
+def created(location, body):
+    return Response("201 Created", [('Location', location)], body)
 
 
 # Redirection 3xx
@@ -82,14 +82,14 @@ def unauthorized():
 class UnauthorizedError(error.HTTPClientError):
     response_factory = staticmethod(unauthorized)
 
-def forbidden(headers, content):
-    return Response("403 Forbidden", headers, content)
+def forbidden(headers, body):
+    return Response("403 Forbidden", headers, body)
 
 class ForbiddenError(error.HTTPClientError):
     response_factory = staticmethod(forbidden)
 
-def not_found(headers, content):
-    return Response("404 Not Found", headers, content)
+def not_found(headers, body):
+    return Response("404 Not Found", headers, body)
 
 class NotFoundError(error.HTTPClientError):
     response_factory = staticmethod(not_found)
@@ -100,8 +100,8 @@ def method_not_allowed(allow):
 class MethodNotAllowedError(error.HTTPClientError):
     response_factory = staticmethod(method_not_allowed)
 
-def conflict(headers, content):
-    return Response("409 Conflict", headers, content)
+def conflict(headers, body):
+    return Response("409 Conflict", headers, body)
 
 class ConflictError(error.HTTPClientError):
     response_factory = staticmethod(conflict)
