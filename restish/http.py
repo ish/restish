@@ -49,8 +49,13 @@ class Response(object):
 def ok(headers, body):
     return Response("200 OK", headers, body)
 
-def created(location, body):
-    return Response("201 Created", [('Location', location)], body)
+def created(location, body, headers=None):
+    if headers is None:
+        headers = []
+    else:
+        headers = list(headers)
+    headers.append(('Location', location))
+    return Response("201 Created", headers, body)
 
 
 # Redirection 3xx
