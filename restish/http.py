@@ -75,8 +75,12 @@ def not_modified():
 
 # Client Error 4xx
 
-def bad_request():
-    return Response("400 Bad Request", [], "")
+def bad_request(headers=None, body=None):
+    if headers is None:
+        headers = [('Content-Type', 'text/plain')]
+    if body is None:
+        body = '400 Bad Request'
+    return Response("400 Bad Request", headers, body)
 
 class BadRequestError(error.HTTPClientError):
     response_factory = staticmethod(bad_request)
