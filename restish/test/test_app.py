@@ -54,6 +54,19 @@ class TestApp(unittest.TestCase):
         assert R['status'].startswith('200')
         assert R['body'] == 'bar'
 
+    def test_resource_returns_resource(self):
+
+        class ProxyResource(resource.Resource):
+            def __init__(self):
+                self.wrapped = Resource('root')
+            def __call__(self, request):
+                return self.wrapped
+
+        A = app.RestishApp(ProxyResource())
+        R = wsgi_out(A, webob.Request.blank('/').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == 'root'
+
 
 if __name__ == '__main__':
     unittest.main()

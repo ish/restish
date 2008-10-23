@@ -14,10 +14,10 @@ class RestishApp(object):
         try:
             # Locate the resource.
             resource = self.locate_resource(request)
-            # Call the resource to get the response.
-            response = resource(request)
         except error.HTTPClientError, e:
             response = e.make_response()
+        else:
+            response = self.call_resource(request, resource)
         # Send the response to the WSGI parent.
         start_response(response.status, response.headerlist)
         return response.body
@@ -34,6 +34,16 @@ class RestishApp(object):
             if resource is None:
                 return self.not_found_factory()
         return resource
+
+    def call_resource(self, request, the_resource):
+        # Recursively call the resource to get a response. A resource is
+        # allowed to return another resource to be used in its place.
+        while True:
+            response = the_resource(request)
+            if not isinstance(response, resource.Resource):
+                break
+            the_resource = response
+        return response
 
 
 class PylonsRestishApp(RestishApp):
