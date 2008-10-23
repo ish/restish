@@ -188,6 +188,12 @@ class TestURL(unittest.TestCase):
             "http://www.foo.com:80/a/nice/path/gong%2Fdouble%2F?zot=23&zut",
             urlpath.child('gong/double/'))
 
+    def test_childs(self):
+        self.assertEquals(url.URL('http://localhost/foo').child('bar'), 'http://localhost/foo/bar')
+        self.assertEquals(url.URL('http://localhost/foo').child('bar', 'woo'), 'http://localhost/foo/bar/woo')
+        self.assertEquals(url.URL('http://localhost/').child('foo', 'bar'), 'http://localhost/foo/bar')
+        self.assertEquals(url.URL('http://localhost').child('foo', 'bar'), 'http://localhost/foo/bar')
+
     def test_child_init_tuple(self):
         self.assertEquals(
             "http://www.foo.com/a/b/c",

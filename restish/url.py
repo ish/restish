@@ -173,14 +173,14 @@ class URL(str):
         l[-1] = segment
         return self.clone(path=join_path(l))
 
-    def child(self, path):
+    def child(self, *path):
         """Construct a url where the given path segment is a child of this url
         """
         l = list(self.path_segments)
         if l[-1:] == ['']:
-            l[-1] = path
+            l[-1:] = path
         else:
-            l.append(path)
+            l.extend(path)
         return self.clone(path=join_path(l))
 
     def parent(self):
