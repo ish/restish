@@ -67,6 +67,14 @@ class TestApp(unittest.TestCase):
         assert R['status'].startswith('200')
         assert R['body'] == 'root'
 
+    def test_client_error(self):
+        class Resource(resource.Resource):
+            def __call__(self, request):
+                raise http.UnauthorizedError()
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, webob.Request.blank('/').environ)
+        assert R['status'].startswith('401')
+
 
 if __name__ == '__main__':
     unittest.main()
