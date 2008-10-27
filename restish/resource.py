@@ -126,9 +126,9 @@ class NotFound(Resource):
         return http.not_found([('Content-Type', 'text/plain')], "404 Not Found")
 
 
-def child(name):
+def child(name=None):
     def decorator(func):
-        setattr(func, _RESTISH_CHILD, name)
+        setattr(func, _RESTISH_CHILD, name or func.__name__)
         return func
     return decorator
 

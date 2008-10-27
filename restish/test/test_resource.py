@@ -18,18 +18,26 @@ class TestResource(unittest.TestCase):
         assert response.status.startswith("405")
 
     def test_child_factory(self):
-        class FooResource(resource.Resource):
+        class ChildResource(resource.Resource):
+            def __init__(self, name):
+                self.name = name
             @resource.GET()
             def text(self, request):
-                return http.ok([('Content-Type', 'text/plain')], 'Foo')
+                return http.ok([('Content-Type', 'text/plain')], self.name)
         class Resource(resource.Resource):
-            @resource.child('foo')
+            @resource.child()
             def foo(self, request):
-                return FooResource()
+                return ChildResource('foo')
+            @resource.child('bar')
+            def bar_child(self, request):
+                return ChildResource('bar')
         A = app.RestishApp(Resource())
         R = wsgi_out(A, webob.Request.blank('/foo').environ)
         assert R['status'].startswith('200')
-        assert R['body'] == 'Foo'
+        assert R['body'] == 'foo'
+        R = wsgi_out(A, webob.Request.blank('/bar').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == 'bar'
 
 
 class TestContentNegotiation(unittest.TestCase):
