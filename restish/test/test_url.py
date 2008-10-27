@@ -308,6 +308,14 @@ class TestURL(unittest.TestCase):
             "http://www.foo.com?foo=bar",
             url.URL("http://www.foo.com").add_query("foo", "bar"))
 
+    def test_add_queries(self):
+        U = url.URL("http://localhost/")
+        self.assertEquals(U.add_queries([('a', 'b'), ('c', 'd')]), "http://localhost/?a=b&c=d")
+
+    def test_remove_query(self):
+        U = url.URL("http://localhost/foo?a=b&c=d")
+        self.assertEquals(U.remove_query('a'), "http://localhost/foo?c=d")
+
     def test_replace_query(self):
         urlpath = url.URL(theurl)
         self.assertEquals(
