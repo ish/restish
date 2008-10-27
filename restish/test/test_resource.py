@@ -5,10 +5,28 @@ Test resource behaviour.
 import unittest
 import webob
 
-from restish import http, resource
+from restish import app, http, resource
+from restish.test.util import wsgi_out
 
 
-class TestResource(unittest.TestCase):
+class TestChildren(unittest.TestCase):
+
+    def test_child_factory(self):
+        class FooResource(resource.Resource):
+            @resource.GET()
+            def text(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'Foo')
+        class Resource(resource.Resource):
+            @resource.child('foo')
+            def foo(self, request):
+                return FooResource()
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, webob.Request.blank('/foo').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == 'Foo'
+
+
+class TestContentNegotiation(unittest.TestCase):
 
     def test_no_accept(self):
         """

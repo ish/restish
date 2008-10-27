@@ -2,6 +2,7 @@ import unittest
 import webob
 
 from restish import app, http, resource
+from restish.test.util import wsgi_out
 
 
 class Resource(resource.Resource):
@@ -18,15 +19,6 @@ class Resource(resource.Resource):
 
     def __call__(self, request):
         return http.ok([('Content-Type', 'text/plain')], self.name)
-
-
-def wsgi_out(app, environ):
-    out = {}
-    def start_response(status, headers):
-        out['status'] = status
-        out['headers'] = headers
-    out['body'] = app(environ, start_response)
-    return out
 
 
 class TestApp(unittest.TestCase):
