@@ -9,7 +9,13 @@ from restish import app, http, resource
 from restish.test.util import wsgi_out
 
 
-class TestChildren(unittest.TestCase):
+class TestResource(unittest.TestCase):
+
+    def test_no_method_handler(self):
+        res = resource.Resource()
+        environ = webob.Request.blank('/').environ
+        response = res(http.Request(environ))
+        assert response.status.startswith("405")
 
     def test_child_factory(self):
         class FooResource(resource.Resource):
@@ -27,6 +33,32 @@ class TestChildren(unittest.TestCase):
 
 
 class TestContentNegotiation(unittest.TestCase):
+
+    def test_implicit_content_type(self):
+        """
+        Test that the content type is added automatically.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='text/html')
+            def html(self, request):
+                return http.ok([], '<p>Hello!</p>')
+        res = Resource()
+        environ = webob.Request.blank('/').environ
+        response = res(http.Request(environ))
+        assert response.headers['Content-Type'] == 'text/html'
+
+    def test_explicit_content_type(self):
+        """
+        Test that the content type is added automatically.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='text/html')
+            def html(self, request):
+                return http.ok([('Content-Type', 'text/plain')], '<p>Hello!</p>')
+        res = Resource()
+        environ = webob.Request.blank('/').environ
+        response = res(http.Request(environ))
+        assert response.headers['Content-Type'] == 'text/plain'
 
     def test_no_accept(self):
         """
