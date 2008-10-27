@@ -1,4 +1,5 @@
 import inspect
+import itertools
 
 from restish import http
 
@@ -99,9 +100,20 @@ def _best_dispatcher(dispatchers, request):
 def _best_accept_dispatchers(dispatchers, request):
     """
     Return a (generate) list of dispatchers that match the request's accept
-    header, ordered by the client's preferrence.
+    header, ordered by the client's preference.
     """
-    for accept in request.accept.best_matches():
+    accepts = request.accept.best_matches()
+    # If the client has not sent an "Accept" header then return the full list
+    # of dispatchers.
+    if not accepts:
+        for (callable, match) in dispatchers:
+            yield (callable, match)
+    # Move the accept-matching dispatchers to the front so they are tried
+    # first.
+    dispatchers = list(itertools.chain(
+        [d for d in dispatchers if 'accept' in d[1]],
+        [d for d in dispatchers if 'accept' not in d[1]]))
+    for accept in accepts:
         for (callable, match) in dispatchers:
             match_accept = match.get('accept')
             if match_accept is None or match_accept == accept:
