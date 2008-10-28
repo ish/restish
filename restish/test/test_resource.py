@@ -118,6 +118,33 @@ class TestContentNegotiation(unittest.TestCase):
         assert response.headers['Content-Type'] == 'text/html'
 
 
+class TestShortAccepts(unittest.TestCase):
+
+    def test_single(self):
+        class Resource(resource.Resource):
+            @resource.GET(accept='html')
+            def html(self, request):
+                return http.ok([], "<html />")
+        res = Resource()
+        environ = webob.Request.blank('/', headers=[('Accept', 'text/html')]).environ
+        response = res(http.Request(environ))
+        print response.status
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/html'
+
+    def test_extra(self):
+        class Resource(resource.Resource):
+            @resource.GET(accept='json')
+            def json(self, request):
+                return http.ok([], "{}")
+        res = Resource()
+        environ = webob.Request.blank('/', headers=[('Accept', 'application/json')]).environ
+        response = res(http.Request(environ))
+        print response.status
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'application/json'
+
+
 if __name__ == '__main__':
     unittest.main()
 

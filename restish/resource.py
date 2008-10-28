@@ -1,5 +1,6 @@
 import inspect
 import itertools
+import mimetypes
 
 from restish import http
 
@@ -7,6 +8,11 @@ from restish import http
 _RESTISH_CHILD = "restish_child"
 _RESTISH_METHOD = "restish_method"
 _RESTISH_MATCH = "restish_match"
+
+
+SHORT_CONTENT_TYPE_EXTRA = {
+        'json': 'application/json',
+        }
 
 
 class _metaResource(type):
@@ -135,19 +141,47 @@ def child(name=None):
 
 class MethodDecorator(object):
 
-    def __init__(self, method):
-        self.method = method
+    method = None
 
-    def __call__(self, **match):
-        def decorator(func):
-            setattr(func, _RESTISH_METHOD, self.method)
-            setattr(func, _RESTISH_MATCH, match)
-            return func
-        return decorator
+    def __init__(self, **match):
+        self.match = match
+
+    def __call__(self, func):
+        setattr(func, _RESTISH_METHOD, self.method)
+        setattr(func, _RESTISH_MATCH, self.match)
+        return func
         
 
-DELETE = MethodDecorator('DELETE')
-GET = MethodDecorator('GET')
-POST = MethodDecorator('POST')
-PUT = MethodDecorator('PUT')
+class DELETE(MethodDecorator):
+    method = 'DELETE'
+
+
+class GET(MethodDecorator):
+    method = 'GET'
+    def __init__(self, **match):
+        accept = match.get('accept')
+        if accept and '/' not in accept:
+            match['accept'] = _real_mimetype(accept)
+        MethodDecorator.__init__(self, **match)
+
+
+class POST(MethodDecorator):
+    method = 'POST'
+
+
+class PUT(MethodDecorator):
+    method = 'PUT'
+
+
+def _real_mimetype(short):
+    # Try mimetypes module, by extension.
+    real = mimetypes.guess_type('.%s'%short)[0]
+    if real is not None:
+        return real
+    # Try extra extension mapping.
+    real = SHORT_CONTENT_TYPE_EXTRA.get(short)
+    if real is not None:
+        return real
+    # Oh well.
+    return short
 
