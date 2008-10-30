@@ -27,13 +27,6 @@ class Request(object):
     def url(self):
         return url.URL(self._request.url)
 
-    def path_segments(self):
-        path = self.url[len(self.application_url):].split('?')[0]
-        segments = path.split("/")[1:]
-        if segments == [""]:
-            segments = []
-        return segments
-
 
 class Response(object):
 

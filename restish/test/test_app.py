@@ -1,7 +1,7 @@
 import unittest
 import webob
 
-from restish import app, http, resource
+from restish import app, http, resource, url
 from restish.test.util import wsgi_out
 
 
@@ -66,6 +66,33 @@ class TestApp(unittest.TestCase):
         A = app.RestishApp(Resource())
         R = wsgi_out(A, webob.Request.blank('/').environ)
         assert R['status'].startswith('401')
+
+    def test_no_root_application(self):
+        class Resource(resource.Resource):
+            def __init__(self, segment):
+                self.segment = segment
+            def resource_child(self, request, segments):
+                return self.__class__(segments[0]), segments[1:]
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], self.segment.encode('utf-8'))
+        A = app.RestishApp(Resource(''))
+        assert wsgi_out(A, webob.Request.blank('/').environ)['body'] == ''
+        assert wsgi_out(A, webob.Request.blank('/', base_url='http://localhost/base').environ)['body'] == ''
+        assert wsgi_out(A, webob.Request.blank('/foo', base_url='http://localhost/base').environ)['body'] == 'foo'
+
+    def test_weird_path_segments(self):
+        class Resource(resource.Resource):
+            def __init__(self, segment):
+                self.segment = segment
+            def resource_child(self, request, segments):
+                return self.__class__(segments[0]), segments[1:]
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], self.segment.encode('utf-8'))
+        A = app.RestishApp(Resource(''))
+        assert wsgi_out(A, webob.Request.blank('/').environ)['body'] == ''
+        assert wsgi_out(A, webob.Request.blank('/foo').environ)['body'] == 'foo'
+        print wsgi_out(A, webob.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body']
+        assert wsgi_out(A, webob.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body'] == 'foo+bar@example.com'
 
 
 if __name__ == '__main__':
