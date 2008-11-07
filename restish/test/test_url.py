@@ -465,19 +465,23 @@ class TestURLAccessor(unittest.TestCase):
     def setUp(self):
         self.host_url = url.URL("http://localhost:1234")
         self.application_url = self.host_url.child('app')
-        self.here_url = self.application_url.child('resource')
-        request = webob.Request.blank('/resource', base_url=self.application_url)
+        self.full_url = self.application_url.child('resource').add_query('foo', 'bar')
+        request = webob.Request.blank('/resource?foo=bar', base_url=self.application_url)
         self.url_accessor = url.URLAccessor(request)
 
-    def test_here(self):
-        self.assertEquals(self.url_accessor.here, self.here_url)
-        self.assertTrue(isinstance(self.url_accessor.here, url.URL))
+    def test_full(self):
+        self.assertEquals(self.url_accessor.full, self.full_url)
+        self.assertTrue(isinstance(self.url_accessor.full, url.URL))
+
+    def test_abs(self):
+        self.assertEquals(self.url_accessor.abs, self.full_url.path.add_query('foo', 'bar'))
+        self.assertTrue(isinstance(self.url_accessor.abs, url.URL))
 
     def test_host(self):
         self.assertEquals(self.url_accessor.host, self.host_url)
         self.assertTrue(isinstance(self.url_accessor.host, url.URL))
 
-    def test_application(self):
-        self.assertEquals(self.url_accessor.application, self.application_url)
-        self.assertTrue(isinstance(self.url_accessor.application, url.URL))
+    def test_app(self):
+        self.assertEquals(self.url_accessor.app, self.application_url)
+        self.assertTrue(isinstance(self.url_accessor.app, url.URL))
 

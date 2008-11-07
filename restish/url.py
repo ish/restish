@@ -314,11 +314,19 @@ class URLAccessor(object):
         self.request = request
 
     @property
-    def here(self):
+    def full(self):
         """
-        Return the current, i.e. requested, URL.
+        Return the full current (i.e. requested), URL.
         """
         return URL(self.request.url)
+
+    @property
+    def abs(self):
+        """
+        Return the part of the current URL that is absolute to the host URL,
+        i.e. the root of the HTTP server.
+        """
+        return URL(self.request.url[len(self.request.host_url):])
 
     @property
     def host(self):
@@ -328,7 +336,7 @@ class URLAccessor(object):
         return URL(self.request.host_url)
 
     @property
-    def application(self):
+    def app(self):
         """
         Return the WSGI application's URL.
         """
