@@ -122,7 +122,7 @@ class URL(str):
 
     @property
     def path(self):
-        return self.parsed_url.path
+        return self.__class__(self.parsed_url.path)
 
     @property
     def path_segments(self):

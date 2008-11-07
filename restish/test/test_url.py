@@ -172,6 +172,13 @@ class TestURL(unittest.TestCase):
         urlpath = url.URL("http://example.com/-_.!*'()?baz=quux#foo")
         self.assertEqual(urlpath.path, "/-_.!*'()")
 
+    def test_path_url(self):
+        """
+        Test that URL.path is, itself, a URL.
+        """
+        self.assertTrue(isinstance(url.URL('http://localhost/a/b').path, url.URL))
+        self.assertEquals(url.URL('http://localhost/a/b').path.child('c'), '/a/b/c')
+
     def test_root(self):
         self.assertEqual(url.URL("http://example.com/foo/barr").root(), "http://example.com/")
 
