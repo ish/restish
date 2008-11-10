@@ -14,9 +14,7 @@ _UNSET = object()
 
 
 def _decode(S):
-    if isinstance(S, str):
-        return S.decode('utf-8')
-    return S
+    return S.decode('utf-8')
 
 
 def _encode(S):
@@ -30,7 +28,7 @@ def _quote(S, safe):
 
 
 def _unquote(S):
-    return urllib.unquote(S)
+    return urllib.unquote_plus(S)
 
 
 def split_path(path):
@@ -56,9 +54,9 @@ def join_path(path_segments):
 def _split_query(query):
     for x in query.split('&'):
         if '=' in x:
-            yield tuple(_decode(urllib.unquote_plus(s)) for s in x.split('=', 1))
+            yield tuple(_decode(_unquote(s)) for s in x.split('=', 1))
         elif x:
-            yield (_decode(urllib.unquote_plus(x)), None)
+            yield (_decode(_unquote(x)), None)
 
 
 def split_query(query):
