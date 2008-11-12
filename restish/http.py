@@ -102,6 +102,12 @@ def method_not_allowed(allow):
 class MethodNotAllowedError(error.HTTPClientError):
     response_factory = staticmethod(method_not_allowed)
 
+def not_acceptable(headers, body):
+    return Response('406 Not Acceptable', headers, body)
+
+class NotAcceptableError(error.HTTPClientError):
+    response_factory = staticmethod(not_acceptable)
+
 def conflict(headers, body):
     return Response("409 Conflict", headers, body)
 

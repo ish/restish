@@ -17,6 +17,17 @@ class TestResource(unittest.TestCase):
         response = res(http.Request(environ))
         assert response.status.startswith("405")
 
+    def test_no_match(self):
+        class Resource(resource.Resource):
+            @resource.GET(accept='text/json')
+            def html(self, request):
+                return http.ok([], '<p>Hello!</p>')
+        res = Resource()
+        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
+        response = res(http.Request(environ))
+        print response.status
+        assert response.status.startswith("406")
+
     def test_child_factory(self):
         class ChildResource(resource.Resource):
             def __init__(self, name):

@@ -75,21 +75,25 @@ class Resource(object):
         return None, segments
 
     def __call__(self, request):
+        # Get the dispatchers for the request method.
         dispatchers = self.request_dispatchers.get(request.method)
-        if dispatchers is not None:
-            # Look up the best dispatcher
-            dispatcher = _best_dispatcher(dispatchers, request)
-            if dispatcher is not None:
-                (callable, match) = dispatcher
-                response = callable(self, request)
-                # If we matched an 'Accept' header and the content type has not
-                # been set explicitly then fill it in on behalf of the
-                # application.
-                if match.get('accept') and response.headers.get('content-type') is None:
-                    response.headers['Content-Type'] = match['accept']
-                return response
-        # No dispatcher, return the list of allowed methods.
-        return http.method_not_allowed(', '.join(self.request_dispatchers))
+        # No dispatchers for method, send 405 with list of allowed methods.
+        if dispatchers is None:
+            print "* method_not_allowed"
+            return http.method_not_allowed(', '.join(self.request_dispatchers))
+        # Look up the best dispatcher
+        dispatcher = _best_dispatcher(dispatchers, request)
+        if dispatcher is not None:
+            (callable, match) = dispatcher
+            response = callable(self, request)
+            # If we matched an 'Accept' header and the content type has not
+            # been set explicitly then fill it in on behalf of the
+            # application.
+            if match.get('accept') and response.headers.get('content-type') is None:
+                response.headers['Content-Type'] = match['accept']
+            return response
+        # No match, send 406
+        return http.not_acceptable([('Content-Type', 'text/plain')], '406 Not Acceptable')
 
 
 def _best_dispatcher(dispatchers, request):
