@@ -132,6 +132,9 @@ class TestContentNegotiation(unittest.TestCase):
 class TestShortAccepts(unittest.TestCase):
 
     def test_single(self):
+        """
+        Check that short types known to Python's mimetypes module are expanded.
+        """
         class Resource(resource.Resource):
             @resource.GET(accept='html')
             def html(self, request):
@@ -144,6 +147,9 @@ class TestShortAccepts(unittest.TestCase):
         assert response.headers['Content-Type'] == 'text/html'
 
     def test_extra(self):
+        """
+        Check that short types added by restish are expanded.
+        """
         class Resource(resource.Resource):
             @resource.GET(accept='json')
             def json(self, request):
@@ -154,6 +160,21 @@ class TestShortAccepts(unittest.TestCase):
         print response.status
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'application/json'
+
+    def test_unknown(self):
+        """
+        Check that unknown short types are not expanded and are still used.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='unknown')
+            def unknown(self, request):
+                return http.ok([], "{}")
+        res = Resource()
+        environ = webob.Request.blank('/').environ
+        response = res(http.Request(environ))
+        print response.status
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'unknown'
 
 
 if __name__ == '__main__':
