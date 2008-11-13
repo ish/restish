@@ -196,6 +196,7 @@ class URL(str):
         """
         scheme, netloc, path, query, fragment = urlparse.urlsplit(href)
 
+        # Return self if the click URL is empty.
         if (scheme, netloc, path, query, fragment) == ('', '', '', '', ''):
             return self
 
@@ -204,14 +205,15 @@ class URL(str):
         else:
             scheme = self.scheme
 
+        # Copy less specific missing parts of the URL from the current URL. We
+        # don't need to worry about copying the fragment because an empty click
+        # URL is handled above.
         if not netloc:
             netloc = self.netloc
             if not path:
                 path = self.path
                 if not query:
                     query = self.query
-                    if not fragment:
-                        fragment = self.fragment
             else:
                 if path[0] != '/':
                     path = join_path(self.path_segments[:-1] + split_path(path))
