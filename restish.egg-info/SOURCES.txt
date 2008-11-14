@@ -7,6 +7,7 @@ restish/error.py
 restish/guard.py
 restish/http.py
 restish/page.py
+restish/pastertemplate.py
 restish/resource.py
 restish/templating.py
 restish/url.py

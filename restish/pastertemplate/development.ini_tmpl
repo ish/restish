@@ -1,0 +1,21 @@
+[DEFAULT]
+; Application id used to prefix logs, errors, etc with something unique to this
+; instance.
+APP_ID = ${package}@localhost
+; Email settings.
+SMTP_SERVER = localhost
+EMAIL_FROM = matt.goodall@gmail.com
+EMAIL_ERROR = matt.goodall@gmail.com
+
+[app:main]
+use = config:${package}.ini#${package}
+filter-with = evalerror
+
+[server:main]
+use = egg:Paste#http
+host = 127.0.0.1
+port = 8080
+
+[filter:evalerror]
+use = egg:Paste#evalerror
+

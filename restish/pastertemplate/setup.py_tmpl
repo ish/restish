@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1'
+version = '0.0'
 
-setup(name='restish',
+setup(name='${package}',
       version=version,
-      description="WSGI library for resource- and rest- oriented web sites",
+      description="",
       long_description="""\
 """,
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='',
-      author='Matt Goodall',
-      author_email='matt@jdi-associates.com',
+      author='',
+      author_email='',
       url='',
       license='',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
@@ -19,12 +19,11 @@ setup(name='restish',
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
-          'decorator',
-          'WebOb',
+          'restish',
       ],
       entry_points="""
       # -*- Entry points: -*-
-      [paste.paster_create_template]
-      restish = restish.pastertemplate:RestishTemplate
+      [paste.app_factory]
+      main = ${package}.wsgiapp:make_app
       """,
       )
