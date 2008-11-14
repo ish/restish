@@ -51,19 +51,3 @@ class RestishApp(object):
             the_resource = response
         return response
 
-
-class PylonsRestishApp(RestishApp):
-
-    def __init__(self, root_resource):
-        self._app = RestishApp(root_resource)
-
-    def __call__(self, environ, start_response):
-        import pylons.config
-        # Collect the bits from the Pylons environment we need, so we never
-        # have to touch the thread local stuff again.
-        environ['restish.templating'] = {
-                'engine': 'mako',
-                'lookup': pylons.config['pylons.app_globals'].mako_lookup,
-                }
-        return self._app(environ, start_response)
-

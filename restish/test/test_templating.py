@@ -61,6 +61,67 @@ class TestRenderingArgs(unittest.TestCase):
         assert set(['url', 'element', 'extra']) == set(rendering.element_args(request, None))
 
 
+OUTPUT_DOC = """<div><p>url.abs: /</p><p>&lt;strong&gt;unsafe&lt;/strong&gt;</p><p><strong>safe</strong></p></div>"""
+
+
+class _TemplatingEngineTestCase(unittest.TestCase):
+
+    renderer = None
+
+    def test_templating(self):
+        environ = {'restish.templating.renderer': self.renderer}
+        request = Request.blank('/', environ=environ)
+        doc = templating.render(request, 'who-cares.html', {
+            'unsafe': '<strong>unsafe</strong>',
+            'safe': '<strong>safe</strong>',
+            })
+        print doc
+        assert doc == OUTPUT_DOC
+
+
+try:
+    import mako.template
+    class TestMako(_TemplatingEngineTestCase):
+        @staticmethod
+        def renderer(template, args={}):
+            template = mako.template.Template("""<div><p>url.abs: ${url.abs|h}</p><p>${unsafe|h}</p><p>${safe}</p></div>""")
+            return template.render(**args)
+    class TestMakoAutoEscape(_TemplatingEngineTestCase):
+        @staticmethod
+        def renderer(template, args={}):
+            template = mako.template.Template("""<div><p>url.abs: ${url.abs}</p><p>${unsafe}</p><p>${safe|n}</p></div>""", default_filters=['h'])
+            return template.render(**args)
+except ImportError:
+    print "Skipping Mako tests"
+
+
+try:
+    import genshi.template
+    class TestGenshi(_TemplatingEngineTestCase):
+        @staticmethod
+        def renderer(template, args={}):
+            template = genshi.template.MarkupTemplate("""<div><p>url.abs: ${url.abs}</p><p>${unsafe}</p><p>${Markup(safe)}</p></div>""")
+            return template.generate(**args).render('html')
+except ImportError:
+    print "Skipping Genshi tests"
+
+
+try:
+    import jinja2
+    class TestJinja2(_TemplatingEngineTestCase):
+        @staticmethod
+        def renderer(template, args={}):
+            template = jinja2.Template("""<div><p>url.abs: {{ url.abs|e }}</p><p>{{ unsafe|e }}</p><p>{{ safe }}</p></div>""")
+            return template.render(**args)
+    class TestJinja2AutoEscape(_TemplatingEngineTestCase):
+        @staticmethod
+        def renderer(template, args={}):
+            template = jinja2.Template("""<div><p>url.abs: {{ url.abs }}</p><p>{{ unsafe }}</p><p>{{ safe|safe }}</p></div>""", autoescape=True)
+            return template.render(**args)
+except ImportError:
+    print "Skipping Jinja2 tests"
+
+
 if __name__ == '__main__':
     unittest.main()
 

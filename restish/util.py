@@ -2,8 +2,6 @@
 General-purpose utilities.
 """
 
-from webhelpers.html import literal
-
 
 class RequestBoundCallable(object):
     """
@@ -18,13 +16,11 @@ class RequestBoundCallable(object):
         self.request = request
 
     def __call__(self, *a, **k):
-        return literal(self.callable(self.request, *a, **k))
+        return self.callable(self.request, *a, **k)
 
     def __getattr__(self, name):
         return getattr(self.callable, name)
     
     def __getitem__(self, name):
         return self.callable[name]
-    
-    
 
