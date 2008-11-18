@@ -1,7 +1,7 @@
 import unittest
 from webob import Request
 
-from restish import http, resource, page, templating
+from restish import resource, page, templating
 
 
 class TestElement(unittest.TestCase):
