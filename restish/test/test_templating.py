@@ -1,7 +1,7 @@
 import unittest
 from webob import Request
 
-from restish import templating
+from restish import resource, templating
 
 
 class TestModule(unittest.TestCase):
@@ -59,6 +59,30 @@ class TestRenderingArgs(unittest.TestCase):
         assert set(['url', 'extra']) == set(rendering.args(request))
         assert set(['url', 'element', 'extra']) == set(rendering.element_args(request, None))
         assert set(['url', 'element', 'extra']) == set(rendering.element_args(request, None))
+
+
+class TestPage(unittest.TestCase):
+
+    def test_page_decorator(self):
+        def renderer(template, args):
+            args.pop('url')
+            args.pop('element')
+            return '<p>%s %r</p>' % (template, args)
+        class Resource(resource.Resource):
+            def __init__(self, args):
+                self.args = args
+            @resource.GET()
+            @templating.page('test.html')
+            def html(self, request):
+                return self.args
+        environ = {'restish.templating.renderer': renderer}
+        request = Request.blank('/', environ=environ)
+        response = Resource({})(request)
+        assert response.status.startswith('200')
+        assert response.body == '<p>test.html {}</p>'
+        response = Resource({'foo': 'bar'})(request)
+        assert response.status.startswith('200')
+        assert response.body == '<p>test.html {\'foo\': \'bar\'}</p>'
 
 
 OUTPUT_DOC = """<div><p>url.abs: /</p><p>&lt;strong&gt;unsafe&lt;/strong&gt;</p><p><strong>safe</strong></p></div>"""
