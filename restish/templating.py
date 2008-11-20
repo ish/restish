@@ -3,6 +3,7 @@ Templating support.
 """
 
 from restish import http, url, util
+from restish.page import Element
 
 
 class Rendering(object):
@@ -95,9 +96,10 @@ class Rendering(object):
         Return a dict of args that should be present when rendering elements.
         """
         def page_element(name):
-            return util.RequestBoundCallable(
-                    element.element(request, name),
-                    request)
+            E = element.element(request, name)
+            if isinstance(E, Element):
+                E = util.RequestBoundCallable(E, request)
+            return E
         args = self.args(request)
         args['element'] = page_element
         return args
