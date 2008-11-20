@@ -245,6 +245,12 @@ class TestURL(unittest.TestCase):
         self.failUnlessEqual('http://www.foo.com:80/me/17?spam=158',
                              u.click('/me/17?spam=158'))
 
+        # Clicking on a fragment URL keeps all other parts of the current URL.
+        self.assertEquals(url.URL("http://www.foo.com:80/click?a=b").click('#frag'), "http://www.foo.com:80/click?a=b#frag")
+
+        # Clicking on a fragment URL discards the current fragment.
+        self.assertEquals(url.URL("http://www.foo.com:80/click#foo").click('#bar'), "http://www.foo.com:80/click#bar")
+
         # Check that everything from the path onward is removed when the click link
         # has no path.
         u = url.URL('http://localhost/foo?abc=def')
