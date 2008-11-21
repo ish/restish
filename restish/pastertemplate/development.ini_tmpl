@@ -4,8 +4,6 @@
 APP_ID = ${package}@localhost
 ; Email settings.
 SMTP_SERVER = localhost
-EMAIL_FROM = matt.goodall@gmail.com
-EMAIL_ERROR = matt.goodall@gmail.com
 
 [app:main]
 use = config:${package}.ini#${package}
