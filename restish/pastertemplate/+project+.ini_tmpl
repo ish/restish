@@ -1,3 +1,0 @@
-[app:${package}]
-use = egg:${package}
-

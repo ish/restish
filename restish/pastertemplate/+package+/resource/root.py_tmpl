@@ -4,5 +4,6 @@ from restish import http, resource
 class Root(resource.Resource):
     @resource.GET()
     def html(self, request):
-        return http.ok([('Content-Type', 'text/html')], "<p>Hello from the ${package} project!</p>")
+        return http.ok([('Content-Type', 'text/html')],
+            "<p>Hello from ${project}!</p>")
 

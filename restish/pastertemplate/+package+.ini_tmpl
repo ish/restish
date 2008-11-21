@@ -1,0 +1,3 @@
+[app:${package}]
+use = egg:${project}
+
