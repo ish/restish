@@ -5,9 +5,16 @@ APP_ID = ${package}@localhost
 ; Email settings.
 SMTP_SERVER = localhost
 
-[app:main]
-use = config:${package}.ini#${package}
+[composite:main]
+use = egg:Paste#cascade
+app1 = public
+app2 = config:${package}.ini#${package}
 filter-with = evalerror
+
+[app:public]
+use = egg:Paste#pkg_resources
+egg = ${package}
+resource_name = ${package}/public
 
 [server:main]
 use = egg:Paste#http
