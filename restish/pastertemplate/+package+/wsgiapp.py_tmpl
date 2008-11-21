@@ -3,7 +3,7 @@ from restish.app import RestishApp
 from ${package}.resource import root
 
 
-def make_app(global_conf, **local_conf):
+def make_app(global_conf, **app_conf):
     """
     PasteDeploy WSGI application factory.
 
@@ -11,7 +11,7 @@ def make_app(global_conf, **local_conf):
     ${package} WSGI application.
     """
     app = RestishApp(root.Root())
-    app = setup_environ(app, global_conf, local_conf)
+    app = setup_environ(app, global_conf, app_conf)
     return app
 
 
