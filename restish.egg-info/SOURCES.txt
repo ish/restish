@@ -19,9 +19,14 @@ restish.egg-info/entry_points.txt
 restish.egg-info/not-zip-safe
 restish.egg-info/requires.txt
 restish.egg-info/top_level.txt
+restish/contrib/__init__.py
+restish/contrib/genshirenderer.py
+restish/contrib/jinja2renderer.py
+restish/contrib/makorenderer.py
 restish/test/__init__.py
 restish/test/test_app.py
 restish/test/test_guard.py
+restish/test/test_page.py
 restish/test/test_request.py
 restish/test/test_resource.py
 restish/test/test_templating.py
