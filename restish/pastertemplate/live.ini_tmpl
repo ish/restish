@@ -4,8 +4,8 @@
 APP_ID = ${package}@localhost
 ; Email settings.
 SMTP_SERVER = localhost
-EMAIL_FROM = matt.goodall@gmail.com
-EMAIL_ERROR = matt.goodall@gmail.com
+ERROR_EMAIL_FROM = %(APP_ID)s
+ERROR_EMAIL_TO = %(APP_ID)s
 
 [app:main]
 use = config:${package}.ini#${package}
@@ -18,8 +18,37 @@ port = 8080
 
 [filter:error_catcher]
 use = egg:Paste#error_catcher
-error_email = %(EMAIL_ERROR)s
+error_email = %(ERROR_EMAIL_TO)s
 error_subject_prefix = [%(APP_ID)s]
-from_address = %(EMAIL_FROM)s
+from_address = %(ERROR_EMAIL_FROM)s
 smtp_server = %(SMTP_SERVER)s
+
+# Logging configuration
+[loggers]
+keys = root, ${package}
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = INFO
+handlers = console
+
+[logger_${package}]
+level = DEBUG
+handlers =
+qualname = ${package}
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(asctime)s,%(msecs)03d %(levelname)-5.5s [${package}@localhost:%(name)s] %(message)s
+datefmt = %H:%M:%S
 
