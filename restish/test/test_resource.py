@@ -130,6 +130,57 @@ class TestContentNegotiation(unittest.TestCase):
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
 
+    def test_default_match(self):
+        """
+        Test that a client that does not send an Accept header gets a
+        consistent response.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='html')
+            def html(self, request):
+                return http.ok([], '<p>Hello!</p>')
+            @resource.GET(accept='json')
+            def json(self, request):
+                return http.ok([], '"Hello!"')
+        res = Resource()
+        environ = webob.Request.blank('/').environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/html'
+
+    def test_no_subtype_match(self):
+        """
+        Test that something/* accept matches are found.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='text/*')
+            def html(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'Hello!')
+        res = Resource()
+        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/plain'
+
+    # XXX skipped
+    def _test_no_subtype_match_2(self):
+        """
+        Test that something/* accept matches are found, when there's also a
+        '*/*' match,
+        """
+        class Resource(resource.Resource):
+            @resource.GET()
+            def anything(self, request):
+                return http.ok([('Content-Type', 'text/html')], '<p>Hello!</p>')
+            @resource.GET(accept='text/*')
+            def html(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'Hello!')
+        res = Resource()
+        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/plain'
+
 
 class TestShortAccepts(unittest.TestCase):
 
