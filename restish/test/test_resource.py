@@ -68,7 +68,8 @@ class TestContentNegotiation(unittest.TestCase):
 
     def test_explicit_content_type(self):
         """
-        Test that the content type is added automatically.
+        Test that the content type is not added automatically if the resource
+        sets it.
         """
         class Resource(resource.Resource):
             @resource.GET(accept='text/html')
@@ -81,7 +82,8 @@ class TestContentNegotiation(unittest.TestCase):
 
     def test_no_accept(self):
         """
-        Test generic GET matches request from client that does not send an Accept header.
+        Test generic GET matches request from client that does not send an
+        Accept header.
         """
         class Resource(resource.Resource):
             @resource.GET()
