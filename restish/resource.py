@@ -78,7 +78,6 @@ class Resource(object):
         dispatchers = self.request_dispatchers.get(request.method)
         # No dispatchers for method, send 405 with list of allowed methods.
         if dispatchers is None:
-            print "* method_not_allowed"
             return http.method_not_allowed(', '.join(self.request_dispatchers))
         # Look up the best dispatcher
         dispatcher = _best_dispatcher(dispatchers, request)
