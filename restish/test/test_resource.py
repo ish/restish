@@ -17,16 +17,29 @@ class TestResource(unittest.TestCase):
         response = res(http.Request(environ))
         assert response.status.startswith("405")
 
-    def test_no_match(self):
+    def test_methods(self):
         class Resource(resource.Resource):
-            @resource.GET(accept='text/json')
-            def html(self, request):
-                return http.ok([], '<p>Hello!</p>')
-        res = Resource()
-        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
-        response = res(http.Request(environ))
-        print response.status
-        assert response.status.startswith("406")
+            @resource.GET()
+            def GET(self, request):
+                return http.ok([], 'GET')
+            @resource.POST()
+            def POST(self, request):
+                return http.ok([], 'POST')
+            @resource.PUT()
+            def PUT(self, request):
+                return http.ok([], 'PUT')
+            @resource.DELETE()
+            def DELETE(self, request):
+                return http.ok([], 'DELETE')
+        for method in ['GET', 'POST', 'PUT', 'DELETE']:
+            print "*", method
+            environ = webob.Request.blank('/',
+                    environ={'REQUEST_METHOD': method},
+                    headers={'Accept': 'text/html'}).environ
+            response = Resource()(http.Request(environ))
+            print response.status, response.body
+            assert response.status == "200 OK"
+            assert response.body == method
 
     def test_child_factory(self):
         class ChildResource(resource.Resource):
@@ -52,6 +65,17 @@ class TestResource(unittest.TestCase):
 
 
 class TestContentNegotiation(unittest.TestCase):
+
+    def test_no_match(self):
+        class Resource(resource.Resource):
+            @resource.GET(accept='text/json')
+            def html(self, request):
+                return http.ok([], '<p>Hello!</p>')
+        res = Resource()
+        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
+        response = res(http.Request(environ))
+        print response.status
+        assert response.status.startswith("406")
 
     def test_implicit_content_type(self):
         """
@@ -161,6 +185,54 @@ class TestContentNegotiation(unittest.TestCase):
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
+
+    def test_quality(self):
+        """
+        Test that a client's accept quality is honoured.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='text/html')
+            def html(self, request):
+                return http.ok([('Content-Type', 'text/html')], '<p>Hello!</p>')
+            @resource.GET(accept='text/plain')
+            def plain(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'Hello!')
+        res = Resource()
+        environ = webob.Request.blank('/', headers={'Accept': 'text/html;q=0.9,text/plain'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/plain'
+        environ = webob.Request.blank('/', headers={'Accept': 'text/plain,text/html;q=0.9'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/plain'
+        environ = webob.Request.blank('/', headers={'Accept': 'text/html;q=0.4,text/plain;q=0.5'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/plain'
+        environ = webob.Request.blank('/', headers={'Accept': 'text/html;q=0.5,text/plain;q=0.4'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/html'
+
+    def test_specificity(self):
+        """
+        Check that more specific mime types are matched in preference to *
+        matches.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='html')
+            def bbb(self, request):
+                return http.ok([('Content-Type', 'text/html')], '')
+            @resource.GET(accept='json')
+            def aaa(self, request):
+                return http.ok([('Content-Type', 'application/json')], '')
+        res = Resource()
+        environ = webob.Request.blank('/', headers={'Accept': '*/*, application/json, text/javascript'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        print response.headers['Content-Type']
+        assert response.headers['Content-Type'] == 'application/json'
 
     # XXX skipped
     def _test_no_subtype_match_2(self):

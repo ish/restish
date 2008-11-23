@@ -1,8 +1,7 @@
 import inspect
-import itertools
 import mimetypes
 
-from restish import http
+from restish import http, _mimeparse as mimeparse
 
 
 _RESTISH_CHILD = "restish_child"
@@ -100,34 +99,22 @@ def _best_dispatcher(dispatchers, request):
     """
     Find the best dispatcher for the request.
     """
-    dispatchers = _best_accept_dispatchers(dispatchers, request)
-    dispatchers = list(dispatchers)
-    if dispatchers:
-        return dispatchers[0]
-    return None
+    # Use content negotation to filter the dispatchers to an ordered list of
+    # only those that match.
+    if 'accept' in request.headers:
+        dispatchers = _filter_dispatchers_on_accept(dispatchers, request)
+    # Return the best match or None
+    return dispatchers[0] if dispatchers else None
 
 
-def _best_accept_dispatchers(dispatchers, request):
-    """
-    Return a (generate) list of dispatchers that match the request's accept
-    header, ordered by the client's preference.
-    """
-    accepts = request.accept.best_matches()
-    # If the client has not sent an "Accept" header then return the full list
-    # of dispatchers.
-    if not accepts:
-        for (callable, match) in dispatchers:
-            yield (callable, match)
-    # Move the accept-matching dispatchers to the front so they are tried
-    # first.
-    dispatchers = list(itertools.chain(
-        [d for d in dispatchers if 'accept' in d[1]],
-        [d for d in dispatchers if 'accept' not in d[1]]))
-    for accept in accepts:
-        for (callable, match) in dispatchers:
-            match_accept = match.get('accept')
-            if match_accept is None or match_accept == accept:
-                yield (callable, match)
+def _filter_dispatchers_on_accept(dispatchers, request):
+    # Build an ordered list of the accept matches
+    supported = [d[1]['accept'] for d in dispatchers]
+    # Find the best accept type
+    best_match = mimeparse.best_match(supported, str(request.accept))
+    #print "****", request.url, request.accept, supported, best_match
+    # Return the matching dispatchers
+    return [d for d in dispatchers if d[1]['accept'] == best_match]
 
 
 class NotFound(Resource):
@@ -147,8 +134,10 @@ class MethodDecorator(object):
 
     method = None
 
-    def __init__(self, **match):
-        self.match = match
+    def __init__(self, accept='*/*'):
+        if '/' not in accept:
+            accept = _real_mimetype(accept)
+        self.match = {'accept': accept}
 
     def __call__(self, func):
         setattr(func, _RESTISH_METHOD, self.method)
@@ -162,11 +151,6 @@ class DELETE(MethodDecorator):
 
 class GET(MethodDecorator):
     method = 'GET'
-    def __init__(self, **match):
-        accept = match.get('accept')
-        if accept and '/' not in accept:
-            match['accept'] = _real_mimetype(accept)
-        MethodDecorator.__init__(self, **match)
 
 
 class POST(MethodDecorator):
