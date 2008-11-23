@@ -90,6 +90,21 @@ class TestContentNegotiation(unittest.TestCase):
         response = res(http.Request(environ))
         assert response.headers['Content-Type'] == 'text/html'
 
+    def test_implicit_content_type_not_on_partial_mimetype(self):
+        """
+        Test that a match on mime type group, e.g. */*, text/*, etc does not
+        automatically add the content type.
+        """
+        class Resource(resource.Resource):
+            @resource.GET(accept='text/*')
+            def html(self, request):
+                return http.ok([], '<p>Hello!</p>')
+        res = Resource()
+        environ = webob.Request.blank('/').environ
+        response = res(http.Request(environ))
+        print response.headers.get('Content-Type')
+        assert response.headers.get('Content-Type') is None
+
     def test_explicit_content_type(self):
         """
         Test that the content type is not added automatically if the resource

@@ -87,7 +87,10 @@ class Resource(object):
             # If we matched an 'Accept' header and the content type has not
             # been set explicitly then fill it in on behalf of the
             # application.
-            if match.get('accept') and response.headers.get('content-type') is None:
+            # Note: if we matched a partial MIME type, e.g.  text/*, then we
+            # don't know the content type so we can't fill it in.
+            if match.get('accept') and '*' not in match.get('accept') and \
+                    response.headers.get('content-type') is None:
                 response.headers['Content-Type'] = match['accept']
             return response
         # No match, send 406
@@ -111,7 +114,6 @@ def _filter_dispatchers_on_accept(dispatchers, request):
     supported = [d[1]['accept'] for d in dispatchers]
     # Find the best accept type
     best_match = mimeparse.best_match(supported, str(request.accept))
-    #print "****", request.url, request.accept, supported, best_match
     # Return the matching dispatchers
     return [d for d in dispatchers if d[1]['accept'] == best_match]
 
