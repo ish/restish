@@ -12,9 +12,8 @@ app2 = config:${package}.ini#${package}
 filter-with = evalerror
 
 [app:public]
-use = egg:Paste#pkg_resources
-egg = ${package}
-resource_name = ${package}/public
+use = egg:Paste#static
+document_root = ${package}/public
 
 [server:main]
 use = egg:Paste#http
