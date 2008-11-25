@@ -32,11 +32,17 @@ class RestishApp(object):
         # Recurse into the resource hierarchy until we run out of segments.
         resource = self.root
         while segments:
-            resource_child = getattr(resource, "resource_child", None)
-            if resource_child is not None:
-                resource, segments = resource_child(request, segments)
-            else:
+            resource_child = getattr(resource, 'resource_child', None)
+            if resource_child is None:
                 resource = None
+            else:
+                result = resource_child(request, segments)
+                if isinstance(result, tuple):
+                    # Result is a tuple of (resource, remaining segments).
+                    resource, segments = result
+                else:
+                    # Result is another resource (probably).
+                    resource = result
             if resource is None:
                 return self.not_found_factory()
         return resource

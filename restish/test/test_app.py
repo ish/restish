@@ -33,6 +33,14 @@ class TestApp(unittest.TestCase):
         R = wsgi_out(A, http.Request.blank('/not_found').environ)
         assert R['status'].startswith('404')
 
+    def test_not_found_on_none(self):
+        class Resource(resource.Resource):
+            def resource_child(self, request, segments):
+                return None
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/not_found').environ)
+        assert R['status'].startswith('404')
+
     def test_children(self):
         A = app.RestishApp(Resource('root', {'foo': Resource('foo'), 'bar': Resource('bar')}))
         R = wsgi_out(A, http.Request.blank('/').environ)
@@ -45,18 +53,30 @@ class TestApp(unittest.TestCase):
         assert R['status'].startswith('200')
         assert R['body'] == 'bar'
 
-    def test_resource_returns_resource(self):
-
-        class ProxyResource(resource.Resource):
-            def __init__(self):
-                self.wrapped = Resource('root')
+    def test_resource_returns_resource_when_called(self):
+        class WrapperResource(resource.Resource):
             def __call__(self, request):
-                return self.wrapped
-
-        A = app.RestishApp(ProxyResource())
+                return Resource('root')
+        A = app.RestishApp(WrapperResource())
         R = wsgi_out(A, http.Request.blank('/').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'root'
+
+    def test_resource_returns_resource_when_finding_child(self):
+        class WrappedResource(resource.Resource):
+            def __init__(self, segments=None):
+                self.segments = segments
+            def resource_child(self, request, segments):
+                return self.__class__(segments), []
+            def __call__(self, request):
+                return http.ok([], repr(self.segments))
+        class WrapperResource(resource.Resource):
+            def resource_child(self, request, segments):
+                return WrappedResource()
+        A = app.RestishApp(WrapperResource())
+        R = wsgi_out(A, http.Request.blank('/foo/bar').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == "[u'foo', u'bar']"
 
     def test_client_error(self):
         class Resource(resource.Resource):
