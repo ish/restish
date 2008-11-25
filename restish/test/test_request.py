@@ -1,14 +1,23 @@
 import unittest
-import webob
 
 from restish import http, url
 
 
 def make_environ(path='/bar', base_url='http://localhost:1234/foo', **k):
-    return webob.Request.blank(path, **k).environ
+    return http.Request.blank(path, **k).environ
 
 
-class TestRequest(unittest.TestCase):
+class TestCreation(unittest.TestCase):
+
+    def test_init(self):
+        template = http.Request.blank('/').environ
+        assert http.Request(template).environ == template
+
+    def test_blank(self):
+        assert isinstance(http.Request.blank('/'), http.Request)
+
+
+class TestAttributes(unittest.TestCase):
 
     def test_composition(self):
         request = http.Request(make_environ())

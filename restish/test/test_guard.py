@@ -1,5 +1,4 @@
 import unittest
-from webob import Request
 
 from restish import guard, http
 
@@ -25,7 +24,7 @@ class TestGuard(unittest.TestCase):
             def denied(self, request):
                 pass
 
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         Resource().allowed(request)
         self.assertRaises(http.UnauthorizedError, Resource().denied, request)
 
@@ -37,7 +36,7 @@ class TestGuard(unittest.TestCase):
             def __call__(self, request):
                 pass
 
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         guard.GuardResource(Resource(), make_checker(True))(request)
         guard.GuardResource(Resource(), make_checker(True)).resource_child(request, ['foo'])
         self.assertRaises(http.UnauthorizedError, guard.GuardResource(Resource(), make_checker(False)), request)

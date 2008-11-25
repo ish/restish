@@ -1,7 +1,6 @@
 import unittest
-from webob import Request
 
-from restish import resource, page, templating
+from restish import http, resource, page, templating
 
 
 class TestElement(unittest.TestCase):
@@ -26,7 +25,7 @@ class TestElement(unittest.TestCase):
             def foo(self, request):
                 return Element()
         environ = {'restish.templating.renderer': renderer}
-        request = Request.blank('/', environ=environ)
+        request = http.Request.blank('/', environ=environ)
         response = Page()(request)
         assert response.status.startswith('200')
         print response.body
@@ -37,7 +36,7 @@ class TestElement(unittest.TestCase):
             @page.element('foo')
             def foo(self, request):
                 return page.Element()
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         assert Page().element(request, 'foo') is not None
 
     def test_dynamic_element(self):
@@ -47,12 +46,12 @@ class TestElement(unittest.TestCase):
         class Page(page.Page):
             def element(self, request, name):
                 return Element(name)
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         assert Page().element(request, 'foo').name == 'foo'
         assert Page().element(request, 'bar').name == 'bar'
 
     def test_missing_element(self):
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         self.assertRaises(page.ElementNotFound, page.Page().element, request, 'foo')
 
     def test_element_caching(self):
@@ -66,11 +65,11 @@ class TestElement(unittest.TestCase):
                 return page.Element()
         P = Page()
         # During request
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         assert P.element(request, 'foo') is P.element(request, 'foo')
         # Across requests
-        request1 = Request.blank('/')
-        request2 = Request.blank('/')
+        request1 = http.Request.blank('/')
+        request2 = http.Request.blank('/')
         assert P.element(request1, 'foo') is not P.element(request2, 'foo')
 
 

@@ -1,7 +1,6 @@
 import unittest
-from webob import Request
 
-from restish import resource, templating
+from restish import http, resource, templating
 
 
 class TestModule(unittest.TestCase):
@@ -23,7 +22,7 @@ class TestRenderingArgs(unittest.TestCase):
         Test that common rendering args are correct.
         """
         rendering = templating.Rendering()
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         args = rendering.args(request)
         assert set(['url']) == set(args)
 
@@ -32,7 +31,7 @@ class TestRenderingArgs(unittest.TestCase):
         Test that element rendering args are correct.
         """
         rendering = templating.Rendering()
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         args = rendering.element_args(request, None)
         assert set(['url', 'element']) == set(args)
 
@@ -41,7 +40,7 @@ class TestRenderingArgs(unittest.TestCase):
         Test that page rendering args are correct.
         """
         rendering = templating.Rendering()
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         args = rendering.page_args(request, None)
         assert set(['url', 'element']) == set(args)
 
@@ -55,7 +54,7 @@ class TestRenderingArgs(unittest.TestCase):
                 args['extra'] = None
                 return args
         rendering = Rendering()
-        request = Request.blank('/')
+        request = http.Request.blank('/')
         assert set(['url', 'extra']) == set(rendering.args(request))
         assert set(['url', 'element', 'extra']) == set(rendering.element_args(request, None))
         assert set(['url', 'element', 'extra']) == set(rendering.element_args(request, None))
@@ -76,7 +75,7 @@ class TestPage(unittest.TestCase):
             def html(self, request):
                 return self.args
         environ = {'restish.templating.renderer': renderer}
-        request = Request.blank('/', environ=environ)
+        request = http.Request.blank('/', environ=environ)
         response = Resource({})(request)
         assert response.status.startswith('200')
         assert response.body == '<p>test.html {}</p>'
@@ -94,7 +93,7 @@ class _TemplatingEngineTestCase(unittest.TestCase):
 
     def test_templating(self):
         environ = {'restish.templating.renderer': self.renderer}
-        request = Request.blank('/', environ=environ)
+        request = http.Request.blank('/', environ=environ)
         doc = templating.render(request, 'who-cares.html', {
             'unsafe': '<strong>unsafe</strong>',
             'safe': '<strong>safe</strong>',

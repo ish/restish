@@ -4,9 +4,8 @@
 # See LICENSE for details.
 
 import unittest
-import webob
 
-from restish import url
+from restish import http, url
 
 POUND = '£'.decode('utf-8')
 
@@ -472,7 +471,7 @@ class TestURLAccessor(unittest.TestCase):
         self.host_url = url.URL("http://localhost:1234")
         self.application_url = self.host_url.child('app')
         self.full_url = self.application_url.child('resource').add_query('foo', 'bar')
-        request = webob.Request.blank('/resource?foo=bar', base_url=self.application_url)
+        request = http.Request.blank('/resource?foo=bar', base_url=self.application_url)
         self.url_accessor = url.URLAccessor(request)
 
     def test_full(self):

@@ -3,7 +3,6 @@ Test resource behaviour.
 """
 
 import unittest
-import webob
 
 from restish import app, http, resource
 from restish.test.util import wsgi_out
@@ -13,7 +12,7 @@ class TestResource(unittest.TestCase):
 
     def test_no_method_handler(self):
         res = resource.Resource()
-        environ = webob.Request.blank('/').environ
+        environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
         assert response.status.startswith("405")
 
@@ -33,7 +32,7 @@ class TestResource(unittest.TestCase):
                 return http.ok([], 'DELETE')
         for method in ['GET', 'POST', 'PUT', 'DELETE']:
             print "*", method
-            environ = webob.Request.blank('/',
+            environ = http.Request.blank('/',
                     environ={'REQUEST_METHOD': method},
                     headers={'Accept': 'text/html'}).environ
             response = Resource()(http.Request(environ))
@@ -56,10 +55,10 @@ class TestResource(unittest.TestCase):
             def bar_child(self, request):
                 return ChildResource('bar')
         A = app.RestishApp(Resource())
-        R = wsgi_out(A, webob.Request.blank('/foo').environ)
+        R = wsgi_out(A, http.Request.blank('/foo').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'foo'
-        R = wsgi_out(A, webob.Request.blank('/bar').environ)
+        R = wsgi_out(A, http.Request.blank('/bar').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'bar'
 
@@ -72,7 +71,7 @@ class TestContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([], '<p>Hello!</p>')
         res = Resource()
-        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
+        environ = http.Request.blank('/', headers={'Accept': 'text/plain'}).environ
         response = res(http.Request(environ))
         print response.status
         assert response.status.startswith("406")
@@ -86,7 +85,7 @@ class TestContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([], '<p>Hello!</p>')
         res = Resource()
-        environ = webob.Request.blank('/').environ
+        environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
         assert response.headers['Content-Type'] == 'text/html'
 
@@ -100,7 +99,7 @@ class TestContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([], '<p>Hello!</p>')
         res = Resource()
-        environ = webob.Request.blank('/').environ
+        environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
         print response.headers.get('Content-Type')
         assert response.headers.get('Content-Type') is None
@@ -115,7 +114,7 @@ class TestContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([('Content-Type', 'text/plain')], '<p>Hello!</p>')
         res = Resource()
-        environ = webob.Request.blank('/').environ
+        environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
         assert response.headers['Content-Type'] == 'text/plain'
 
@@ -129,7 +128,7 @@ class TestContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([('Content-Type', 'text/html')], "<html />")
         res = Resource()
-        environ = webob.Request.blank('/').environ
+        environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
@@ -147,7 +146,7 @@ class TestContentNegotiation(unittest.TestCase):
             def json(self, request):
                 return http.ok([('Content-Type', 'application/json')], "{}")
         res = Resource()
-        environ = webob.Request.blank('/', headers=[('Accept', 'application/json')]).environ
+        environ = http.Request.blank('/', headers=[('Accept', 'application/json')]).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
 
@@ -164,7 +163,7 @@ class TestContentNegotiation(unittest.TestCase):
             def json(self, request):
                 return http.ok([('Content-Type', 'application/json')], "{}")
         res = Resource()
-        environ = webob.Request.blank('/', headers=[('Accept', 'text/html')]).environ
+        environ = http.Request.blank('/', headers=[('Accept', 'text/html')]).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
@@ -182,7 +181,7 @@ class TestContentNegotiation(unittest.TestCase):
             def json(self, request):
                 return http.ok([], '"Hello!"')
         res = Resource()
-        environ = webob.Request.blank('/').environ
+        environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
@@ -196,7 +195,7 @@ class TestContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([('Content-Type', 'text/plain')], 'Hello!')
         res = Resource()
-        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
+        environ = http.Request.blank('/', headers={'Accept': 'text/plain'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
@@ -213,19 +212,19 @@ class TestContentNegotiation(unittest.TestCase):
             def plain(self, request):
                 return http.ok([('Content-Type', 'text/plain')], 'Hello!')
         res = Resource()
-        environ = webob.Request.blank('/', headers={'Accept': 'text/html;q=0.9,text/plain'}).environ
+        environ = http.Request.blank('/', headers={'Accept': 'text/html;q=0.9,text/plain'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
-        environ = webob.Request.blank('/', headers={'Accept': 'text/plain,text/html;q=0.9'}).environ
+        environ = http.Request.blank('/', headers={'Accept': 'text/plain,text/html;q=0.9'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
-        environ = webob.Request.blank('/', headers={'Accept': 'text/html;q=0.4,text/plain;q=0.5'}).environ
+        environ = http.Request.blank('/', headers={'Accept': 'text/html;q=0.4,text/plain;q=0.5'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
-        environ = webob.Request.blank('/', headers={'Accept': 'text/html;q=0.5,text/plain;q=0.4'}).environ
+        environ = http.Request.blank('/', headers={'Accept': 'text/html;q=0.5,text/plain;q=0.4'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
@@ -243,7 +242,7 @@ class TestContentNegotiation(unittest.TestCase):
             def aaa(self, request):
                 return http.ok([('Content-Type', 'application/json')], '')
         res = Resource()
-        environ = webob.Request.blank('/', headers={'Accept': '*/*, application/json, text/javascript'}).environ
+        environ = http.Request.blank('/', headers={'Accept': '*/*, application/json, text/javascript'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         print response.headers['Content-Type']
@@ -263,7 +262,7 @@ class TestContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([('Content-Type', 'text/plain')], 'Hello!')
         res = Resource()
-        environ = webob.Request.blank('/', headers={'Accept': 'text/plain'}).environ
+        environ = http.Request.blank('/', headers={'Accept': 'text/plain'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
@@ -280,7 +279,7 @@ class TestShortAccepts(unittest.TestCase):
             def html(self, request):
                 return http.ok([], "<html />")
         res = Resource()
-        environ = webob.Request.blank('/', headers=[('Accept', 'text/html')]).environ
+        environ = http.Request.blank('/', headers=[('Accept', 'text/html')]).environ
         response = res(http.Request(environ))
         print response.status
         assert response.status == "200 OK"
@@ -295,7 +294,7 @@ class TestShortAccepts(unittest.TestCase):
             def json(self, request):
                 return http.ok([], "{}")
         res = Resource()
-        environ = webob.Request.blank('/', headers=[('Accept', 'application/json')]).environ
+        environ = http.Request.blank('/', headers=[('Accept', 'application/json')]).environ
         response = res(http.Request(environ))
         print response.status
         assert response.status == "200 OK"
@@ -310,7 +309,7 @@ class TestShortAccepts(unittest.TestCase):
             def unknown(self, request):
                 return http.ok([], "{}")
         res = Resource()
-        environ = webob.Request.blank('/').environ
+        environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
         print response.status
         assert response.status == "200 OK"

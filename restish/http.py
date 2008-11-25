@@ -5,6 +5,13 @@ from restish import error, url
 
 class Request(object):
 
+    @classmethod
+    def blank(cls, *a, **k):
+        """
+        Create a new Request, compatible with webob.Request.blank.
+        """
+        return cls(webob.Request.blank(*a, **k).environ)
+
     def __init__(self, environ):
         self._request = webob.Request(environ)
 

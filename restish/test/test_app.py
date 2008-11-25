@@ -1,5 +1,4 @@
 import unittest
-import webob
 
 from restish import app, http, resource, url
 from restish.test.util import wsgi_out
@@ -25,24 +24,24 @@ class TestApp(unittest.TestCase):
 
     def test_root(self):
         A = app.RestishApp(Resource('root'))
-        R = wsgi_out(A, webob.Request.blank('/').environ)
+        R = wsgi_out(A, http.Request.blank('/').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'root'
 
     def test_not_found(self):
         A = app.RestishApp(resource.Resource())
-        R = wsgi_out(A, webob.Request.blank('/not_found').environ)
+        R = wsgi_out(A, http.Request.blank('/not_found').environ)
         assert R['status'].startswith('404')
 
     def test_children(self):
         A = app.RestishApp(Resource('root', {'foo': Resource('foo'), 'bar': Resource('bar')}))
-        R = wsgi_out(A, webob.Request.blank('/').environ)
+        R = wsgi_out(A, http.Request.blank('/').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'root'
-        R = wsgi_out(A, webob.Request.blank('/foo').environ)
+        R = wsgi_out(A, http.Request.blank('/foo').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'foo'
-        R = wsgi_out(A, webob.Request.blank('/bar').environ)
+        R = wsgi_out(A, http.Request.blank('/bar').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'bar'
 
@@ -55,7 +54,7 @@ class TestApp(unittest.TestCase):
                 return self.wrapped
 
         A = app.RestishApp(ProxyResource())
-        R = wsgi_out(A, webob.Request.blank('/').environ)
+        R = wsgi_out(A, http.Request.blank('/').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'root'
 
@@ -64,7 +63,7 @@ class TestApp(unittest.TestCase):
             def __call__(self, request):
                 raise http.UnauthorizedError()
         A = app.RestishApp(Resource())
-        R = wsgi_out(A, webob.Request.blank('/').environ)
+        R = wsgi_out(A, http.Request.blank('/').environ)
         assert R['status'].startswith('401')
 
     def test_no_root_application(self):
@@ -76,9 +75,9 @@ class TestApp(unittest.TestCase):
             def __call__(self, request):
                 return http.ok([('Content-Type', 'text/plain')], self.segment.encode('utf-8'))
         A = app.RestishApp(Resource(''))
-        assert wsgi_out(A, webob.Request.blank('/').environ)['body'] == ''
-        assert wsgi_out(A, webob.Request.blank('/', base_url='http://localhost/base').environ)['body'] == ''
-        assert wsgi_out(A, webob.Request.blank('/foo', base_url='http://localhost/base').environ)['body'] == 'foo'
+        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == ''
+        assert wsgi_out(A, http.Request.blank('/', base_url='http://localhost/base').environ)['body'] == ''
+        assert wsgi_out(A, http.Request.blank('/foo', base_url='http://localhost/base').environ)['body'] == 'foo'
 
     def test_weird_path_segments(self):
         class Resource(resource.Resource):
@@ -89,10 +88,10 @@ class TestApp(unittest.TestCase):
             def __call__(self, request):
                 return http.ok([('Content-Type', 'text/plain')], self.segment.encode('utf-8'))
         A = app.RestishApp(Resource(''))
-        assert wsgi_out(A, webob.Request.blank('/').environ)['body'] == ''
-        assert wsgi_out(A, webob.Request.blank('/foo').environ)['body'] == 'foo'
-        print wsgi_out(A, webob.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body']
-        assert wsgi_out(A, webob.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body'] == 'foo+bar@example.com'
+        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == ''
+        assert wsgi_out(A, http.Request.blank('/foo').environ)['body'] == 'foo'
+        print wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body']
+        assert wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body'] == 'foo+bar@example.com'
 
 
 if __name__ == '__main__':
