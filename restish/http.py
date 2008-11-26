@@ -76,17 +76,19 @@ def not_modified():
 # Client Error 4xx
 
 def bad_request(headers=None, body=None):
-    if headers is None:
+    if headers is None and body is None:
         headers = [('Content-Type', 'text/plain')]
-    if body is None:
         body = '400 Bad Request'
     return Response("400 Bad Request", headers, body)
 
 class BadRequestError(error.HTTPClientError):
     response_factory = staticmethod(bad_request)
 
-def unauthorized():
-    return Response("401 Unauthorized", [('Content-Type', 'text/plain')], "401 Unauthorized")
+def unauthorized(headers=None, body=None):
+    if headers is None and body is None:
+        headers = [('Content-Type', 'text/plain')]
+        body = '401 Unauthorized'
+    return Response("401 Unauthorized", headers, body)
 
 class UnauthorizedError(error.HTTPClientError):
     response_factory = staticmethod(unauthorized)
