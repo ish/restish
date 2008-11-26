@@ -14,14 +14,22 @@ authenticated user as the REMOTE_USER:
 
     def authenticated_checker(request, obj):
         if request.environ.get('REMOTE_USER') is None:
-            raise http.UnauthorizedError()
+            raise guard.GuardError("No authenticated user.")
         
 """
 
 import decorator
 
+from restish import http
 
-def guard(*checkers):
+
+class GuardError(Exception):
+    """
+    Guard check failure.
+    """
+
+
+def guard(*checkers, **kwargs):
     """
     Decorator that guards a function by calling each checker function before
     calling the decorated function.
@@ -29,9 +37,19 @@ def guard(*checkers):
     The only requirement is that the decorated function takes the request as
     the first positional arg.
     """
+
+    # Bah, silly Python doesn't (yet) support explicit positional vs keyword
+    # args so we'll have to handle it ourselves for now.
+    error_handler = kwargs.pop('error_handler', _default_error_handler)
+    if kwargs:
+        raise TypeError('guard() got unexpected keyword arguments %r' % ('.'.join(kwargs),))
+
     def call(func, obj, request, *a, **k):
-        _run_guard_checkers(checkers, request, obj)
+        errors = _run_guard_checkers(checkers, request, obj, error_handler)
+        if errors:
+            return error_handler(request, obj, errors)
         return func(obj, request, *a, **k)
+
     return decorator.decorator(call)
 
 
@@ -41,20 +59,42 @@ class GuardResource(object):
     before calling the wrapped resource's methods.
     """
 
-    def __init__(self, resource, *checkers):
+    def __init__(self, resource, *checkers, **kwargs):
+        # Bah, silly Python doesn't (yet) support explicit positional vs keyword
+        # args so we'll have to handle it ourselves for now.
+        error_handler = kwargs.pop('error_handler', _default_error_handler)
+        if kwargs:
+            raise TypeError('guard() got unexpected keyword arguments %r' % ('.'.join(kwargs),))
         self.resource = resource
         self.checkers = checkers
+        self.error_handler = error_handler
 
     def resource_child(self, request, segments):
-        _run_guard_checkers(self.checkers, request, self.resource)
+        errors = _run_guard_checkers(self.checkers, request, self.resource, self.error_handler)
+        if errors:
+            return self.error_handler(request, self.resource, errors)
         return self.resource.resource_child(request, segments)
 
     def __call__(self, request):
-        _run_guard_checkers(self.checkers, request, self.resource)
+        errors = _run_guard_checkers(self.checkers, request, self.resource, self.error_handler)
+        if errors:
+            return self.error_handler(request, self.resource, errors)
         return self.resource(request)
 
 
-def _run_guard_checkers(checkers, request, obj):
+def _run_guard_checkers(checkers, request, obj, error_handler):
+    errors = []
     for checker in checkers:
-        checker(request, obj)
+        try:
+            checker(request, obj)
+        except GuardError, e:
+            errors.append(e.message)
+    return errors
+
+
+def _default_error_handler(request, obj, errors):
+    errors_text = '\n'.join(errors)
+    raise http.UnauthorizedError(
+            [('Content-Type', 'text/plain')],
+            """401 Unauthorized\n\n%s\n"""%errors_text)
 
