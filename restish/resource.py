@@ -84,14 +84,22 @@ class Resource(object):
         if dispatcher is not None:
             (callable, match) = dispatcher
             response = callable(self, request)
-            # If we matched an 'Accept' header and the content type has not
-            # been set explicitly then fill it in on behalf of the
-            # application.
-            # Note: if we matched a partial MIME type, e.g.  text/*, then we
-            # don't know the content type so we can't fill it in.
-            if match.get('accept') and '*' not in match.get('accept') and \
-                    response.headers.get('content-type') is None:
-                response.headers['Content-Type'] = match['accept']
+            # Try to autocomplete the content-type header if not set
+            # explicitly.
+            # If there's no accept from the client and there's only one
+            # possible type from the match then use that as the best match.
+            # Otherwise use mimeparse to work out what the best match was. If
+            # the best match if not a wildcard then we know what content-type
+            # should be.
+            if isinstance(response, http.Response) and \
+                    not response.headers.get('content-type'):
+                accept = str(request.accept)
+                if not accept and len(match['accept']) == 1:
+                    best_match = match['accept'][0]
+                else:
+                    best_match = mimeparse.best_match(match['accept'], accept)
+                if '*' not in best_match:
+                    response.headers['content-type'] = best_match
             return response
         # No match, send 406
         return http.not_acceptable([('Content-Type', 'text/plain')], '406 Not Acceptable')
@@ -111,11 +119,13 @@ def _best_dispatcher(dispatchers, request):
 
 def _filter_dispatchers_on_accept(dispatchers, request):
     # Build an ordered list of the accept matches
-    supported = [d[1]['accept'] for d in dispatchers]
+    supported = []
+    for d in dispatchers:
+        supported.extend(d[1]['accept'])
     # Find the best accept type
     best_match = mimeparse.best_match(supported, str(request.accept))
     # Return the matching dispatchers
-    return [d for d in dispatchers if d[1]['accept'] == best_match]
+    return [d for d in dispatchers if best_match in d[1]['accept']]
 
 
 class NotFound(Resource):
@@ -136,8 +146,9 @@ class MethodDecorator(object):
     method = None
 
     def __init__(self, accept='*/*'):
-        if '/' not in accept:
-            accept = _real_mimetype(accept)
+        if not isinstance(accept, list):
+            accept = [accept]
+        accept = [_normalise_mimetype(a) for a in accept]
         self.match = {'accept': accept}
 
     def __call__(self, func):
@@ -162,15 +173,17 @@ class PUT(MethodDecorator):
     method = 'PUT'
 
 
-def _real_mimetype(short):
+def _normalise_mimetype(mimetype):
+    if '/' in mimetype:
+        return mimetype
     # Try mimetypes module, by extension.
-    real = mimetypes.guess_type('.%s'%short)[0]
+    real = mimetypes.guess_type('.%s'%mimetype)[0]
     if real is not None:
         return real
     # Try extra extension mapping.
-    real = SHORT_CONTENT_TYPE_EXTRA.get(short)
+    real = SHORT_CONTENT_TYPE_EXTRA.get(mimetype)
     if real is not None:
         return real
     # Oh well.
-    return short
+    return mimetype
 

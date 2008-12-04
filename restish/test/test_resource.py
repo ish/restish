@@ -267,6 +267,52 @@ class TestContentNegotiation(unittest.TestCase):
         assert response.headers['Content-Type'] == 'text/plain'
 
 
+class TestAcceptLists(unittest.TestCase):
+
+    def test_match(self):
+        class Resource(resource.Resource):
+            @resource.GET(accept=['text/html', 'application/xhtml+xml'])
+            def html(self, request):
+                return http.ok([], '<html />')
+        res = Resource()
+        environ = http.Request.blank('/', headers={'Accept': 'text/html'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        environ = http.Request.blank('/', headers={'Accept': 'application/xhtml+xml'}).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+
+    def test_auto_content_type(self):
+        class Resource(resource.Resource):
+            @resource.GET(accept=['text/html', 'application/xhtml+xml'])
+            def html(self, request):
+                return http.ok([], '<html />')
+        # Check specific accept type.
+        environ = http.Request.blank('/', headers={'Accept': 'text/html'}).environ
+        response = Resource()(http.Request(environ))
+        assert response.headers['content-type'] == 'text/html'
+        # Check other specific accept type.
+        environ = http.Request.blank('/', headers={'Accept': 'application/xhtml+xml'}).environ
+        response = Resource()(http.Request(environ))
+        assert response.headers['content-type'] == 'application/xhtml+xml'
+        # Check the server's first accept match type is used if the client has
+        # no strong preference whatever order the accept header lists types.
+        environ = http.Request.blank('/', headers={'Accept': 'text/html,application/xhtml+xml'}).environ
+        response = Resource()(http.Request(environ))
+        assert response.headers['content-type'] == 'text/html'
+        environ = http.Request.blank('/', headers={'Accept': 'application/xhtml+xml,text/html'}).environ
+        response = Resource()(http.Request(environ))
+        assert response.headers['content-type'] == 'text/html'
+        # Client accepts both but prefers one.
+        environ = http.Request.blank('/', headers={'Accept': 'text/html,application/xhtml+xml;q=0.9'}).environ
+        response = Resource()(http.Request(environ))
+        assert response.headers['content-type'] == 'text/html'
+        # Client accepts both but prefers other.
+        environ = http.Request.blank('/', headers={'Accept': 'text/html;q=0.9,application/xhtml+xml'}).environ
+        response = Resource()(http.Request(environ))
+        assert response.headers['content-type'] == 'application/xhtml+xml'
+
+
 class TestShortAccepts(unittest.TestCase):
 
     def test_single(self):

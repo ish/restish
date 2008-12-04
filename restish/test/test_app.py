@@ -62,7 +62,10 @@ class TestApp(unittest.TestCase):
         assert R['status'].startswith('200')
         assert R['body'] == 'root'
 
-    def test_resource_returns_resource_when_finding_child(self):
+    def test_resource_returns_resource(self):
+        """
+        Check resources can return other resources.
+        """
         class WrappedResource(resource.Resource):
             def __init__(self, segments=None):
                 self.segments = segments
@@ -70,13 +73,40 @@ class TestApp(unittest.TestCase):
                 return self.__class__(segments), []
             def __call__(self, request):
                 return http.ok([], repr(self.segments))
-        class WrapperResource(resource.Resource):
+        class WrapperResource(object):
             def resource_child(self, request, segments):
                 return WrappedResource()
+            def __call__(self, request):
+                return WrappedResource()
         A = app.RestishApp(WrapperResource())
+        # Call the wrapper
+        R = wsgi_out(A, http.Request.blank('/').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == "None"
+        # Call a child of the wrapper
         R = wsgi_out(A, http.Request.blank('/foo/bar').environ)
         assert R['status'].startswith('200')
         assert R['body'] == "[u'foo', u'bar']"
+
+    def test_accepting_resource_returns_resource(self):
+        """
+        Check resource with accept match that returns another resource.
+
+        This test was added because of a bug in resource.Resource where it
+        assumed the request handler would return a response object but only
+        broke when some accept matching had occurred.
+        """
+        class WrappedResource(resource.Resource):
+            def __call__(self, request):
+                return http.ok([], "WrappedResource")
+        class WrapperResource(resource.Resource):
+            @resource.GET(accept='html')
+            def html(self, request):
+                return WrappedResource()
+        A = app.RestishApp(WrapperResource())
+        R = wsgi_out(A, http.Request.blank('/').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == "WrappedResource"
 
     def test_client_error(self):
         class Resource(resource.Resource):
