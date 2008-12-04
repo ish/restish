@@ -1,6 +1,6 @@
 import unittest
 
-from restish import guard, http, resource
+from restish import guard, http
 
 
 def make_checker(allow, checker_num=1):
