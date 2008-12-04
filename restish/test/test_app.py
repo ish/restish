@@ -114,6 +114,50 @@ class TestApp(unittest.TestCase):
         assert wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body'] == 'foo+bar@example.com'
 
 
+class CallableResource(object):
+    def __call__(self, request):
+        return http.ok([], 'CallableResource')
+
+
+class TraversableResource(object):
+    def resource_child(self, request, segments):
+        return CallableResource(), []
+
+
+def resource_func(request):
+    return http.ok([], 'resource_func')
+
+
+class TestResourceLike(unittest.TestCase):
+    """
+    Test non-Resource subclasses work as expected.
+    """
+
+    def test_callable(self):
+        A = app.RestishApp(CallableResource())
+        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == 'CallableResource'
+
+    def test_not_callable(self):
+        A = app.RestishApp(TraversableResource())
+        self.assertRaises(TypeError, wsgi_out, A, http.Request.blank('/').environ)
+        
+    def test_traversable(self):
+        A = app.RestishApp(TraversableResource())
+        assert wsgi_out(A, http.Request.blank('/foo').environ)['body'] == 'CallableResource'
+
+    def test_not_traversable(self):
+        A = app.RestishApp(CallableResource())
+        wsgi_out(A, http.Request.blank('/foo').environ)['status'].startswith('404')
+
+    def test_func_callable(self):
+        A = app.RestishApp(resource_func)
+        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == 'resource_func'
+
+    def test_func_not_traversable(self):
+        A = app.RestishApp(resource_func)
+        wsgi_out(A, http.Request.blank('/foo').environ)['status'].startswith('404')
+        
+
 if __name__ == '__main__':
     unittest.main()
 
