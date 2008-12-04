@@ -248,8 +248,7 @@ class TestContentNegotiation(unittest.TestCase):
         print response.headers['Content-Type']
         assert response.headers['Content-Type'] == 'application/json'
 
-    # XXX skipped
-    def _test_no_subtype_match_2(self):
+    def test_no_subtype_match_2(self):
         """
         Test that something/* accept matches are found, when there's also a
         '*/*' match,
