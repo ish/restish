@@ -108,6 +108,19 @@ class TestApp(unittest.TestCase):
         assert R['status'].startswith('200')
         assert R['body'] == "WrappedResource"
 
+    def test_resource_returns_func(self):
+        def func(request):
+            return http.ok([], 'func')
+        class WrapperResource(resource.Resource):
+            @resource.GET()
+            def GET(self, request):
+                return func
+        A = app.RestishApp(WrapperResource())
+        R = wsgi_out(A, http.Request.blank('/').environ)
+        print R
+        assert R['status'].startswith('200')
+        assert R['body'] == 'func'
+
     def test_client_error(self):
         class Resource(resource.Resource):
             def __call__(self, request):

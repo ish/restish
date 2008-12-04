@@ -15,7 +15,7 @@ class RestishApp(object):
             # Locate the resource.
             resource = self.locate_resource(request)
             # Call the resource to render the page.
-            response = self.call_resource(request, resource)
+            response = self.get_response(request, resource)
         except error.HTTPClientError, e:
             response = e.make_response()
         # Send the response to the WSGI parent.
@@ -47,13 +47,17 @@ class RestishApp(object):
                 return self.not_found_factory()
         return resource
 
-    def call_resource(self, request, the_resource):
-        # Recursively call the resource to get a response. A resource is
-        # allowed to return another resource to be used in its place.
+    def get_response(self, request, resource):
+        """
+        Recursively call the resource until we get a response.
+        
+        A resource is allowed to return another resource to be used in its
+        place. This method handles the recursive calling.
+        """
         while True:
-            response = the_resource(request)
-            if not isinstance(response, resource.Resource):
+            response = resource(request)
+            if isinstance(response, http.Response):
                 break
-            the_resource = response
+            resource = response
         return response
 
