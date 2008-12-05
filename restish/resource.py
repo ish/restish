@@ -177,7 +177,7 @@ def _normalise_mimetype(mimetype):
     if '/' in mimetype:
         return mimetype
     # Try mimetypes module, by extension.
-    real = mimetypes.guess_type('.%s'%mimetype)[0]
+    real = mimetypes.guess_type('filename.%s'%mimetype)[0]
     if real is not None:
         return real
     # Try extra extension mapping.
