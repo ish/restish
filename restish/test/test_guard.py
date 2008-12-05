@@ -97,6 +97,22 @@ class TestGuard(unittest.TestCase):
         self.assertRaises(http.UnauthorizedError, guard.GuardResource(Resource(), make_checker(False)).resource_child, request, ['foo'])
 
 
+class TestArgs(unittest.TestCase):
+    """
+    Check explicit keyword args handling.
+    """
+
+    def test_decorator(self):
+        guard.guard()
+        guard.guard(error_handler=lambda: None)
+        self.assertRaises(TypeError, guard.guard, bad_arg=None)
+
+    def test_resource(self):
+        guard.GuardResource(None)
+        guard.GuardResource(None, error_handler=lambda: None)
+        self.assertRaises(TypeError, guard.GuardResource, None, bad_arg=None)
+
+
 if __name__ == '__main__':
     unittest.main()
 
