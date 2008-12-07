@@ -4,6 +4,7 @@
 APP_ID = ${package}@localhost
 ; Email settings.
 SMTP_SERVER = localhost
+CACHE_DIR = %(here)s/cache
 
 [composite:main]
 use = egg:Paste#cascade

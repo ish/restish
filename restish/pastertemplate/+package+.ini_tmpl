@@ -1,3 +1,4 @@
 [app:${package}]
 use = egg:${project}
+cache_dir = %(CACHE_DIR)s
 
