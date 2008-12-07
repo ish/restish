@@ -1,3 +1,7 @@
+"""
+WSGI/PasteDeploy application bootstrap module.
+"""
+
 from restish.app import RestishApp
 
 from ${package}.resource import root

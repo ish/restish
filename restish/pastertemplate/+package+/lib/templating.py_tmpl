@@ -1,8 +1,16 @@
+"""
+Templating support library and renderer configuration.
+"""
+
 from restish import templating
 
 
 def make_renderer(app_conf):
+    """
+    Create and return a restish.templating "renderer".
+    """
 
+    # Uncomment for an example of Mako templating support.
     #import pkg_resources
     #import os.path
     #from restish.contrib.makorenderer import MakoRenderer
@@ -15,6 +23,7 @@ def make_renderer(app_conf):
     #        default_filters=['unicode', 'h']
     #        )
 
+    # Uncomment for an example of Jinja2 templating support.
     #from restish.contrib.jinja2renderer import Jinja2Renderer
     #from jinja2 import PackageLoader
     #return Jinja2Renderer(
@@ -22,6 +31,7 @@ def make_renderer(app_conf):
     #        autoescape=True
     #        )
 
+    # Uncomment for an example of Genshi templating support.
     #from restish.contrib.genshirenderer import GenshiRenderer
     #import genshi.template.loader
     #return GenshiRenderer(
@@ -31,10 +41,14 @@ def make_renderer(app_conf):
     return None
 
 
+# Subclass the standard Rendering type. Overriding Rendering methods make it
+# trivial to push extra, application-wide data to the templates without any
+# assistance from the resource.
 class Rendering(templating.Rendering):
     pass
 
 
+# Expose the decorators at module-scope, just like restish.templating.
 _rendering = Rendering()
 render = _rendering.render
 page = _rendering.page
