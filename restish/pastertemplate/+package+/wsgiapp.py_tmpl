@@ -22,18 +22,14 @@ def setup_environ(app, global_conf, app_conf):
     """
 
     # Create any objects that should exist for the lifetime of the application
-    # here. Don't forget to actually include them in the environ though! For
-    # example:
-    #
-    # renderer = SomeRenderingEngine(...)
-    # ...
+    # here. Don't forget to actually include them in the environ below!
+    from ${package}.lib import templating
+    renderer = templating.make_renderer(app_conf)
 
     def application(environ, start_response):
 
-        # Add additional keys to the environ here. For example:
-        #
-        # environ['restish.templating.renderer'] = renderer
-        # ...
+        # Add additional keys to the environ here.
+        environ['restish.templating.renderer'] = renderer
 
         return app(environ, start_response)
 

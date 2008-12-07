@@ -1,0 +1,42 @@
+from restish import templating
+
+
+def make_renderer(app_conf):
+
+    #import pkg_resources
+    #import os.path
+    #from restish.contrib.makorenderer import MakoRenderer
+    #return MakoRenderer(
+    #        directories=[
+    #            pkg_resources.resource_filename('${package}', 'templates')
+    #            ],
+    #        module_directory=os.path.join(app_conf['cache_dir'], 'templates'),
+    #        input_encoding='utf-8', output_encoding='utf-8',
+    #        default_filters=['unicode', 'h']
+    #        )
+
+    #from restish.contrib.jinja2renderer import Jinja2Renderer
+    #from jinja2 import PackageLoader
+    #return Jinja2Renderer(
+    #        loader=PackageLoader('${package}', 'templates'),
+    #        autoescape=True
+    #        )
+
+    #from restish.contrib.genshirenderer import GenshiRenderer
+    #import genshi.template.loader
+    #return GenshiRenderer(
+    #        genshi.template.loader.package('${package}', 'templates')
+    #        )
+
+    return None
+
+
+class Rendering(templating.Rendering):
+    pass
+
+
+_rendering = Rendering()
+render = _rendering.render
+page = _rendering.page
+element = _rendering.element
+
