@@ -103,7 +103,10 @@ def forbidden(headers, body):
 class ForbiddenError(error.HTTPClientError):
     response_factory = staticmethod(forbidden)
 
-def not_found(headers, body):
+def not_found(headers=None, body=None):
+    if headers is None and body is None:
+        headers = [('Content-Type', 'text/plain')]
+        body = '404 Not Found'
     return Response("404 Not Found", headers, body)
 
 class NotFoundError(error.HTTPClientError):

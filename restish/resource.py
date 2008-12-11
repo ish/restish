@@ -128,12 +128,6 @@ def _filter_dispatchers_on_accept(dispatchers, request):
     return [d for d in dispatchers if best_match in d[1]['accept']]
 
 
-class NotFound(Resource):
-
-    def __call__(self, request):
-        return http.not_found([('Content-Type', 'text/plain')], "404 Not Found")
-
-
 def child(name=None):
     def decorator(func):
         setattr(func, _RESTISH_CHILD, name or func.__name__)

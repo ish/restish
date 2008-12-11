@@ -1,9 +1,7 @@
-from restish import error, http, resource
+from restish import error, http
 
 
 class RestishApp(object):
-
-    not_found_factory = resource.NotFound
 
     def __init__(self, root_resource):
         self.root = root_resource
@@ -44,7 +42,7 @@ class RestishApp(object):
                     # Result is another resource (probably).
                     resource = result
             if resource is None:
-                return self.not_found_factory()
+                raise http.NotFoundError()
         return resource
 
     def get_response(self, request, resource):
