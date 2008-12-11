@@ -156,6 +156,18 @@ class TestApp(unittest.TestCase):
         print wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body']
         assert wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body'] == 'foo+bar@example.com'
 
+    def test_iterable_response_body(self):
+        def resource(request):
+            def gen():
+                yield "Three ... "
+                yield "two ... "
+                yield "one ... "
+                yield "BANG!"
+            return http.ok([('Content-Type', 'text/plain')], gen())
+        A = app.RestishApp(resource)
+        print  wsgi_out(A, http.Request.blank('/').environ)['body']
+        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == 'Three ... two ... one ... BANG!'
+
 
 class CallableResource(object):
     def __call__(self, request):

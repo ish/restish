@@ -7,7 +7,7 @@ def make_environ(path='/bar', base_url='http://localhost:1234/foo', **k):
     return http.Request.blank(path, **k).environ
 
 
-class TestCreation(unittest.TestCase):
+class TestRequestCreation(unittest.TestCase):
 
     def test_init(self):
         template = http.Request.blank('/').environ
@@ -17,7 +17,7 @@ class TestCreation(unittest.TestCase):
         assert isinstance(http.Request.blank('/'), http.Request)
 
 
-class TestAttributes(unittest.TestCase):
+class TestRequestAttributes(unittest.TestCase):
 
     def test_composition(self):
         request = http.Request(make_environ())
@@ -29,6 +29,17 @@ class TestAttributes(unittest.TestCase):
         self.assertTrue(isinstance(request.application_url, url.URL))
         self.assertTrue(isinstance(request.path_url, url.URL))
         self.assertTrue(isinstance(request.url, url.URL))
+
+
+class TestResponseCreation(unittest.TestCase):
+
+    def test_init_with_bytes(self):
+        return http.Response('200 OK', [('Content-Type', 'text/plain')], "bytes")
+
+    def test_init_with_iter(self):
+        def gen():
+            yield ''
+        return http.Response('200 OK', [('Content-Type', 'text/plain')], gen())
 
 
 if __name__ == '__main__':

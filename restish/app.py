@@ -20,7 +20,7 @@ class RestishApp(object):
             response = e.make_response()
         # Send the response to the WSGI parent.
         start_response(response.status, response.headerlist)
-        return response.body
+        return response.app_iter
 
     def locate_resource(self, request):
         # Calculate the path segments relative to the application,

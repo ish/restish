@@ -38,7 +38,11 @@ class Request(object):
 class Response(object):
 
     def __init__(self, status, headers, body):
-        self._response = webob.Response(body, status, headers)
+        self._response = webob.Response(status=status, headerlist=headers)
+        if isinstance(body, str):
+            self._response.body = body
+        else:
+            self._response.app_iter = body
 
     def __getattr__(self, name):
         return getattr(self._response, name)
