@@ -31,18 +31,19 @@ class RestishApp(object):
         resource = self.root
         while segments:
             resource_child = getattr(resource, 'resource_child', None)
+            # No resource_child method? 404.
             if resource_child is None:
-                resource = None
-            else:
-                result = resource_child(request, segments)
-                if isinstance(result, tuple):
-                    # Result is a tuple of (resource, remaining segments).
-                    resource, segments = result
-                else:
-                    # Result is another resource (probably).
-                    resource = result
-            if resource is None:
                 raise http.NotFoundError()
+            result = resource_child(request, segments)
+            # No result returned? 404.
+            if result is None:
+                raise http.NotFoundError()
+            # Either aa (resource, remaining segments) tuple or an object to
+            # forward the lookup to is acceptable.
+            if isinstance(result, tuple):
+                resource, segments = result
+            else:
+                resource = result
         return resource
 
     def get_response(self, request, resource):

@@ -71,7 +71,7 @@ class Resource(object):
         factory = self.child_factories.get(segments[0])
         if factory is not None:
             return factory(self, request), segments[1:]
-        return None, segments
+        return None
 
     def __call__(self, request):
         # Get the dispatchers for the request method.
