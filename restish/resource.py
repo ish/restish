@@ -137,7 +137,7 @@ def _filter_dispatchers_on_accept(dispatchers, request):
 
 def child(name=None):
     def decorator(func):
-        setattr(func, _RESTISH_CHILD, name or func.__name__)
+        setattr(func, _RESTISH_CHILD, func.__name__ if name is None else name)
         return func
     return decorator
 

@@ -50,6 +50,28 @@ class TestChildLookup(unittest.TestCase):
         R = wsgi_out(A, http.Request.blank('/404').environ)
         assert R['status'].startswith('404')
 
+    def test_nameless_child(self):
+        class Resource(resource.Resource):
+            def __init__(self, segments=[]):
+                self.segments = segments
+            @resource.child()
+            def foo(self, request, segments):
+                return self.__class__(self.segments + ['foo'])
+            @resource.child('')
+            def nameless_child(self, request, segments):
+                return self.__class__(self.segments + [''])
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/foo/').environ)
+        print R['status']
+        assert R['status'].startswith('200')
+        assert R['body'] == 'foo/'
+        R = wsgi_out(A, http.Request.blank('/foo//foo/foo///').environ)
+        print R['status']
+        assert R['status'].startswith('200')
+        assert R['body'] == 'foo//foo/foo///'
+
     def test_implicitly_named(self):
         class Resource(resource.Resource):
             def __init__(self, segments=[]):
