@@ -70,7 +70,14 @@ class Resource(object):
     def resource_child(self, request, segments):
         factory = self.child_factories.get(segments[0])
         if factory is not None:
-            return factory(self, request), segments[1:]
+            unmatched_segments = segments[1:]
+            result = factory(self, request, unmatched_segments)
+            if result is None:
+                return None
+            elif isinstance(result, tuple):
+                return result
+            else:
+                return result, unmatched_segments
         return None
 
     def __call__(self, request):

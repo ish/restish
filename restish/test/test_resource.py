@@ -40,27 +40,63 @@ class TestResource(unittest.TestCase):
             assert response.status == "200 OK"
             assert response.body == method
 
-    def test_child_factory(self):
-        class ChildResource(resource.Resource):
-            def __init__(self, name):
-                self.name = name
-            @resource.GET()
-            def text(self, request):
-                return http.ok([('Content-Type', 'text/plain')], self.name)
+
+class TestChildLookup(unittest.TestCase):
+
+    def test_404(self):
         class Resource(resource.Resource):
-            @resource.child()
-            def foo(self, request):
-                return ChildResource('foo')
-            @resource.child('bar')
-            def bar_child(self, request):
-                return ChildResource('bar')
+            pass
         A = app.RestishApp(Resource())
-        R = wsgi_out(A, http.Request.blank('/foo').environ)
+        R = wsgi_out(A, http.Request.blank('/404').environ)
+        assert R['status'].startswith('404')
+
+    def test_implicitly_named(self):
+        class Resource(resource.Resource):
+            def __init__(self, segments=[]):
+                self.segments = segments
+            @resource.child()
+            def implicitly_named_child(self, request, segments):
+                return self.__class__(self.segments + ['implicitly_named_child'])
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/implicitly_named_child').environ)
         assert R['status'].startswith('200')
-        assert R['body'] == 'foo'
-        R = wsgi_out(A, http.Request.blank('/bar').environ)
+        assert R['body'] == 'implicitly_named_child'
+
+    def test_explicitly_named(self):
+        class Resource(resource.Resource):
+            def __init__(self, segments=[]):
+                self.segments = segments
+            @resource.child('explicitly_named_child')
+            def find_me_a_child(self, request, segments):
+                return self.__class__(self.segments + ['explicitly_named_child'])
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/explicitly_named_child').environ)
         assert R['status'].startswith('200')
-        assert R['body'] == 'bar'
+        assert R['body'] == 'explicitly_named_child'
+
+    def test_segment_consumption(self):
+        class Resource(resource.Resource):
+            def __init__(self, segments=[]):
+                self.segments = segments
+            @resource.child()
+            def first(self, request, segments):
+                return self.__class__(self.segments + ['first'] + segments), []
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/first').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == 'first'
+        R = wsgi_out(A, http.Request.blank('/first/second').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == 'first/second'
+        R = wsgi_out(A, http.Request.blank('/first/a/b/c/d/e').environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == 'first/a/b/c/d/e'
 
 
 class TestContentNegotiation(unittest.TestCase):
