@@ -204,6 +204,9 @@ class TestChildLookup(unittest.TestCase):
             @resource.child('a')
             def _6(self, request, segments):
                 return make_resource('a'), []
+            @resource.child('{a}/b/c')
+            def _7(self, request, segments, a):
+                return make_resource('{a}/b/c'), []
             @resource.child(resource.any)
             def any(self, request, segments):
                 return make_resource('any'), []
@@ -214,6 +217,7 @@ class TestChildLookup(unittest.TestCase):
                 ('/a/b/foo/bar', 'a/b/{c}/{d}'),
                 ('/a/foo/bar', 'a/{b}/{c}'),
                 ('/a', 'a'),
+                ('/foo/b/c', '{a}/b/c'),
                 ('/foo', 'any'),
                 ]
         A = app.RestishApp(Resource())
