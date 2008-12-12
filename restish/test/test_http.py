@@ -29,6 +29,8 @@ class TestRequestAttributes(unittest.TestCase):
         self.assertTrue(isinstance(request.application_url, url.URL))
         self.assertTrue(isinstance(request.path_url, url.URL))
         self.assertTrue(isinstance(request.url, url.URL))
+        self.assertTrue(isinstance(request.path, url.URL))
+        self.assertTrue(isinstance(request.path_qs, url.URL))
 
 
 class TestResponseCreation(unittest.TestCase):

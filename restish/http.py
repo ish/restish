@@ -34,6 +34,14 @@ class Request(object):
     def url(self):
         return url.URL(self._request.url)
 
+    @property
+    def path(self):
+        return url.URL(self._request.path)
+
+    @property
+    def path_qs(self):
+        return url.URL(self._request.path_qs)
+
 
 class Response(object):
 
