@@ -1,7 +1,8 @@
 import inspect
 import mimetypes
+import re
 
-from restish import http, _mimeparse as mimeparse
+from restish import http, _mimeparse as mimeparse, url
 
 
 _RESTISH_CHILD = "restish_child"
@@ -27,33 +28,38 @@ class _metaResource(type):
 
 def _gather_request_dispatchers(cls, clsattrs):
     """
-    Find the methods marked as request dispatchers and return them as a mapping
-    of name to (callable, match) tuples.
+    Gather any request handler -annotated methods and add them to the class's
+    request_dispatchers attribute.
     """
+    # Copy the super class's 'request_dispatchers' dict (if any) to this class.
     cls.request_dispatchers = dict(getattr(cls, 'request_dispatchers', {}))
-    for (name, callable) in clsattrs.iteritems():
-        if not inspect.isroutine(callable):
-            continue
+    for callable in _find_annotated_funcs(clsattrs, _RESTISH_METHOD):
         method = getattr(callable, _RESTISH_METHOD, None)
-        if method is None:
-            continue
         match = getattr(callable, _RESTISH_MATCH)
         cls.request_dispatchers.setdefault(method, []).append((callable, match))
 
 
 def _gather_child_factories(cls, clsattrs):
     """
-    Find the methods marked as child factories and return them as a mapping of
-    name to callable.
+    Gather any 'child' annotated methods and add them to the class's
+    child_factories attribute.
     """
-    cls.child_factories = dict(getattr(cls, 'child_factories', {}))
-    for (name, callable) in clsattrs.iteritems():
-        if not inspect.isroutine(callable):
-            continue
-        child = getattr(callable, _RESTISH_CHILD, None)
-        if child is None:
-            continue
-        cls.child_factories[child] = callable
+    # Copy the super class's 'child_factories' list (if any) to this class.
+    cls.child_factories = list(getattr(cls, 'child_factories', []))
+    # Extend child_factories to include the ones found on this class.
+    child_factories = _find_annotated_funcs(clsattrs, _RESTISH_CHILD)
+    cls.child_factories.extend((getattr(f, _RESTISH_CHILD), f) for f in child_factories)
+    # Sort the child factories by score.
+    cls.child_factories = sorted(cls.child_factories, key=lambda i: i[0].score, reverse=True)
+
+
+def _find_annotated_funcs(clsattrs, annotation):
+    """
+    Return a (generated) list of methods that include the given annotation.
+    """
+    funcs = (item for item in clsattrs.itervalues() if inspect.isroutine(item))
+    funcs = (func for func in funcs if getattr(func, annotation, None) is not None)
+    return funcs
 
 
 class Resource(object):
@@ -68,17 +74,20 @@ class Resource(object):
     __metaclass__ = _metaResource
 
     def resource_child(self, request, segments):
-        factory = self.child_factories.get(segments[0])
-        if factory is not None:
-            unmatched_segments = segments[1:]
-            result = factory(self, request, unmatched_segments)
-            if result is None:
-                return None
-            elif isinstance(result, tuple):
-                return result
-            else:
-                return result, unmatched_segments
-        return None
+        for matcher, func in self.child_factories:
+            match = matcher(segments)
+            if match is not None:
+                break
+        else:
+            return None
+        match_args, segments = match
+        result = func(self, request, segments, **match_args)
+        if result is None:
+            return None
+        elif isinstance(result, tuple):
+            return result
+        else:
+            return result, segments
 
     def __call__(self, request):
         # Get the dispatchers for the request method.
@@ -135,11 +144,74 @@ def _filter_dispatchers_on_accept(dispatchers, request):
     return [d for d in dispatchers if best_match in d[1]['accept']]
 
 
-def child(name=None):
-    def decorator(func):
-        setattr(func, _RESTISH_CHILD, func.__name__ if name is None else name)
+def child(matcher=None):
+    def decorator(func, matcher=matcher):
+        # No matcher? Use the function name.
+        if matcher is None:
+            matcher = func.__name__
+        # If the matcher is a string then create a TemplateChildMatcher in its
+        # place.
+        if isinstance(matcher, str):
+            matcher = TemplateChildMatcher(matcher)
+        # Annotate the function.
+        setattr(func, _RESTISH_CHILD, matcher)
+        # Return the function (unwrapped).
         return func
     return decorator
+
+
+class TemplateChildMatcher(object):
+    """
+    A @child matcher that parses a template in the form /fixed/{dynamic}/fixed,
+    extracting segments inside {} markers.
+    """
+
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self._calc_score()
+        self._compile()
+
+    def _calc_score(self):
+        def score(segment):
+            if len(segment) >= 2 and segment[0] == '{' and segment[-1] == '}':
+                return 0
+            return 1
+        segments = self.pattern.split('/')
+        self.score = tuple(score(segment) for segment in segments)
+
+    def _compile(self):
+        def re_segments(segments):
+            for segment in segments:
+                if len(segment) >= 2 and segment[0] == '{' and segment[-1] == '}':
+                    yield '(?P<%s>.*?)' % segment[1:-1]
+                else:
+                    yield segment
+        segments = self.pattern.split('/')
+        self._count = len(segments)
+        self._regex = re.compile('^' + '\\/'.join(re_segments(segments)) + '$')
+
+    def __call__(self, segments):
+        match_segments, remaining_segments = segments[:self._count], segments[self._count:]
+        match_path = url.join_path(match_segments)[1:]
+        match = self._regex.match(match_path)
+        if not match:
+            return None
+        return match.groupdict(), remaining_segments
+
+
+class AnyChildMatcher(object):
+    """
+    A @child matcher that will always match, returning to match args and the
+    list of segments unchanged.
+    """
+
+    score = ()
+
+    def __call__(self, segments):
+        return {}, segments
+
+
+any = AnyChildMatcher()
 
 
 class MethodDecorator(object):

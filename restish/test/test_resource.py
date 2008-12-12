@@ -48,6 +48,7 @@ class TestChildLookup(unittest.TestCase):
             pass
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/404').environ)
+        print R
         assert R['status'].startswith('404')
 
     def test_nameless_child(self):
@@ -64,11 +65,11 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/foo/').environ)
-        print R['status']
+        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'foo/'
         R = wsgi_out(A, http.Request.blank('/foo//foo/foo///').environ)
-        print R['status']
+        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'foo//foo/foo///'
 
@@ -83,6 +84,7 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/implicitly_named_child').environ)
+        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'implicitly_named_child'
 
@@ -97,6 +99,7 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/explicitly_named_child').environ)
+        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'explicitly_named_child'
 
@@ -111,14 +114,116 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/first').environ)
+        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'first'
         R = wsgi_out(A, http.Request.blank('/first/second').environ)
+        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'first/second'
         R = wsgi_out(A, http.Request.blank('/first/a/b/c/d/e').environ)
+        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'first/a/b/c/d/e'
+
+    def test_static_match(self):
+        class Resource(resource.Resource):
+            def __init__(self, segments=[]):
+                self.segments = segments
+            @resource.child('foo/bar')
+            def static_child(self, request, segments):
+                return self.__class__(self.segments + ['foo', 'bar'] + segments), []
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/foo/bar').environ)
+        print R
+        assert R['status'].startswith('200')
+        assert R['body'] == 'foo/bar'
+        R = wsgi_out(A, http.Request.blank('/foo/bar/a/b/c').environ)
+        print R
+        assert R['status'].startswith('200')
+        assert R['body'] == 'foo/bar/a/b/c'
+
+    def test_dynamic_match(self):
+        class Resource(resource.Resource):
+            def __init__(self, segments=[], args={}):
+                self.segments = segments
+                self.args = args
+            @resource.child('users/{username}')
+            def dynamic_child(self, request, segments, **kwargs):
+                return self.__class__(self.segments + ['users', kwargs['username']] + segments, kwargs), []
+            def __call__(self, request):
+                body = '%r %r' % (self.segments, self.args)
+                return http.ok([('Content-Type', 'text/plain')], body)
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/users/foo').environ)
+        print R
+        assert R['status'].startswith('200')
+        assert R['body'] == "['users', 'foo'] {'username': 'foo'}"
+
+    def test_any_match(self):
+        class Resource(resource.Resource):
+            def __init__(self, segments=[]):
+                self.segments = segments
+            @resource.child(resource.any)
+            def any_child(self, request, segments):
+                return self.__class__(self.segments + segments), []
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')], '%r' % (self.segments,))
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/foo').environ)
+        print R
+        assert R['status'].startswith('200')
+        assert R['body'] == "[u'foo']"
+
+    def test_specificity(self):
+        """
+        Check the child match specificity.
+        """
+        def make_resource(body):
+            def resource(request):
+                return http.ok([], body)
+            return resource
+        class Resource(resource.Resource):
+            @resource.child('a/b/c')
+            def _1(self, request, segments):
+                return make_resource('a/b/c'), []
+            @resource.child('a/b/{c}')
+            def _2(self, request, segments, c):
+                return make_resource('a/b/{c}'), []
+            @resource.child('a/{b}/c/{d}')
+            def _3(self, request, segments, b, d):
+                return make_resource('a/{b}/c/{d}'), []
+            @resource.child('a/b/{c}/{d}')
+            def _4(self, request, segments, c, d):
+                return make_resource('a/b/{c}/{d}'), []
+            @resource.child('a/{b}/{c}')
+            def _5(self, request, segments, b, c):
+                return make_resource('a/{b}/{c}'), []
+            @resource.child('a')
+            def _6(self, request, segments):
+                return make_resource('a'), []
+            @resource.child(resource.any)
+            def any(self, request, segments):
+                return make_resource('any'), []
+        tests = [
+                ('/a/b/c', 'a/b/c'),
+                ('/a/b/foo', 'a/b/{c}'),
+                ('/a/foo/c/bar', 'a/{b}/c/{d}'),
+                ('/a/b/foo/bar', 'a/b/{c}/{d}'),
+                ('/a/foo/bar', 'a/{b}/{c}'),
+                ('/a', 'a'),
+                ('/foo', 'any'),
+                ]
+        A = app.RestishApp(Resource())
+        for path, expected in tests:
+            R = wsgi_out(A, http.Request.blank(path).environ)
+            print path, expected, R
+            assert R['body'] == expected
+
+    def _test_custom_match(self):
+        self.fail()
 
 
 class TestContentNegotiation(unittest.TestCase):
