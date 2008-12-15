@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Restish Resources &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" />
+    <link rel="next" title="Templating in Restish" href="templating.html" />
+    <link rel="prev" title="An Introduction to Restish" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templating.html" title="Templating in Restish"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="An Introduction to Restish"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="restish-resources">
+<h1>Restish Resources<a class="headerlink" href="#restish-resources" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="our-project-resource">
+<h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
+<p>The root resource you get in your project looks like this</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;text/html&#39;</span><span class="p">)],</span>
+            <span class="s">&quot;&lt;p&gt;Hello from myproject!&lt;/p&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<p>We think you should be using proper logging in your application for word go so restish makes a logger available at the top of the sample resource. You don&#8217;t need to use this but we&#8217;ve found it a lot better than print statements.</p>
+</div>
+<div class="section" id="resource-resource">
+<h3><tt class="docutils literal"><span class="pre">resource.Resource</span></tt><a class="headerlink" href="#resource-resource" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Matt to write a little note on resource.Resource</p>
+</div>
+</div>
+<div class="section" id="resource-get">
+<h3><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt><a class="headerlink" href="#resource-get" title="Permalink to this headline">¶</a></h3>
+<p>resource also carries most of our resource decorators and can be used for url handling or http procesing. Here were are have decorated a method of our Root resource with a resource.GET().  This tells the resource to use this method for any GET responses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">add a bit about resource http handlers</p>
+</div>
+<p>Responses should always be either http response codes or a callable that will generate a response.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">add a bit about http responses</p>
+</div>
+<p>In this case we have returned a http response with a content type of text/html. Let&#8217;s take a look at it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[</span> <span class="p">(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;text/html&#39;</span><span class="p">)</span> <span class="p">],</span> <span class="s">&quot;&lt;p&gt;Hello from myproject!&lt;/p&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The response is a list of tuples, each of which is a http header key and value. This is followed by the data for the http response.</p>
+</div>
+<div class="section" id="other-restish-http-response-codes">
+<h3>Other restish http response codes<a class="headerlink" href="#other-restish-http-response-codes" title="Permalink to this headline">¶</a></h3>
+<p>We can also return a whole range of http responses. .</p>
+<dl class="function">
+<dt id="restish.http.ok">
+<!--[restish.http.ok]--><tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.created">
+<!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>body</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.moved_permanently">
+<!--[restish.http.moved_permanently]--><tt class="descclassname">restish.http.</tt><tt class="descname">moved_permanently</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.moved_permanently" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.found">
+<!--[restish.http.found]--><tt class="descclassname">restish.http.</tt><tt class="descname">found</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.found" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.see_other">
+<!--[restish.http.see_other]--><tt class="descclassname">restish.http.</tt><tt class="descname">see_other</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.see_other" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.not_modified">
+<!--[restish.http.not_modified]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.http.not_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.bad_request">
+<!--[restish.http.bad_request]--><tt class="descclassname">restish.http.</tt><tt class="descname">bad_request</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.bad_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.unauthorized">
+<!--[restish.http.unauthorized]--><tt class="descclassname">restish.http.</tt><tt class="descname">unauthorized</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.unauthorized" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.forbidden">
+<!--[restish.http.forbidden]--><tt class="descclassname">restish.http.</tt><tt class="descname">forbidden</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.forbidden" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.not_found">
+<!--[restish.http.not_found]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_found</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.not_found" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.method_not_allowed">
+<!--[restish.http.method_not_allowed]--><tt class="descclassname">restish.http.</tt><tt class="descname">method_not_allowed</tt><big>(</big><em>allow</em><big>)</big><a class="headerlink" href="#restish.http.method_not_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.not_acceptable">
+<!--[restish.http.not_acceptable]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_acceptable</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.not_acceptable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="restish.http.conflict">
+<!--[restish.http.conflict]--><tt class="descclassname">restish.http.</tt><tt class="descname">conflict</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.conflict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="so-is-that-it-what-else-can-it-do-for-me">
+<h3>So is that it? What else can it do for me?<a class="headerlink" href="#so-is-that-it-what-else-can-it-do-for-me" title="Permalink to this headline">¶</a></h3>
+<p>To answer this, it is probably a good idea to go through a few examples. We&#8217;ll work with Mako templates in this case so set up your make_renderer in lib/templating.py file to look like the following</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">make_renderer</span><span class="p">(</span><span class="n">app_conf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create and return a restish.templating &quot;renderer&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">pkg_resources</span>
+    <span class="kn">import</span> <span class="nn">os.path</span>
+    <span class="kn">from</span> <span class="nn">restish.contrib.makorenderer</span> <span class="kn">import</span> <span class="n">MakoRenderer</span>
+    <span class="k">return</span> <span class="n">MakoRenderer</span><span class="p">(</span>
+            <span class="n">directories</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s">&#39;myproject&#39;</span><span class="p">,</span> <span class="s">&#39;templates&#39;</span><span class="p">)</span>
+                <span class="p">],</span>
+            <span class="n">module_directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_conf</span><span class="p">[</span><span class="s">&#39;cache_dir&#39;</span><span class="p">],</span> <span class="s">&#39;templates&#39;</span><span class="p">),</span>
+            <span class="n">input_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">output_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span>
+            <span class="n">default_filters</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;unicode&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is a syllabus of restish things to cover</p>
+<ol class="arabic simple">
+<li>Templating</li>
+<li>handling GET and POST</li>
+<li>Simple Child methods</li>
+<li>Using urls</li>
+</ol>
+<ol class="arabic simple" start="4">
+<li>conditional content type handling</li>
+<li>example of a cookie wsgi app</li>
+<li>example of a flashmessage wsgi app</li>
+<li>Implementing guards</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Restish Resources</a><ul>
+<li><a class="reference external" href="#our-project-resource">Our project resource</a><ul>
+<li><a class="reference external" href="#logging">Logging</a></li>
+<li><a class="reference external" href="#resource-resource"><tt class="docutils literal"><span class="pre">resource.Resource</span></tt></a></li>
+<li><a class="reference external" href="#resource-get"><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt></a></li>
+<li><a class="reference external" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
+<li><a class="reference external" href="#so-is-that-it-what-else-can-it-do-for-me">So is that it? What else can it do for me?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="introduction.html" title="previous chapter">An Introduction to Restish</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="templating.html" title="next chapter">Templating in Restish</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/resources.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templating.html" title="Templating in Restish"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="An Introduction to Restish"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>

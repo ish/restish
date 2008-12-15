@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>An Introduction to Restish &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" />
+    <link rel="next" title="Restish Resources" href="resources.html" />
+    <link rel="prev" title="Welcome to Restish&#8217;s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="resources.html" title="Restish Resources"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Restish&#8217;s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="an-introduction-to-restish">
+<h1>An Introduction to Restish<a class="headerlink" href="#an-introduction-to-restish" title="Permalink to this headline">¶</a></h1>
+<p>Restish is a minimal but fully formed rest oriented wsgi web framework.</p>
+<div class="section" id="why-restish">
+<h2>Why Restish?<a class="headerlink" href="#why-restish" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="background">
+<h3>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h3>
+<p>We were looking around for a web framework for a new project. Previously we had
+worked with Twisted and Nevow and had developed the Formal form handling
+library for it. However for this project we wanted something that would be a
+little more accessible and that would allow us to make use of the full range of
+libraries has to offer. The three obvious frameworks were pylons, turbogears
+and django. We wanted to use SqlAlchemy and hence Django wasn&#8217;t really a
+contender. Turbogears looked in a s tate of flux and we were looking for
+something a lot lower level. So by process of elimination we h ad to look at
+pylons.</p>
+<p>Pylons started out looking quite good but we started to find the odd problem.
+The initial problem w as pylon&#8217;s use of threadlocals. Using threadlocals
+precludes any use of single threaded servers. So we removed threadlocals. Next
+we started to make pylons more templating agnostic, eventually removing
+templating completely. Finally, when we had removed all trace of pylons, we
+realised what we had was a new lightweight web framework.</p>
+</div>
+<div class="section" id="advantages-disadvantages">
+<h3>Advantages &amp; Disadvantages<a class="headerlink" href="#advantages-disadvantages" title="Permalink to this headline">¶</a></h3>
+<p>The advantages that restish has are</p>
+<ul class="simple">
+<li>Well tested and powerful url handling, parsing and creation</li>
+<li>Simple integration with templating frameworks</li>
+<li>Powerful but simple http request and response handling</li>
+</ul>
+<p>The three libraries we have used in the creation of restsh are paste (for
+initial project template creation), decorator (used to decorate methods as
+children or http handlers and for adding page templating) and webob (for it&#8217;s
+http.request and response)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Matt: Add some notes here on the whys behind restish?? I don&#8217;t know enough about what you did to write anything</p>
+</div>
+</div>
+</div>
+<div class="section" id="how-to-start-a-restish-project">
+<h2>How to start a restish project<a class="headerlink" href="#how-to-start-a-restish-project" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-paster-create">
+<h3>Using paster create<a class="headerlink" href="#using-paster-create" title="Permalink to this headline">¶</a></h3>
+<p>First you use paste with a &#8216;restish&#8217; template:</p>
+<div class="highlight-python"><pre>$ paster create --template=restish</pre>
+</div>
+<p>This will create a basic, minimal restish project:</p>
+<div class="highlight-python"><pre>paster create --template=restish
+ Selected and implied templates:
+   restish#restish  Template for creating a basic Restish package
+ Enter project name: myproject
+ Variables:
+   egg:      myproject
+   package:  myproject
+   project:  myproject
+ Creating template restish
+ Creating directory ./myproject
+   Recursing into +package+
+     Creating ./myproject/myproject/
+     Copying __init__.py to ./myproject/myproject/__init__.py
+     Recursing into lib
+       Creating ./myproject/myproject/lib/
+       Copying __init__.py to ./myproject/myproject/lib/__init__.py
+       Copying guard.py to ./myproject/myproject/lib/guard.py
+       Copying templating.py_tmpl to ./myproject/myproject/lib/templating.py
+     Recursing into public
+       Creating ./myproject/myproject/public/
+       Copying index.html_tmpl to ./myproject/myproject/public/index.html
+     Recursing into resource
+       Creating ./myproject/myproject/resource/
+       Copying __init__.py to ./myproject/myproject/resource/__init__.py
+       Copying root.py_tmpl to ./myproject/myproject/resource/root.py
+     Copying wsgiapp.py_tmpl to ./myproject/myproject/wsgiapp.py
+   Copying +package+.ini_tmpl to ./myproject/myproject.ini
+   Copying development.ini_tmpl to ./myproject/development.ini
+   Copying live.ini_tmpl to ./myproject/live.ini
+   Copying setup.py_tmpl to ./myproject/setup.py
+ Running /Users/timparkin/py/bin/python setup.py egg_info
+ Manually creating paster_plugins.txt (deprecated! pass a paster_plugins keyword to setup() instead)
+ Adding Restish to paster_plugins.txt</pre>
+</div>
+</div>
+<div class="section" id="what-is-in-the-template-project">
+<h3>What is in the template project<a class="headerlink" href="#what-is-in-the-template-project" title="Permalink to this headline">¶</a></h3>
+<p>The files in this project are as follows:</p>
+<div class="highlight-python"><pre>.
+|-- development.ini
+|-- live.ini
+|-- myproject
+|   |-- __init__.py
+|   |-- lib
+|   |   |-- __init__.py
+|   |   |-- guard.py
+|   |   `-- templating.py
+|   |-- public
+|   |   `-- index.html
+|   |-- resource
+|   |   |-- __init__.py
+|   |   `-- root.py
+|   `-- wsgiapp.py
+|-- myproject.egg-info
+|   |-- PKG-INFO
+|   |-- SOURCES.txt
+|   |-- dependency_links.txt
+|   |-- entry_points.txt
+|   |-- not-zip-safe
+|   |-- paster_plugins.txt
+|   |-- requires.txt
+|   `-- top_level.txt
+|-- myproject.ini
+`-- setup.py</pre>
+</div>
+<p>We&#8217;ll simplify that a bit in order to describe what we have in the actual project:</p>
+<div class="highlight-python"><pre>.
+|-- myproject.ini
+|-- development.ini
+|-- live.ini
+|
+|-- myproject
+|   |-- lib
+|   |   |-- guard.py
+|   |   `-- templating.py
+|   |-- public
+|   |   `-- index.html
+|   |-- resource
+|   |   `-- root.py
+|   `-- wsgiapp.py</pre>
+</div>
+<p>The ini files are paste configuration files and setup up the project. There is
+a base configuration file that contains project settings and then there are two
+deployment files, live and development, which contain information on how to
+serve the project.</p>
+<p>The project itself has three directories.</p>
+<div class="section" id="the-lib-directory">
+<h4>The <tt class="docutils literal"><span class="pre">lib</span></tt> directory<a class="headerlink" href="#the-lib-directory" title="Permalink to this headline">¶</a></h4>
+<p>The lib directory has an example authenticator called &#8216;guard.py&#8217; and a sample
+templating package which shows how to setup templating with Mako, Genshi or
+Jinja.</p>
+<p>We tend to put most of our project library code in here.</p>
+</div>
+<div class="section" id="the-public-directory">
+<h4>The <tt class="docutils literal"><span class="pre">public</span></tt> directory<a class="headerlink" href="#the-public-directory" title="Permalink to this headline">¶</a></h4>
+<p>The public directory is used to serve static resources in preference to any
+dynamic resources. The sample index.html just contains some information on what
+the file is for.</p>
+<p>A typical use for this would be to have a css, images and js directory
+underneath with your assets in. Placing files directly inside public will also
+make them available on root of your website, useful for favicons, google
+analytics files, etc.</p>
+</div>
+<div class="section" id="the-resource-directory">
+<h4>The <tt class="docutils literal"><span class="pre">resource</span></tt> directory<a class="headerlink" href="#the-resource-directory" title="Permalink to this headline">¶</a></h4>
+<p>The resource directory contains our root resource. This is the first file that
+will handle any requests.</p>
+<p>Finally, our wsgiapp.py can be used to wire up any other wsgi applications,
+such as cookies, authentication, etc.</p>
+<p>Let&#8217;s take a look at the resource first as that is where the fun stuff is..</p>
+</div>
+</div>
+<div class="section" id="starting-a-server">
+<h3>Starting a server<a class="headerlink" href="#starting-a-server" title="Permalink to this headline">¶</a></h3>
+<p>Your can start your example project right now by using the command:</p>
+<div class="highlight-python"><pre>$ paster serve development.ini</pre>
+</div>
+<p>Which should return the following:</p>
+<div class="highlight-python"><pre>$ paster serve development.ini
+Starting server in PID 22237.
+serving on http://127.0.0.1:8080</pre>
+</div>
+</div>
+<div class="section" id="next-steps">
+<h3>Next Steps..<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h3>
+<p>Next we&#8217;ll talk about how to build resources and use templating...</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">An Introduction to Restish</a><ul>
+<li><a class="reference external" href="#why-restish">Why Restish?</a><ul>
+<li><a class="reference external" href="#background">Background</a></li>
+<li><a class="reference external" href="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#how-to-start-a-restish-project">How to start a restish project</a><ul>
+<li><a class="reference external" href="#using-paster-create">Using paster create</a></li>
+<li><a class="reference external" href="#what-is-in-the-template-project">What is in the template project</a><ul>
+<li><a class="reference external" href="#the-lib-directory">The <tt class="docutils literal"><span class="pre">lib</span></tt> directory</a></li>
+<li><a class="reference external" href="#the-public-directory">The <tt class="docutils literal"><span class="pre">public</span></tt> directory</a></li>
+<li><a class="reference external" href="#the-resource-directory">The <tt class="docutils literal"><span class="pre">resource</span></tt> directory</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#starting-a-server">Starting a server</a></li>
+<li><a class="reference external" href="#next-steps">Next Steps..</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html" title="previous chapter">Welcome to Restish&#8217;s documentation!</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="resources.html" title="next chapter">Restish Resources</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/introduction.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="resources.html" title="Restish Resources"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Restish&#8217;s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Whats in the wsgiapp? &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="whats-in-the-wsgiapp">
+<h1>Whats in the wsgiapp?<a class="headerlink" href="#whats-in-the-wsgiapp" title="Permalink to this headline">¶</a></h1>
+<p>The wsgiapp is shown below. make_app is set up to define the restish app by passing the root resource to it. The restish app is then passed to the setup_environ function which can be used to set any attributes on the ennviron you may wish. In this case templating is setup by calling &#8216;make_renderer&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restish.app</span> <span class="kn">import</span> <span class="n">RestishApp</span>
+
+<span class="kn">from</span> <span class="nn">myproject.resource</span> <span class="kn">import</span> <span class="n">root</span>
+
+
+<span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PasteDeploy WSGI application factory.</span>
+
+<span class="sd">    Called by PasteDeply (or a compatable WSGI application host) to create the</span>
+<span class="sd">    myproject WSGI application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">RestishApp</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Root</span><span class="p">())</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">setup_environ</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">global_conf</span><span class="p">,</span> <span class="n">app_conf</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">app</span>
+
+
+<span class="k">def</span> <span class="nf">setup_environ</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">global_conf</span><span class="p">,</span> <span class="n">app_conf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    WSGI application wrapper factory for extending the WSGI environ with</span>
+<span class="sd">    application-specific keys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Create any objects that should exist for the lifetime of the application</span>
+    <span class="c"># here. Don&#39;t forget to actually include them in the environ below!</span>
+    <span class="kn">from</span> <span class="nn">myproject.lib</span> <span class="kn">import</span> <span class="n">templating</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">templating</span><span class="o">.</span><span class="n">make_renderer</span><span class="p">(</span><span class="n">app_conf</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+
+        <span class="c"># Add additional keys to the environ here.</span>
+        <span class="n">environ</span><span class="p">[</span><span class="s">&#39;restish.templating.renderer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">renderer</span>
+
+        <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">application</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/wsgiapp.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>

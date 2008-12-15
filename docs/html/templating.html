@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Templating in Restish &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" />
+    <link rel="prev" title="Restish Resources" href="resources.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="resources.html" title="Restish Resources"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="templating-in-restish">
+<h1>Templating in Restish<a class="headerlink" href="#templating-in-restish" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="lib-templating-py">
+<h2><tt class="docutils literal"><span class="pre">lib/templating.py</span></tt><a class="headerlink" href="#lib-templating-py" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">make_renderer</span><span class="p">(</span><span class="n">app_conf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create and return a restish.templating &quot;renderer&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">pkg_resources</span>
+    <span class="kn">import</span> <span class="nn">os.path</span>
+    <span class="kn">from</span> <span class="nn">restish.contrib.makorenderer</span> <span class="kn">import</span> <span class="n">MakoRenderer</span>
+    <span class="k">return</span> <span class="n">MakoRenderer</span><span class="p">(</span>
+            <span class="n">directories</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s">&#39;myproject&#39;</span><span class="p">,</span> <span class="s">&#39;templates&#39;</span><span class="p">)</span>
+                <span class="p">],</span>
+            <span class="n">module_directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_conf</span><span class="p">[</span><span class="s">&#39;cache_dir&#39;</span><span class="p">],</span> <span class="s">&#39;templates&#39;</span><span class="p">),</span>
+            <span class="n">input_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">output_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span>
+            <span class="n">default_filters</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;unicode&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Templating in Restish</a><ul>
+<li><a class="reference external" href="#lib-templating-py"><tt class="docutils literal"><span class="pre">lib/templating.py</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="resources.html" title="previous chapter">Restish Resources</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/templating.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="resources.html" title="Restish Resources"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>

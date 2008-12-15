@@ -1,0 +1,16 @@
+# Sphinx inventory version 1
+# Project: Restish
+# Version: 0.1
+restish.http.bad_request function resources.html
+restish.http.not_modified function resources.html
+restish.http.forbidden function resources.html
+restish.http.conflict function resources.html
+restish.http.found function resources.html
+restish.http.unauthorized function resources.html
+restish.http.not_found function resources.html
+restish.http.moved_permanently function resources.html
+restish.http.method_not_allowed function resources.html
+restish.http.see_other function resources.html
+restish.http.ok function resources.html
+restish.http.created function resources.html
+restish.http.not_acceptable function resources.html
