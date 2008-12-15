@@ -27,6 +27,8 @@ we started to make pylons more templating agnostic, eventually removing
 templating completely. Finally, when we had removed all trace of pylons, we
 realised what we had was a new lightweight web framework. 
 
+.. note:: Matt: Why is pylons oh so crap.. 
+
 Advantages & Disadvantages
 --------------------------
 

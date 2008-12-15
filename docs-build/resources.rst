@@ -36,11 +36,11 @@ We think you should be using proper logging in your application for word go so r
 
 resource also carries most of our resource decorators and can be used for url handling or http procesing. Here were are have decorated a method of our Root resource with a resource.GET().  This tells the resource to use this method for any GET responses. 
 
-.. note:: add a bit about resource http handlers
+.. note:: Matt: add a bit about resource http handlers
 
 Responses should always be either http response codes or a callable that will generate a response.
 
-.. note:: add a bit about http responses
+.. note:: Matt: add a bit about http responses
 
 In this case we have returned a http response with a content type of text/html. Let's take a look at it.
 
@@ -100,7 +100,7 @@ Here is a syllabus of restish things to cover
 1) Templating
     - using explicitly
     - using the templating.page decorator
-    - adding your own environment variables
+    - adding your own global templating variables
 
 2) handling GET and POST
 
