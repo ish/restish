@@ -98,18 +98,51 @@ To answer this, it is probably a good idea to go through a few examples. We'll w
 Here is a syllabus of restish things to cover
 
 1) Templating
+    - using explicitly
+    - using the templating.page decorator
+    - adding your own environment variables
 
 2) handling GET and POST
 
+   - resource.GET(
+     resource.POST(
+     PUT, DELETE
+   - accept mimetypes handling
+
 3) Simple Child methods
+
+  - function name children
+  - explicit one deep
+  - explicit multi depth
+  - any matcher
 
 4) Using urls
 
-4) conditional content type handling
+   - constructing urls
+   - urls in templates
+    - path parameters?
 
 5) example of a cookie wsgi app
 
+   - Building the app
+   - installing the app
+
 6) example of a flashmessage wsgi app
+
+   - Building the app
+   - installing the app
 
 7) Implementing guards
 
+   - using a basic guard
+   - using repoze.who
+
+8) Examples
+
+   - A rest api server
+   - 
+
+9) Using formish within restish
+
+   - Typical pattern
+   - multiple forms
