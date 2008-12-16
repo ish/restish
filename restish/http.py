@@ -20,6 +20,7 @@ class Request(object):
 
     @property
     def host_url(self):
+        """ The host url """
         return url.URL(self._request.host_url)
 
     @property

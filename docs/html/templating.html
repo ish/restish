@@ -49,9 +49,9 @@
 <span class="sd">    Create and return a restish.templating &quot;renderer&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="kn">import</span> <span class="nn">pkg_resources</span>
-    <span class="kn">import</span> <span class="nn">os.path</span>
-    <span class="kn">from</span> <span class="nn">restish.contrib.makorenderer</span> <span class="kn">import</span> <span class="n">MakoRenderer</span>
+    <span class="k">import</span> <span class="nn">pkg_resources</span>
+    <span class="k">import</span> <span class="nn">os.path</span>
+    <span class="k">from</span> <span class="nn">restish.contrib.makorenderer</span> <span class="k">import</span> <span class="n">MakoRenderer</span>
     <span class="k">return</span> <span class="n">MakoRenderer</span><span class="p">(</span>
             <span class="n">directories</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s">&#39;myproject&#39;</span><span class="p">,</span> <span class="s">&#39;templates&#39;</span><span class="p">)</span>
@@ -62,6 +62,181 @@
             <span class="p">)</span>
 </pre></div>
 </div>
+<p>The mako renderer configures the project template directory, a cache directory, our default encoding and a default filter (unicode, which is mako default, and html escaping, which we felt is safest).</p>
+</div>
+<div class="section" id="explicit-templating">
+<h2>Explicit templating<a class="headerlink" href="#explicit-templating" title="Permalink to this headline">¶</a></h2>
+<p>You can call the templating engine explicity by using restish.templating. e.g.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">templating</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;mytemplate.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tim&#39;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="n">content</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Explicit templating<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>However it is a lot easier to use the templating decorator. By adding this decorator,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;mytemplate.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tim&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>templating.page uses the content type passed in by the request so all you need to do is provide a templat in the decorator and the arguments in the return.</p>
+</div>
+<div class="section" id="global-template-varaibles">
+<h2>Global Template Varaibles<a class="headerlink" href="#global-template-varaibles" title="Permalink to this headline">¶</a></h2>
+<p>Quite often you will write your own functions or supply global variables to use within your template (possibly a set of site urls). This can be set up within the &lt;project&gt;/lib/templating.py by overriding the args method of the Rendering class.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Rendering</span><span class="p">(</span><span class="n">templating</span><span class="o">.</span><span class="n">Rendering</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="c"># Call the super class to get the basic set of args.</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Rendering</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">args</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="c"># Push to the args and return them.</span>
+        <span class="n">args</span><span class="p">[</span><span class="s">&#39;myurldict&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;about&#39;</span><span class="p">:</span> <span class="s">&#39;/about&#39;</span><span class="p">,</span> <span class="s">&#39;contact&#39;</span><span class="p">:</span><span class="s">&#39;/contact&#39;</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">args</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-better-way-of-dealing-with-urls">
+<h2>A better way of dealing with URLs<a class="headerlink" href="#a-better-way-of-dealing-with-urls" title="Permalink to this headline">¶</a></h2>
+<p>Using strings for urls isn&#8217;t particularly safe in a lot of cases and sometimes you might want a little more flexibility with your url handling. Restish automatically adds a &#8216;url&#8217; arg which is a URLAccessor based on the current request.</p>
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.full">
+<!--[restish.url.URLAccessor.full]--><tt class="descclassname">URLAccessor.</tt><tt class="descname">full</tt><a class="headerlink" href="#restish.url.URLAccessor.full" title="Permalink to this definition">¶</a></dt>
+<dd>Return the full current (i.e. requested), URL.</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.abs">
+<!--[restish.url.URLAccessor.abs]--><tt class="descclassname">URLAccessor.</tt><tt class="descname">abs</tt><a class="headerlink" href="#restish.url.URLAccessor.abs" title="Permalink to this definition">¶</a></dt>
+<dd>Return the part of the current URL that is absolute to the host URL,
+i.e. the root of the HTTP server.</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.host">
+<!--[restish.url.URLAccessor.host]--><tt class="descclassname">URLAccessor.</tt><tt class="descname">host</tt><a class="headerlink" href="#restish.url.URLAccessor.host" title="Permalink to this definition">¶</a></dt>
+<dd>Return the host&#8217;s URL, i.e. the URL of the HTTP server.</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.app">
+<!--[restish.url.URLAccessor.app]--><tt class="descclassname">URLAccessor.</tt><tt class="descname">app</tt><a class="headerlink" href="#restish.url.URLAccessor.app" title="Permalink to this definition">¶</a></dt>
+<dd>Return the WSGI application&#8217;s URL.</dd></dl>
+
+<p>So url.full would give you the full current requested url.</p>
+<p>From here you can then chain together other url methods to create new urls</p>
+<dl class="method">
+<dt id="restish.url.URL.root">
+<!--[restish.url.URL.root]--><tt class="descclassname">URL.</tt><tt class="descname">root</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.url.URL.root" title="Permalink to this definition">¶</a></dt>
+<dd>Contruct a URL to the root of the web server.</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.sibling">
+<!--[restish.url.URL.sibling]--><tt class="descclassname">URL.</tt><tt class="descname">sibling</tt><big>(</big><em>segment</em><big>)</big><a class="headerlink" href="#restish.url.URL.sibling" title="Permalink to this definition">¶</a></dt>
+<dd>Construct a url where the given path segment is a sibling of this url</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.child">
+<!--[restish.url.URL.child]--><tt class="descclassname">URL.</tt><tt class="descname">child</tt><big>(</big><em>*path</em><big>)</big><a class="headerlink" href="#restish.url.URL.child" title="Permalink to this definition">¶</a></dt>
+<dd>Construct a url where the given path segment is a child of this url</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.parent">
+<!--[restish.url.URL.parent]--><tt class="descclassname">URL.</tt><tt class="descname">parent</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.url.URL.parent" title="Permalink to this definition">¶</a></dt>
+<dd>Pop a URL segment from this url.</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.click">
+<!--[restish.url.URL.click]--><tt class="descclassname">URL.</tt><tt class="descname">click</tt><big>(</big><em>href</em><big>)</big><a class="headerlink" href="#restish.url.URL.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a path by merging &#8216;href&#8217; and this path.</p>
+<p>Return a path which is the URL where a browser would presumably
+take you if you clicked on a link with an &#8216;href&#8217; as given.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.add_query">
+<!--[restish.url.URL.add_query]--><tt class="descclassname">URL.</tt><tt class="descname">add_query</tt><big>(</big><em>name</em>, <em>value=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.add_query" title="Permalink to this definition">¶</a></dt>
+<dd>Add a query argument with the given value
+None indicates that the argument has no value</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.add_queries">
+<!--[restish.url.URL.add_queries]--><tt class="descclassname">URL.</tt><tt class="descname">add_queries</tt><big>(</big><em>query_list</em><big>)</big><a class="headerlink" href="#restish.url.URL.add_queries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.replace_query">
+<!--[restish.url.URL.replace_query]--><tt class="descclassname">URL.</tt><tt class="descname">replace_query</tt><big>(</big><em>name</em>, <em>value=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.replace_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all existing occurrences of the query argument &#8216;name&#8217;, <em>if it
+exists</em>, then add the argument with the given value.</p>
+<p>C{None} indicates that the argument has no value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.remove_query">
+<!--[restish.url.URL.remove_query]--><tt class="descclassname">URL.</tt><tt class="descname">remove_query</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#restish.url.URL.remove_query" title="Permalink to this definition">¶</a></dt>
+<dd>Remove all query arguments with the given name</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.clear_queries">
+<!--[restish.url.URL.clear_queries]--><tt class="descclassname">URL.</tt><tt class="descname">clear_queries</tt><big>(</big><em>name=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.clear_queries" title="Permalink to this definition">¶</a></dt>
+<dd>Remove all existing query arguments</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.secure">
+<!--[restish.url.URL.secure]--><tt class="descclassname">URL.</tt><tt class="descname">secure</tt><big>(</big><em>secure=True</em>, <em>port=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the scheme to https/http and return the new URL.</p>
+<p>&#64;param secure: choose between https and http, default to True (https)
+&#64;param port: port, override the scheme&#8217;s normal port</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.anchor">
+<!--[restish.url.URL.anchor]--><tt class="descclassname">URL.</tt><tt class="descname">anchor</tt><big>(</big><em>anchor=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.anchor" title="Permalink to this definition">¶</a></dt>
+<dd>Modify the fragment/anchor and return a new URL. An anchor of
+C{None} (the default) or C{&#8216;&#8217;} (the empty string) will remove the
+current anchor.</dd></dl>
+
+<p>You can also filter particular parts of a url</p>
+<dl class="attribute">
+<dt id="restish.url.URL.scheme">
+<!--[restish.url.URL.scheme]--><tt class="descclassname">URL.</tt><tt class="descname">scheme</tt><a class="headerlink" href="#restish.url.URL.scheme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.netloc">
+<!--[restish.url.URL.netloc]--><tt class="descclassname">URL.</tt><tt class="descname">netloc</tt><a class="headerlink" href="#restish.url.URL.netloc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.path">
+<!--[restish.url.URL.path]--><tt class="descclassname">URL.</tt><tt class="descname">path</tt><a class="headerlink" href="#restish.url.URL.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.path_segments">
+<!--[restish.url.URL.path_segments]--><tt class="descclassname">URL.</tt><tt class="descname">path_segments</tt><a class="headerlink" href="#restish.url.URL.path_segments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.query">
+<!--[restish.url.URL.query]--><tt class="descclassname">URL.</tt><tt class="descname">query</tt><a class="headerlink" href="#restish.url.URL.query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.query_list">
+<!--[restish.url.URL.query_list]--><tt class="descclassname">URL.</tt><tt class="descname">query_list</tt><a class="headerlink" href="#restish.url.URL.query_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.fragment">
+<!--[restish.url.URL.fragment]--><tt class="descclassname">URL.</tt><tt class="descname">fragment</tt><a class="headerlink" href="#restish.url.URL.fragment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 </div>
 
@@ -73,8 +248,12 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Templating in Restish</a><ul>
-<li><a class="reference external" href="#lib-templating-py"><tt class="docutils literal"><span class="pre">lib/templating.py</span></tt></a></li>
+<li><a class="reference" href="">Templating in Restish</a><ul>
+<li><a class="reference" href="#lib-templating-py"><tt class="docutils literal"><span class="pre">lib/templating.py</span></tt></a></li>
+<li><a class="reference" href="#explicit-templating">Explicit templating</a></li>
+<li><a class="reference" href="#id1">Explicit templating</a></li>
+<li><a class="reference" href="#global-template-varaibles">Global Template Varaibles</a></li>
+<li><a class="reference" href="#a-better-way-of-dealing-with-urls">A better way of dealing with URLs</a></li>
 </ul>
 </li>
 </ul>

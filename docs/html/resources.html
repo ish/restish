@@ -49,8 +49,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource you get in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
+<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -78,12 +78,12 @@
 <p>resource also carries most of our resource decorators and can be used for url handling or http procesing. Here were are have decorated a method of our Root resource with a resource.GET().  This tells the resource to use this method for any GET responses.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">add a bit about resource http handlers</p>
+<p class="last">Matt: add a bit about resource http handlers</p>
 </div>
 <p>Responses should always be either http response codes or a callable that will generate a response.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">add a bit about http responses</p>
+<p class="last">Matt: add a bit about http responses</p>
 </div>
 <p>In this case we have returned a http response with a content type of text/html. Let&#8217;s take a look at it.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[</span> <span class="p">(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;text/html&#39;</span><span class="p">)</span> <span class="p">],</span> <span class="s">&quot;&lt;p&gt;Hello from myproject!&lt;/p&gt;&quot;</span><span class="p">)</span>
@@ -168,9 +168,9 @@
 <span class="sd">    Create and return a restish.templating &quot;renderer&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="kn">import</span> <span class="nn">pkg_resources</span>
-    <span class="kn">import</span> <span class="nn">os.path</span>
-    <span class="kn">from</span> <span class="nn">restish.contrib.makorenderer</span> <span class="kn">import</span> <span class="n">MakoRenderer</span>
+    <span class="k">import</span> <span class="nn">pkg_resources</span>
+    <span class="k">import</span> <span class="nn">os.path</span>
+    <span class="k">from</span> <span class="nn">restish.contrib.makorenderer</span> <span class="k">import</span> <span class="n">MakoRenderer</span>
     <span class="k">return</span> <span class="n">MakoRenderer</span><span class="p">(</span>
             <span class="n">directories</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s">&#39;myproject&#39;</span><span class="p">,</span> <span class="s">&#39;templates&#39;</span><span class="p">)</span>
@@ -182,17 +182,78 @@
 </pre></div>
 </div>
 <p>Here is a syllabus of restish things to cover</p>
-<ol class="arabic simple">
-<li>Templating</li>
-<li>handling GET and POST</li>
-<li>Simple Child methods</li>
-<li>Using urls</li>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Templating</dt>
+<dd><ul class="first last simple">
+<li>using explicitly</li>
+<li>using the templating.page decorator</li>
+<li>adding your own global templating variables</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">handling GET and POST</p>
+<ul class="simple">
+<li>resource.GET(
+resource.POST(
+PUT, DELETE</li>
+<li>accept mimetypes handling</li>
+</ul>
+</li>
+<li><p class="first">Simple Child methods</p>
+</li>
 </ol>
-<ol class="arabic simple" start="4">
-<li>conditional content type handling</li>
-<li>example of a cookie wsgi app</li>
-<li>example of a flashmessage wsgi app</li>
-<li>Implementing guards</li>
+<blockquote>
+<ul class="simple">
+<li>function name children</li>
+<li>explicit one deep</li>
+<li>explicit multi depth</li>
+<li>any matcher</li>
+</ul>
+</blockquote>
+<ol class="arabic" start="4">
+<li><p class="first">Using urls</p>
+<ul class="simple">
+<li>constructing urls</li>
+<li>urls in templates</li>
+</ul>
+<blockquote>
+<ul class="simple">
+<li>path parameters?</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">example of a cookie wsgi app</p>
+<ul class="simple">
+<li>Building the app</li>
+<li>installing the app</li>
+</ul>
+</li>
+<li><p class="first">example of a flashmessage wsgi app</p>
+<ul class="simple">
+<li>Building the app</li>
+<li>installing the app</li>
+</ul>
+</li>
+<li><p class="first">Implementing guards</p>
+<ul class="simple">
+<li>using a basic guard</li>
+<li>using repoze.who</li>
+</ul>
+</li>
+<li><p class="first">Examples</p>
+<ul class="simple">
+<li>A rest api server</li>
+<li></li>
+</ul>
+</li>
+<li><p class="first">Using formish within restish</p>
+<ul class="simple">
+<li>Typical pattern</li>
+<li>multiple forms</li>
+</ul>
+</li>
 </ol>
 </div>
 </div>
@@ -206,13 +267,13 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Restish Resources</a><ul>
-<li><a class="reference external" href="#our-project-resource">Our project resource</a><ul>
-<li><a class="reference external" href="#logging">Logging</a></li>
-<li><a class="reference external" href="#resource-resource"><tt class="docutils literal"><span class="pre">resource.Resource</span></tt></a></li>
-<li><a class="reference external" href="#resource-get"><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt></a></li>
-<li><a class="reference external" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
-<li><a class="reference external" href="#so-is-that-it-what-else-can-it-do-for-me">So is that it? What else can it do for me?</a></li>
+<li><a class="reference" href="">Restish Resources</a><ul>
+<li><a class="reference" href="#our-project-resource">Our project resource</a><ul>
+<li><a class="reference" href="#logging">Logging</a></li>
+<li><a class="reference" href="#resource-resource"><tt class="docutils literal"><span class="pre">resource.Resource</span></tt></a></li>
+<li><a class="reference" href="#resource-get"><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt></a></li>
+<li><a class="reference" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
+<li><a class="reference" href="#so-is-that-it-what-else-can-it-do-for-me">So is that it? What else can it do for me?</a></li>
 </ul>
 </li>
 </ul>

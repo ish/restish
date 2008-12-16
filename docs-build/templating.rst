@@ -24,3 +24,92 @@ Templating in Restish
                 default_filters=['unicode', 'h']
                 )
 
+The mako renderer configures the project template directory, a cache directory, our default encoding and a default filter (unicode, which is mako default, and html escaping, which we felt is safest).
+
+Explicit templating
+===================
+
+You can call the templating engine explicity by using restish.templating. e.g.
+
+.. code-block:: python
+
+    class Root(resource.Resource):
+
+        @resource.GET()
+        def html(self, request):
+            content = templating.render(request, 'mytemplate.html', {'name': 'Tim'})
+            return http.ok( [('Content-Type','text/html')], content )
+
+Templating decorator
+====================
+
+However it is a lot easier to use the templating decorator. By adding this decorator, 
+
+.. code-block:: python
+
+    class Root(resource.Resource):
+
+        @resource.GET()
+        @templating.page('mytemplate.html')
+        def html(self, request):
+            return {'name': 'Tim'}
+
+templating.page uses the content type passed in by the request so all you need to do is provide a templat in the decorator and the arguments in the return.
+
+Global Template Varaibles
+=========================
+
+Quite often you will write your own functions or supply global variables to use within your template (possibly a set of site urls). This can be set up within the <project>/lib/templating.py by overriding the args method of the Rendering class.
+
+.. code-block:: python
+
+    class Rendering(templating.Rendering):
+
+        def args(self, request):
+            # Call the super class to get the basic set of args.
+            args = super(Rendering, self).args(request)
+            # Push to the args and return them.
+            args['myurldict'] = {'about': '/about', 'contact':'/contact'}
+            return args
+
+A better way of dealing with URLs
+=================================
+
+Using strings for urls isn't particularly safe in a lot of cases and sometimes you might want a little more flexibility with your url handling. Restish automatically adds a 'url' arg which is a URLAccessor based on the current request.
+
+.. autoattribute:: restish.url.URLAccessor.full
+.. autoattribute:: restish.url.URLAccessor.abs
+.. autoattribute:: restish.url.URLAccessor.host
+.. autoattribute:: restish.url.URLAccessor.app
+
+So url.full would give you the full current requested url.
+
+From here you can then chain together other url methods to create new urls
+
+
+.. automethod:: restish.url.URL.root
+.. automethod:: restish.url.URL.sibling
+.. automethod:: restish.url.URL.child
+.. automethod:: restish.url.URL.parent
+.. automethod:: restish.url.URL.click
+.. automethod:: restish.url.URL.add_query
+.. automethod:: restish.url.URL.add_queries
+.. automethod:: restish.url.URL.replace_query
+.. automethod:: restish.url.URL.remove_query
+.. automethod:: restish.url.URL.clear_queries
+.. automethod:: restish.url.URL.secure
+.. automethod:: restish.url.URL.anchor
+
+You can also filter particular parts of a url
+
+
+.. autoattribute:: restish.url.URL.scheme
+.. autoattribute:: restish.url.URL.netloc
+.. autoattribute:: restish.url.URL.path
+.. autoattribute:: restish.url.URL.path_segments
+.. autoattribute:: restish.url.URL.query
+.. autoattribute:: restish.url.URL.query_list
+.. autoattribute:: restish.url.URL.fragment
+
+
+

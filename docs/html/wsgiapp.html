@@ -39,9 +39,9 @@
   <div class="section" id="whats-in-the-wsgiapp">
 <h1>Whats in the wsgiapp?<a class="headerlink" href="#whats-in-the-wsgiapp" title="Permalink to this headline">¶</a></h1>
 <p>The wsgiapp is shown below. make_app is set up to define the restish app by passing the root resource to it. The restish app is then passed to the setup_environ function which can be used to set any attributes on the ennviron you may wish. In this case templating is setup by calling &#8216;make_renderer&#8217;.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restish.app</span> <span class="kn">import</span> <span class="n">RestishApp</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">from</span> <span class="nn">restish.app</span> <span class="k">import</span> <span class="n">RestishApp</span>
 
-<span class="kn">from</span> <span class="nn">myproject.resource</span> <span class="kn">import</span> <span class="n">root</span>
+<span class="k">from</span> <span class="nn">myproject.resource</span> <span class="k">import</span> <span class="n">root</span>
 
 
 <span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
@@ -64,7 +64,7 @@
 
     <span class="c"># Create any objects that should exist for the lifetime of the application</span>
     <span class="c"># here. Don&#39;t forget to actually include them in the environ below!</span>
-    <span class="kn">from</span> <span class="nn">myproject.lib</span> <span class="kn">import</span> <span class="n">templating</span>
+    <span class="k">from</span> <span class="nn">myproject.lib</span> <span class="k">import</span> <span class="n">templating</span>
     <span class="n">renderer</span> <span class="o">=</span> <span class="n">templating</span><span class="o">.</span><span class="n">make_renderer</span><span class="p">(</span><span class="n">app_conf</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
