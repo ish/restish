@@ -4,7 +4,7 @@
 restish.url.URLAccessor.path_url attribute templating.html
 restish.url.URL.root method templating.html
 restish.url.URLAccessor.application_url attribute templating.html
-restish.http.bad_request function resources.html
+restish.url.URL.add_query method templating.html
 restish.url.URL.sibling method templating.html
 restish.url.URL.path_segments attribute templating.html
 restish.url.URL.remove_query method templating.html
@@ -18,7 +18,7 @@ restish.url.URLAccessor.path_qs attribute templating.html
 restish.url.URL.anchor method templating.html
 restish.url.URL.child method templating.html
 restish.http.created function resources.html
-restish.url.URL.add_query method templating.html
+restish.http.bad_request function resources.html
 restish.url.URL.add_queries method templating.html
 restish.url.URL.secure method templating.html
 restish.url.URL.query_list attribute templating.html
