@@ -123,6 +123,10 @@ class URL(str):
         return self.__class__(self.parsed_url.path)
 
     @property
+    def path_qs(self):
+        return self.clone(scheme=None,netloc=None)
+
+    @property
     def path_segments(self):
         return split_path(self.path)
 
