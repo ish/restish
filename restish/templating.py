@@ -89,7 +89,7 @@ class Rendering(object):
         """
         Return a dict of args that should always be present.
         """
-        return {'url': url.URLAccessor(request)}
+        return {'urls': url.URLAccessor(request)}
 
     def element_args(self, request, element):
         """

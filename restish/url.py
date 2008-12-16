@@ -306,7 +306,7 @@ class URL(str):
 
 class URLAccessor(object):
     """
-    URL accessor, provides access to useful URLs constructed from the
+    URL accessor, provides access to useful URLs, often constructed from the
     accessor's request.
     """
 
@@ -314,33 +314,54 @@ class URLAccessor(object):
         self.request = request
 
     @property
-    def full(self):
+    def url(self):
         """
         Return the full current (i.e. requested), URL.
         """
-        return URL(self.request.url)
+        return self.request.url
 
     @property
-    def abs(self):
+    def path(self):
         """
-        Return the part of the current URL that is absolute to the host URL,
-        i.e. the root of the HTTP server.
+        Return the path part of the current URL, relative to the root of the
+        web server.
         """
-        return URL(self.request.url[len(self.request.host_url):])
+        return self.request.path
 
     @property
-    def host(self):
+    def path_qs(self):
+        """
+        Return the path of the current URL, relative to the root of the web
+        server, and the query string.
+        """
+        return self.request.path_qs
+
+    @property
+    def host_url(self):
         """
         Return the host's URL, i.e. the URL of the HTTP server.
         """
-        return URL(self.request.host_url)
+        return self.request.host_url
 
     @property
-    def app(self):
+    def path_url(self):
+        """
+        Return the path's URL, i.e. the current URL without the query string.
+        """
+        return self.request.path_url
+
+    @property
+    def application_url(self):
         """
         Return the WSGI application's URL.
         """
-        return URL(self.request.application_url)
+        return self.request.application_url
+
+    def new(self, url):
+        """
+        Create a new URL instance.
+        """
+        return URL(url)
 
     
 def normalise_path(path):

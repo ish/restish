@@ -24,7 +24,7 @@ class TestRenderingArgs(unittest.TestCase):
         rendering = templating.Rendering()
         request = http.Request.blank('/')
         args = rendering.args(request)
-        assert set(['url']) == set(args)
+        assert set(['urls']) == set(args)
 
     def test_element_args(self):
         """
@@ -33,7 +33,7 @@ class TestRenderingArgs(unittest.TestCase):
         rendering = templating.Rendering()
         request = http.Request.blank('/')
         args = rendering.element_args(request, None)
-        assert set(['url', 'element']) == set(args)
+        assert set(['urls', 'element']) == set(args)
 
     def test_page_args(self):
         """
@@ -42,7 +42,7 @@ class TestRenderingArgs(unittest.TestCase):
         rendering = templating.Rendering()
         request = http.Request.blank('/')
         args = rendering.page_args(request, None)
-        assert set(['url', 'element']) == set(args)
+        assert set(['urls', 'element']) == set(args)
 
     def test_args_chaining(self):
         """
@@ -55,16 +55,16 @@ class TestRenderingArgs(unittest.TestCase):
                 return args
         rendering = Rendering()
         request = http.Request.blank('/')
-        assert set(['url', 'extra']) == set(rendering.args(request))
-        assert set(['url', 'element', 'extra']) == set(rendering.element_args(request, None))
-        assert set(['url', 'element', 'extra']) == set(rendering.element_args(request, None))
+        assert set(['urls', 'extra']) == set(rendering.args(request))
+        assert set(['urls', 'element', 'extra']) == set(rendering.element_args(request, None))
+        assert set(['urls', 'element', 'extra']) == set(rendering.element_args(request, None))
 
 
 class TestPage(unittest.TestCase):
 
     def test_page_decorator(self):
         def renderer(template, args):
-            args.pop('url')
+            args.pop('urls')
             args.pop('element')
             return '<p>%s %r</p>' % (template, args)
         class Resource(resource.Resource):
@@ -84,7 +84,7 @@ class TestPage(unittest.TestCase):
         assert response.body == '<p>test.html {\'foo\': \'bar\'}</p>'
 
 
-OUTPUT_DOC = """<div><p>url.abs: /</p><p>&lt;strong&gt;unsafe&lt;/strong&gt;</p><p><strong>safe</strong></p></div>"""
+OUTPUT_DOC = """<div><p>urls.path_qs: /</p><p>&lt;strong&gt;unsafe&lt;/strong&gt;</p><p><strong>safe</strong></p></div>"""
 
 
 class _TemplatingEngineTestCase(unittest.TestCase):
@@ -107,12 +107,12 @@ try:
     class TestMako(_TemplatingEngineTestCase):
         @staticmethod
         def renderer(template, args={}):
-            template = mako.template.Template("""<div><p>url.abs: ${url.abs|h}</p><p>${unsafe|h}</p><p>${safe}</p></div>""")
+            template = mako.template.Template("""<div><p>urls.path_qs: ${urls.path_qs|h}</p><p>${unsafe|h}</p><p>${safe}</p></div>""")
             return template.render(**args)
     class TestMakoAutoEscape(_TemplatingEngineTestCase):
         @staticmethod
         def renderer(template, args={}):
-            template = mako.template.Template("""<div><p>url.abs: ${url.abs}</p><p>${unsafe}</p><p>${safe|n}</p></div>""", default_filters=['h'])
+            template = mako.template.Template("""<div><p>urls.path_qs: ${urls.path_qs}</p><p>${unsafe}</p><p>${safe|n}</p></div>""", default_filters=['h'])
             return template.render(**args)
 except ImportError:
     print "Skipping Mako tests"
@@ -123,7 +123,7 @@ try:
     class TestGenshi(_TemplatingEngineTestCase):
         @staticmethod
         def renderer(template, args={}):
-            template = genshi.template.MarkupTemplate("""<div><p>url.abs: ${url.abs}</p><p>${unsafe}</p><p>${Markup(safe)}</p></div>""")
+            template = genshi.template.MarkupTemplate("""<div><p>urls.path_qs: ${urls.path_qs}</p><p>${unsafe}</p><p>${Markup(safe)}</p></div>""")
             return template.generate(**args).render('html')
 except ImportError:
     print "Skipping Genshi tests"
@@ -134,12 +134,12 @@ try:
     class TestJinja2(_TemplatingEngineTestCase):
         @staticmethod
         def renderer(template, args={}):
-            template = jinja2.Template("""<div><p>url.abs: {{ url.abs|e }}</p><p>{{ unsafe|e }}</p><p>{{ safe }}</p></div>""")
+            template = jinja2.Template("""<div><p>urls.path_qs: {{ urls.path_qs|e }}</p><p>{{ unsafe|e }}</p><p>{{ safe }}</p></div>""")
             return template.render(**args)
     class TestJinja2AutoEscape(_TemplatingEngineTestCase):
         @staticmethod
         def renderer(template, args={}):
-            template = jinja2.Template("""<div><p>url.abs: {{ url.abs }}</p><p>{{ unsafe }}</p><p>{{ safe|safe }}</p></div>""", autoescape=True)
+            template = jinja2.Template("""<div><p>urls.path_qs: {{ urls.path_qs }}</p><p>{{ unsafe }}</p><p>{{ safe|safe }}</p></div>""", autoescape=True)
             return template.render(**args)
 except ImportError:
     print "Skipping Jinja2 tests"

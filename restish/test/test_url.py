@@ -470,23 +470,40 @@ class TestURLAccessor(unittest.TestCase):
     def setUp(self):
         self.host_url = url.URL("http://localhost:1234")
         self.application_url = self.host_url.child('app')
-        self.full_url = self.application_url.child('resource').add_query('foo', 'bar')
-        request = http.Request.blank('/resource?foo=bar', base_url=self.application_url)
-        self.url_accessor = url.URLAccessor(request)
+        self.url = self.application_url.child('resource').add_query('foo', 'bar')
+        self.request = http.Request.blank('/resource?foo=bar', base_url=self.application_url)
+        self.url_accessor = url.URLAccessor(self.request)
 
-    def test_full(self):
-        self.assertEquals(self.url_accessor.full, self.full_url)
-        self.assertTrue(isinstance(self.url_accessor.full, url.URL))
+    def test_host_url(self):
+        self.assertEquals(self.url_accessor.host_url, self.request.host_url)
+        self.assertEquals(self.url_accessor.host_url, self.host_url)
+        self.assertTrue(isinstance(self.url_accessor.host_url, url.URL))
 
-    def test_abs(self):
-        self.assertEquals(self.url_accessor.abs, self.full_url.path.add_query('foo', 'bar'))
-        self.assertTrue(isinstance(self.url_accessor.abs, url.URL))
+    def test_application_url(self):
+        self.assertEquals(self.url_accessor.application_url, self.request.application_url)
+        self.assertEquals(self.url_accessor.application_url, self.application_url)
+        self.assertTrue(isinstance(self.url_accessor.application_url, url.URL))
 
-    def test_host(self):
-        self.assertEquals(self.url_accessor.host, self.host_url)
-        self.assertTrue(isinstance(self.url_accessor.host, url.URL))
+    def test_path_url(self):
+        self.assertEquals(self.url_accessor.path_url, self.request.path_url)
+        self.assertTrue(isinstance(self.url_accessor.path_url, url.URL))
 
-    def test_app(self):
-        self.assertEquals(self.url_accessor.app, self.application_url)
-        self.assertTrue(isinstance(self.url_accessor.app, url.URL))
+    def test_url(self):
+        print "*", self.url_accessor.url, self.request.url, self.url
+        self.assertEquals(self.url_accessor.url, self.request.url)
+        self.assertEquals(self.url_accessor.url, self.url)
+        self.assertTrue(isinstance(self.url_accessor.url, url.URL))
+
+    def test_path(self):
+        self.assertEquals(self.url_accessor.path, self.request.path)
+        self.assertTrue(isinstance(self.url_accessor.path, url.URL))
+
+    def test_path_qs(self):
+        self.assertEquals(self.url_accessor.path_qs, self.request.path_qs)
+        self.assertTrue(isinstance(self.url_accessor.path_qs, url.URL))
+
+    def test_new(self):
+        u = self.url_accessor.new('http://localhost:1234/a/b/c')
+        assert u == 'http://localhost:1234/a/b/c' 
+        self.assertTrue(isinstance(u, url.URL))
 
