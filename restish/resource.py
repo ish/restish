@@ -75,7 +75,7 @@ class Resource(object):
 
     def resource_child(self, request, segments):
         for matcher, func in self.child_factories:
-            match = matcher(segments)
+            match = matcher(request, segments)
             if match is not None:
                 break
         else:
@@ -190,7 +190,7 @@ class TemplateChildMatcher(object):
         self._count = len(segments)
         self._regex = re.compile('^' + '\\/'.join(re_segments(segments)) + '$')
 
-    def __call__(self, segments):
+    def __call__(self, request, segments):
         match_segments, remaining_segments = segments[:self._count], segments[self._count:]
         match_path = url.join_path(match_segments)[1:]
         match = self._regex.match(match_path)
@@ -207,7 +207,7 @@ class AnyChildMatcher(object):
 
     score = ()
 
-    def __call__(self, segments):
+    def __call__(self, request, segments):
         return {}, segments
 
 
