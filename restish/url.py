@@ -112,36 +112,54 @@ class URL(str):
 
     @property
     def scheme(self):
+        """ The url scheme (http, https, etc) """
         return self.parsed_url.scheme
 
     @property
     def netloc(self):
+        """ The domain or network location """
         return self.parsed_url.netloc
 
     @property
     def path(self):
+        """ The path of the url without query string or fragment """
         return self.__class__(self.parsed_url.path)
 
     @property
+    def path_qs(self):
+        """ The path, query string and fragment """
+        return self.clone(scheme=None,netloc=None)
+
+    @property
     def path_segments(self):
+        """ A list of url segments """
         return split_path(self.path)
 
     @property
     def query(self):
+        """ The query parameters as a string """
         return self.parsed_url.query
 
     @property
     def query_list(self):
+        """ The query parameters as a list of tuples """
         return split_query(self.query)
 
     @property
     def fragment(self):
+        """ The url fragment (e.g. #anchor) """
         return self.parsed_url.fragment
 
     def clone(self, scheme=_UNSET, netloc=_UNSET, path=_UNSET, query=_UNSET, fragment=_UNSET):
         """
-        Make a new instance of C{self.__class__}, passing along the given
+        Make a new instance of self, passing along the given
         arguments to its constructor.
+
+        :arg scheme:
+        :arg netloc:
+        :arg path:
+        :arg query:
+        :arg fragment:
         """
         scheme_, netloc_, path_, query_, fragment_ = self.parsed_url
         if scheme is not _UNSET:
@@ -159,20 +177,19 @@ class URL(str):
     ## path manipulations ##
 
     def root(self):
-        """
-        Contruct a URL to the root of the web server.
+        """ Contruct a URL to the root of the web server.
         """
         return self.clone(path='/')
 
     def sibling(self, segment):
-        """Construct a url where the given path segment is a sibling of this url
+        """ Construct a url where the given path segment is a sibling of this url
         """
         l = list(self.path_segments)
         l[-1] = segment
         return self.clone(path=join_path(l))
 
     def child(self, *path):
-        """Construct a url where the given path segment is a child of this url
+        """ Construct a url where the given path segment is a child of this url
         """
         l = list(self.path_segments)
         if l[-1:] == ['']:
@@ -182,17 +199,17 @@ class URL(str):
         return self.clone(path=join_path(l))
 
     def parent(self):
-        """Pop a URL segment from this url.
+        """ Pop a URL segment from this url.
         """
         l = list(self.path_segments)
         l.pop()
         return self.clone(path=join_path(l))
     
     def click(self, href):
-        """Build a path by merging 'href' and this path.
+        """
+        Modify the path as if ``href`` were clicked
 
-        Return a path which is the URL where a browser would presumably
-        take you if you clicked on a link with an 'href' as given.
+        Create a url as if the current url was given by ``self`` and ``href`` was clicked on
         """
         scheme, netloc, path, query, fragment = urlparse.urlsplit(href)
 
@@ -222,8 +239,11 @@ class URL(str):
         return self.clone(scheme=scheme, netloc=netloc, path=path, query=query, fragment=fragment) 
     
     def add_query(self, name, value=None):
-        """Add a query argument with the given value
-        None indicates that the argument has no value
+        """
+        Add a query argument with the given value
+
+        :arg key: the query key
+        :arg value: The query value. None means do not use a value. e.g. ``?key=``
         """
         if value is not None:
             value = unicode(value)
@@ -232,6 +252,11 @@ class URL(str):
         return self.clone(query=join_query(q))
     
     def add_queries(self, query_list):
+        """
+        Add multiple query args from a list of tuples
+
+        :arg query_list: list of tuple (key, value) pairs
+        """
         q = list(self.query_list)
         q.extend(query_list)
         return self.clone(query=join_query(q))
@@ -241,7 +266,8 @@ class URL(str):
         Remove all existing occurrences of the query argument 'name', *if it
         exists*, then add the argument with the given value.
 
-        C{None} indicates that the argument has no value.
+        :arg key: the query key
+        :arg value: The query value. None means do not use a value. e.g. ``?key=``
         """
         if value is not None:
             value = unicode(value)
@@ -257,13 +283,19 @@ class URL(str):
         return self.clone(query=join_query(q))
 
     def remove_query(self, name):
-        """Remove all query arguments with the given name
+        """
+        Remove all query arguments with the given name
+
+        :arg name: the name of the query arguments to remove
         """
         q = filter(lambda x: x[0] != name, self.query_list)
         return self.clone(query=join_query(q))
 
     def clear_queries(self, name=None):
-        """Remove all existing query arguments
+        """
+        Remove all existing query arguments
+
+        :arg name: the name of the query arguments to remove, defaults to removing all
         """
         if name is None:
             q = []
@@ -276,8 +308,8 @@ class URL(str):
     def secure(self, secure=True, port=None):
         """Modify the scheme to https/http and return the new URL.
 
-        @param secure: choose between https and http, default to True (https)
-        @param port: port, override the scheme's normal port
+        :arg secure: choose between https and http, default to True (https)
+        :arg port: port, override the scheme's normal port
         """
 
         # Choose the scheme and default port.
@@ -297,9 +329,10 @@ class URL(str):
 
     def anchor(self, anchor=None):
         """
-        Modify the fragment/anchor and return a new URL. An anchor of
-        C{None} (the default) or C{''} (the empty string) will remove the
-        current anchor.
+        Modify the fragment/anchor and return a new URL. 
+
+        :arg anchor: An anchor of None (the default) or '' will remove the
+                     current anchor.
         """
         return self.clone(fragment=anchor)
 

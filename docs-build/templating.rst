@@ -29,7 +29,7 @@ The mako renderer configures the project template directory, a cache directory, 
 Explicit templating
 ===================
 
-You can call the templating engine explicity by using restish.templating. e.g.
+You can call the templating engine explicity by using ``restish.templating``. e.g.
 
 .. code-block:: python
 
@@ -54,12 +54,16 @@ However it is a lot easier to use the templating decorator. By adding this decor
         def html(self, request):
             return {'name': 'Tim'}
 
-templating.page uses the content type passed in by the request so all you need to do is provide a templat in the decorator and the arguments in the return.
+templating.page uses the content type passed in by the request so all you need
+to do is provide a templat in the decorator and the arguments in the return.
 
-Global Template Varaibles
-=========================
+Template Default Variables
+==========================
 
-Quite often you will write your own functions or supply global variables to use within your template (possibly a set of site urls). This can be set up within the <project>/lib/templating.py by overriding the args method of the Rendering class.
+Quite often you will write your own functions or supply default variables to
+use within your template (possibly a set of site urls). This can be set up
+within the ``<project>/lib/templating.py`` by overriding the args method of the
+Rendering class.
 
 .. code-block:: python
 
@@ -75,17 +79,54 @@ Quite often you will write your own functions or supply global variables to use 
 A better way of dealing with URLs
 =================================
 
-Using strings for urls isn't particularly safe in a lot of cases and sometimes you might want a little more flexibility with your url handling. Restish automatically adds a 'url' arg which is a URLAccessor based on the current request.
+Using strings for urls isn't particularly safe in a lot of cases and sometimes
+you might want a little more flexibility with your url handling. Also, some
+urls are application specific and the template has no way of finding out what
+the current url is. Restish automatically includes a ``urls`` arg which is a
+``URLAccessor`` based on the current request.
 
-.. autoattribute:: restish.url.URLAccessor.full
-.. autoattribute:: restish.url.URLAccessor.abs
-.. autoattribute:: restish.url.URLAccessor.host
-.. autoattribute:: restish.url.URLAccessor.app
+.. note:: These attributes are the same as the attributes on the webob request object. See http://pythonpaste.org/webob/
 
-So url.full would give you the full current requested url.
+.. autoattribute:: restish.url.URLAccessor.url
+.. autoattribute:: restish.url.URLAccessor.path
+.. autoattribute:: restish.url.URLAccessor.path_qs
+.. autoattribute:: restish.url.URLAccessor.host_url
+.. autoattribute:: restish.url.URLAccessor.path_url
+.. autoattribute:: restish.url.URLAccessor.application_url
 
-From here you can then chain together other url methods to create new urls
+Let's see what these look like for an example url ``http://restish.com/tickets/search?u=foo#first`` which is a wsgi app mounted at ``/tickets``
 
+===================================  =================================================
+Template var                         Output
+===================================  =================================================
+``${urls.url}``                      ``http://restish.com/tickets/search?u=foo#first``
+``${urls.path}``                     ``/tickets/search``
+``${urls.path_qs}``                  ``/tickets/search?u=foo#first``
+``${urls.host_url}``                 ``http://restish.com``
+``${urls.path_url}``                 ``http://restish.com/tickets/search``
+``${urls.application_url}``          ``http://restish.com/tickets``
+===================================  =================================================
+
+There is also a ``urls.new()`` method which allows you to create your own urls from scratch. Once you have one of these urls (or a new one) you can use some of the utility methods on them to create modified urls. e.g.
+
+======================================================   ===================================================
+Template var                                             Output
+======================================================   ===================================================
+``${urls.new('/').child('Tim Parkin')``                  ``/Tim%20Parkin``
+``${urls.url.parent()}``                                 ``http://restish.com/tickets?u=foo#first``
+``${urls.application_url.click('search?u=foo')``         ``/tickets/search?u=foo``
+``${urls.url.sibling('help')}``                          ``http://restish.com/tickets/help?u=foo#first``
+``${urls.url.sibling('help').path_qs}``                  ``/tickets/help?u=foo#first``
+``${urls.path_qs.anchor()}``                             ``/tickets/search?u=foo``
+``${urls.path_qs.anchor('last')}``                       ``/tickets/search?u=foo#last``
+``${urls.path_qs.clear_queries()}``                      ``/tickets/search#last``
+``${urls.path_qs.replace_query('u','bar')}``             ``/tickets/search?u=bar#first``
+``${urls.path_qs.add_query('page','7')}``                ``/tickets/search?u=foo&page=7#first``
+``${urls.url.secure()}``                                 ``https://restish.com/tickets/search?u=foo#first``
+``${urls.path_qs.add_queries([('p','7'),('x','9')])}``   ``/tickets/search?u=foo&p=7&x=9#first``
+======================================================   ===================================================
+
+Here are the docstrings for the above methods/properties
 
 .. automethod:: restish.url.URL.root
 .. automethod:: restish.url.URL.sibling
@@ -106,6 +147,7 @@ You can also filter particular parts of a url
 .. autoattribute:: restish.url.URL.scheme
 .. autoattribute:: restish.url.URL.netloc
 .. autoattribute:: restish.url.URL.path
+.. autoattribute:: restish.url.URL.path_qs
 .. autoattribute:: restish.url.URL.path_segments
 .. autoattribute:: restish.url.URL.query
 .. autoattribute:: restish.url.URL.query_list
