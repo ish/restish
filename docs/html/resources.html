@@ -184,7 +184,7 @@
     <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;application/json&#39;</span><span class="p">)],</span> <span class="s">&quot;{}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We can use shorten <tt class="docutils literal"><span class="pre">text/html</span></tt> and <tt class="docutils literal"><span class="pre">text/json</span></tt> to just <tt class="docutils literal"><span class="pre">html</span></tt> and <tt class="docutils literal"><span class="pre">json</span></tt>.</p>
+<p>We can also use file suffixes and let the mimetypes module work out what content type to use. e.g. <tt class="docutils literal"><span class="pre">html</span></tt>, <tt class="docutils literal"><span class="pre">xml</span></tt>, <tt class="docutils literal"><span class="pre">pdf</span></tt>. We&#8217;ve also added <tt class="docutils literal"><span class="pre">json</span></tt> as we think you might (should) be using this one a lot! If you want to respond to multiple encodings, give it a list (e.g. GET(acept=[&#8216;html&#8217;,&#8217;xml&#8217;])</p>
 <p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -283,7 +283,7 @@
 <div class="section" id="custom-matchers">
 <h3>Custom Matchers<a class="headerlink" href="#custom-matchers" title="Permalink to this headline">¶</a></h3>
 <p>You can pass your own matchers to the child method if you like. For instance, let&#8217;s process the following search url <tt class="docutils literal"><span class="pre">/search/python?u=foo</span></tt></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">mymatcher</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">mymatcher</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span> <span class="o">&gt;</span><span class="mf">2</span> <span class="ow">and</span> <span class="n">segments</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;search&#39;</span><span class="p">:</span>
         <span class="n">category</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span>
         <span class="n">search_string</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>

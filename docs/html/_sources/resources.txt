@@ -98,7 +98,7 @@ If we had our argument-less GET resource also, then this would act as a 'catch-a
     def json(self, request):
         return http.ok([('Content-Type', 'application/json')], "{}")
 
-We can use shorten ``text/html`` and ``text/json`` to just ``html`` and ``json``.
+We can also use file suffixes and let the mimetypes module work out what content type to use. e.g. ``html``, ``xml``, ``pdf``. We've also added ``json`` as we think you might (should) be using this one a lot! If you want to respond to multiple encodings, give it a list (e.g. GET(acept=['html','xml'])
 
 Wildcard content type matching also works. e.g. ``text/*``
 
@@ -217,7 +217,7 @@ You can pass your own matchers to the child method if you like. For instance, le
 
 .. code-block:: python
 
-    def mymatcher(page, segments):
+    def mymatcher(request, segments):
         if len(segments) >2 and segments[0] == 'search':
             category = segments[1]
             search_string = request.GET.get('u',None)
