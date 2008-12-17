@@ -93,7 +93,11 @@
 </div>
 <div class="section" id="other-restish-http-response-codes">
 <h3>Other restish http response codes<a class="headerlink" href="#other-restish-http-response-codes" title="Permalink to this headline">¶</a></h3>
-<p>We can also return a whole range of http responses. .</p>
+<p>We can also return a whole range of http responses.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Returning <tt class="xref docutils literal"><span class="pre">None</span></tt> from a resource is equivalent to a 404</p>
+</div>
 <dl class="function">
 <dt id="restish.http.ok">
 <!--[restish.http.ok]--><tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
@@ -160,96 +164,175 @@
 <dd></dd></dl>
 
 </div>
-<div class="section" id="so-is-that-it-what-else-can-it-do-for-me">
-<h3>So is that it? What else can it do for me?<a class="headerlink" href="#so-is-that-it-what-else-can-it-do-for-me" title="Permalink to this headline">¶</a></h3>
-<p>To answer this, it is probably a good idea to go through a few examples. We&#8217;ll work with Mako templates in this case so set up your make_renderer in lib/templating.py file to look like the following</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">make_renderer</span><span class="p">(</span><span class="n">app_conf</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create and return a restish.templating &quot;renderer&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">import</span> <span class="nn">pkg_resources</span>
-    <span class="k">import</span> <span class="nn">os.path</span>
-    <span class="k">from</span> <span class="nn">restish.contrib.makorenderer</span> <span class="k">import</span> <span class="n">MakoRenderer</span>
-    <span class="k">return</span> <span class="n">MakoRenderer</span><span class="p">(</span>
-            <span class="n">directories</span><span class="o">=</span><span class="p">[</span>
-                <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s">&#39;myproject&#39;</span><span class="p">,</span> <span class="s">&#39;templates&#39;</span><span class="p">)</span>
-                <span class="p">],</span>
-            <span class="n">module_directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_conf</span><span class="p">[</span><span class="s">&#39;cache_dir&#39;</span><span class="p">],</span> <span class="s">&#39;templates&#39;</span><span class="p">),</span>
-            <span class="n">input_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">output_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span>
-            <span class="n">default_filters</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;unicode&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">]</span>
-            <span class="p">)</span>
+</div>
+<div class="section" id="content-negotiation">
+<h2>Content Negotiation<a class="headerlink" href="#content-negotiation" title="Permalink to this headline">¶</a></h2>
+<p>Resources can perform content negotiation in a few different ways. The example above where <tt class="docutils literal"><span class="pre">GET()</span></tt> had not arguments accepts any (or no) content type. If we wanted to explictly return different types of document depending on the accept headers we can include this as a GET argument.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;application/json&#39;</span><span class="p">)],</span> <span class="s">&quot;{}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Here is a syllabus of restish things to cover</p>
-<ol class="arabic">
-<li><dl class="first docutils">
-<dt>Templating</dt>
-<dd><ul class="first last simple">
-<li>using explicitly</li>
-<li>using the templating.page decorator</li>
-<li>adding your own global templating variables</li>
+<p>In this case, if the accept header was application/json, our empty json string would be returned.</p>
+<p>If we had our argument-less GET resource also, then this would act as a &#8216;catch-all&#8217; where everything apart from &#8216;application/json&#8217; would return html. e.g.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">catchall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="s">&quot;&lt;strong&gt;I&#39;m HTML&lt;/strong&gt;&quot;</span><span class="p">)</span>
+
+<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;application/json&#39;</span><span class="p">)],</span> <span class="s">&quot;{}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can use shorten <tt class="docutils literal"><span class="pre">text/html</span></tt> and <tt class="docutils literal"><span class="pre">text/json</span></tt> to just <tt class="docutils literal"><span class="pre">html</span></tt> and <tt class="docutils literal"><span class="pre">json</span></tt>.</p>
+<p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
+</div>
+<p>We sometimes want to match lists of content types, for example where we would like to use <tt class="docutils literal"><span class="pre">application/xhtml+xml</span></tt>. This are honoured by restish. (See test_resource.py in the unit tests for examples)</p>
+</div>
+<div class="section" id="resource-url-handling">
+<h2>Resource URL Handling<a class="headerlink" href="#resource-url-handling" title="Permalink to this headline">¶</a></h2>
+<p>Restish implements a <tt class="docutils literal"><span class="pre">resource_child</span></tt> method on each resource which checks it&#8217;s registered <tt class="docutils literal"><span class="pre">matchers</span></tt> to see if they are successful. If they are not, then None is returned (which is the same as a 404 response).</p>
+<p>Matchers are any callable that returns another resource and a list of remaining segments.</p>
+<p>As far as most applications are concerned, they need not implement anything beyond the included matcher which is wired by default into the <tt class="docutils literal"><span class="pre">resource.child</span></tt> decorator. The uses of this method are described in the following sections.</p>
+<div class="section" id="implicitly-named-child">
+<h3>Implicitly named child<a class="headerlink" href="#implicitly-named-child" title="Permalink to this headline">¶</a></h3>
+<p>This takes it&#8217;s segment matching from the method name. For instance, this code will match a segment named <tt class="docutils literal"><span class="pre">thanks</span></tt> and ignore any remaining segments. So if this were a root resource, it would match <tt class="docutils literal"><span class="pre">/thanks</span></tt> and <tt class="docutils literal"><span class="pre">/thanks/foo/bar</span></tt>, amongst others.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">thanks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="s">&#39;thanks&#39;</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="explicitly-named-child">
+<h3>Explicitly named child<a class="headerlink" href="#explicitly-named-child" title="Permalink to this headline">¶</a></h3>
+<p>Obviously this won&#8217;t work where you have urls with non-python method name characters (for example a stylesheet). For this you can pass an explicit child name to the <tt class="docutils literal"><span class="pre">resource.child</span></tt> decorator.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;styles.css&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">styles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/css&#39;</span><span class="p">)],</span> <span class="s">&#39;body { color: red; }&#39;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>For any non-trivial application, you would want to handle a segment and pass everything below it to the next resource.</p>
+</div>
+<div class="section" id="chaining-resources">
+<h3>Chaining Resources<a class="headerlink" href="#chaining-resources" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;re showing a contrived example where the url <tt class="docutils literal"><span class="pre">/blog/entries/28</span></tt> get&#8217;s passed down from resource to resource.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">blog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Blog</span><span class="p">(),</span> <span class="n">segments</span>
+
+<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Entry</span><span class="p">(),</span> <span class="n">segments</span>
+
+<span class="k">class</span> <span class="nc">Entries</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;entry.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">blogcontent</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segments</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;content&#39;</span><span class="p">:</span> <span class="n">blogcontent</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="template-resource-matchers">
+<h3>Template Resource Matchers<a class="headerlink" href="#template-resource-matchers" title="Permalink to this headline">¶</a></h3>
+<p>OK so that wasn&#8217;t the most realistic example, for sites like blogger you would want to pick up the year and month and then the blog entry name. We can do this using the template style url matcher. We&#8217;ll try that now..</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;{year}/{month}&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">blog_month_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">BlogList</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">),</span> <span class="n">segments</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;{year}/{month}/{entryid}&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">blog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">BlogPost</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">),</span> <span class="n">segments</span>
+
+<span class="k">class</span> <span class="nc">BlogList</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">month</span> <span class="o">=</span> <span class="n">month</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;EntryList.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">entrylist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;entries&#39;</span><span class="p">:</span> <span class="n">entries</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entryid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entryid</span><span class="o">=</span><span class="n">entryid</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;entry.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">blogcontent</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entryid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;content&#39;</span><span class="p">:</span> <span class="n">blogcontent</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-matchers">
+<h3>Custom Matchers<a class="headerlink" href="#custom-matchers" title="Permalink to this headline">¶</a></h3>
+<p>You can pass your own matchers to the child method if you like. For instance, let&#8217;s process the following search url <tt class="docutils literal"><span class="pre">/search/python?u=foo</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">mymatcher</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span> <span class="o">&gt;</span><span class="mf">2</span> <span class="ow">and</span> <span class="n">segments</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;search&#39;</span><span class="p">:</span>
+        <span class="n">category</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span>
+        <span class="n">search_string</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;category&#39;</span><span class="p">:</span> <span class="n">category</span><span class="p">,</span> <span class="s">&#39;search_string&#39;</span><span class="p">:</span> <span class="n">search_string</span><span class="p">},</span> <span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="n">mymatcher</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SearchResults</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">SearchResults</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="o">=</span><span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;category&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_string</span><span class="o">=</span><span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;search_string&#39;</span><span class="p">)</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">search_term</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">search_term</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li>Other methods<ul>
+<li>PUT, DELETE</li>
 </ul>
-</dd>
-</dl>
-</li>
-<li><p class="first">handling GET and POST</p>
-<ul class="simple">
-<li>resource.GET(
-resource.POST(
-PUT, DELETE</li>
-<li>accept mimetypes handling</li>
-</ul>
-</li>
-<li><p class="first">Simple Child methods</p>
 </li>
 </ol>
-<blockquote>
-<ul class="simple">
-<li>function name children</li>
-<li>explicit one deep</li>
-<li>explicit multi depth</li>
-<li>any matcher</li>
-</ul>
-</blockquote>
-<ol class="arabic" start="4">
-<li><p class="first">Using urls</p>
-<ul class="simple">
-<li>constructing urls</li>
-<li>urls in templates</li>
-</ul>
-<blockquote>
-<ul class="simple">
-<li>path parameters?</li>
-</ul>
-</blockquote>
-</li>
-<li><p class="first">example of a cookie wsgi app</p>
-<ul class="simple">
+<ol class="arabic simple" start="5">
+<li>example of a cookie wsgi app<ul>
 <li>Building the app</li>
 <li>installing the app</li>
 </ul>
 </li>
-<li><p class="first">example of a flashmessage wsgi app</p>
-<ul class="simple">
+<li>example of a flashmessage wsgi app<ul>
 <li>Building the app</li>
 <li>installing the app</li>
 </ul>
 </li>
-<li><p class="first">Implementing guards</p>
-<ul class="simple">
+<li>Implementing guards<ul>
 <li>using a basic guard</li>
 <li>using repoze.who</li>
 </ul>
 </li>
-<li><p class="first">Examples</p>
-<ul class="simple">
+<li>Examples<ul>
 <li>A rest api server</li>
-<li></li>
 </ul>
 </li>
-<li><p class="first">Using formish within restish</p>
-<ul class="simple">
+<li>Using formish within restish<ul>
 <li>Typical pattern</li>
 <li>multiple forms</li>
 </ul>
@@ -273,7 +356,15 @@ PUT, DELETE</li>
 <li><a class="reference" href="#resource-resource"><tt class="docutils literal"><span class="pre">resource.Resource</span></tt></a></li>
 <li><a class="reference" href="#resource-get"><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt></a></li>
 <li><a class="reference" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
-<li><a class="reference" href="#so-is-that-it-what-else-can-it-do-for-me">So is that it? What else can it do for me?</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#content-negotiation">Content Negotiation</a></li>
+<li><a class="reference" href="#resource-url-handling">Resource URL Handling</a><ul>
+<li><a class="reference" href="#implicitly-named-child">Implicitly named child</a></li>
+<li><a class="reference" href="#explicitly-named-child">Explicitly named child</a></li>
+<li><a class="reference" href="#chaining-resources">Chaining Resources</a></li>
+<li><a class="reference" href="#template-resource-matchers">Template Resource Matchers</a></li>
+<li><a class="reference" href="#custom-matchers">Custom Matchers</a></li>
 </ul>
 </li>
 </ul>
