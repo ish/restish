@@ -83,9 +83,22 @@ We can also pass the success and failure callables to the validate function to s
 
 .. code-block:: python
 
-    @resource.POST()
-    def POST(self, request):
-        return get_form().validate(request, self.html, self.thanks)
+    class Root(resource.Resource):
+
+        @resource.GET()
+        @templating.page('test.html')
+        def html(self, request, form=None):
+            if form is None:
+                form = get_form()
+            return {'form': form}
+
+        @resource.POST()
+        def POST(self, request):
+            return get_form().validate(request, self.html, self.thanks)
+
+        @templating.page('thanks.html')
+        def thanks(self, request, data):
+            return {'data': data}
 
 
 Multiple Actions on a Form
