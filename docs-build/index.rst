@@ -13,6 +13,7 @@ Contents:
    introduction
    resources
    templating
+   formish
 
 Indices and tables
 ==================

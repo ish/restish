@@ -49,8 +49,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource you get in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
-<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -90,6 +90,10 @@
 </pre></div>
 </div>
 <p>The response is a list of tuples, each of which is a http header key and value. This is followed by the data for the http response.</p>
+</div>
+<div class="section" id="other-http-handlers">
+<h3>Other HTTP Handlers<a class="headerlink" href="#other-http-handlers" title="Permalink to this headline">¶</a></h3>
+<p>Restish implements resource decorators to handle GET, POST, PUT and DELETE.</p>
 </div>
 <div class="section" id="other-restish-http-response-codes">
 <h3>Other restish http response codes<a class="headerlink" href="#other-restish-http-response-codes" title="Permalink to this headline">¶</a></h3>
@@ -188,7 +192,7 @@
 <p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
+<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
 </div>
 <p>We sometimes want to match lists of content types, for example where we would like to use <tt class="docutils literal"><span class="pre">application/xhtml+xml</span></tt>. This are honoured by restish. (See test_resource.py in the unit tests for examples)</p>
 </div>
@@ -306,12 +310,10 @@
         <span class="n">results</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="n">search_term</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">search_term</span><span class="p">)</span>
 </pre></div>
 </div>
-<ol class="arabic simple">
-<li>Other methods<ul>
-<li>PUT, DELETE</li>
-</ul>
-</li>
-</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Check that the matcher API has not been updated. We had discussed passing the return args of the matcher directly back to the decorated method.</p>
+</div>
 <ol class="arabic simple" start="5">
 <li>example of a cookie wsgi app<ul>
 <li>Building the app</li>
@@ -350,21 +352,22 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Restish Resources</a><ul>
-<li><a class="reference" href="#our-project-resource">Our project resource</a><ul>
-<li><a class="reference" href="#logging">Logging</a></li>
-<li><a class="reference" href="#resource-resource"><tt class="docutils literal"><span class="pre">resource.Resource</span></tt></a></li>
-<li><a class="reference" href="#resource-get"><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt></a></li>
-<li><a class="reference" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
+<li><a class="reference external" href="">Restish Resources</a><ul>
+<li><a class="reference external" href="#our-project-resource">Our project resource</a><ul>
+<li><a class="reference external" href="#logging">Logging</a></li>
+<li><a class="reference external" href="#resource-resource"><tt class="docutils literal"><span class="pre">resource.Resource</span></tt></a></li>
+<li><a class="reference external" href="#resource-get"><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt></a></li>
+<li><a class="reference external" href="#other-http-handlers">Other HTTP Handlers</a></li>
+<li><a class="reference external" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#content-negotiation">Content Negotiation</a></li>
-<li><a class="reference" href="#resource-url-handling">Resource URL Handling</a><ul>
-<li><a class="reference" href="#implicitly-named-child">Implicitly named child</a></li>
-<li><a class="reference" href="#explicitly-named-child">Explicitly named child</a></li>
-<li><a class="reference" href="#chaining-resources">Chaining Resources</a></li>
-<li><a class="reference" href="#template-resource-matchers">Template Resource Matchers</a></li>
-<li><a class="reference" href="#custom-matchers">Custom Matchers</a></li>
+<li><a class="reference external" href="#content-negotiation">Content Negotiation</a></li>
+<li><a class="reference external" href="#resource-url-handling">Resource URL Handling</a><ul>
+<li><a class="reference external" href="#implicitly-named-child">Implicitly named child</a></li>
+<li><a class="reference external" href="#explicitly-named-child">Explicitly named child</a></li>
+<li><a class="reference external" href="#chaining-resources">Chaining Resources</a></li>
+<li><a class="reference external" href="#template-resource-matchers">Template Resource Matchers</a></li>
+<li><a class="reference external" href="#custom-matchers">Custom Matchers</a></li>
 </ul>
 </li>
 </ul>

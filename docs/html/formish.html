@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using Formish within Restish &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" />
+    <link rel="prev" title="Templating in Restish" href="templating.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templating.html" title="Templating in Restish"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="using-formish-within-restish">
+<h1>Using Formish within Restish<a class="headerlink" href="#using-formish-within-restish" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Formish is a forms library that was developed in parralel with Restish, although the library itself can be used completely independently. Formish started life as formal, a form library written for Twisted/Nevow. The goal of the project was to create a simple forms library that allowed separation of the component parts such as schema, widgets, validation, data conversion and templates. The result is a suite of components formish, validatish, convertish and schemaish. These can all be used independently but work seamlessly when needed.</p>
+</div>
+<div class="section" id="using-a-simple-form-withing-restish">
+<h2>Using a simple form withing Restish<a class="headerlink" href="#using-a-simple-form-withing-restish" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll start off with one of the examples from the Formish documentation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">SimpleSchema</span><span class="p">(</span><span class="n">schemaish</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A simple sommets form &quot;&quot;&quot;</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">schemaish</span><span class="o">.</span><span class="n">All</span><span class="p">(</span><span class="n">schemaish</span><span class="o">.</span><span class="n">NotEmpty</span><span class="p">,</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">Email</span><span class="p">))</span>
+    <span class="n">first_names</span> <span class="o">=</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">schemaish</span><span class="o">.</span><span class="n">NotEmpty</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">schemaish</span><span class="o">.</span><span class="n">NotEmpty</span><span class="p">)</span>
+    <span class="n">comments</span> <span class="o">=</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">get_form</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Creates a form and assigns a widget &quot;&quot;&quot;</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">formish</span><span class="o">.</span><span class="n">Form</span><span class="p">(</span><span class="n">SimpleSchema</span><span class="p">())</span>
+    <span class="n">form</span><span class="p">[</span><span class="s">&#39;comments&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">formish</span><span class="o">.</span><span class="n">TextArea</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">form</span>
+
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Our form resource &quot;&quot;&quot;</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;test.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the form is None then we get a clean form, otherwise show the</span>
+<span class="sd">        form that was passsed back from an unsuccessful POST</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">form</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">get_form</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">POST</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a clean form and validate it against the request data that was</span>
+<span class="sd">        submitted. Errors pass the form (with attached errors) back up to</span>
+<span class="sd">        the page renderer. Success shows a thanks page (typically you would</span>
+<span class="sd">        redirect here.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">get_form</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">formish</span><span class="o">.</span><span class="n">FormError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">thanks</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;thanks.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">thanks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Just show the data &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We need to have the following in the <tt class="docutils literal"><span class="pre">test.html</span></tt> file</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;formbox&quot;</span><span class="nt">&gt;</span>
+  ${form()|n}
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<p>The steps when this form is created are as follows</p>
+<ol class="arabic simple">
+<li>Get a copy of the form and put it on the page</li>
+<li>When POST&#8217;d, validate the returned request data. If this raises an exception, errors will have been bound to the form instance.</li>
+<li>(On Error): Pass the form with bound errors back up the page renderer.</li>
+<li>(On Success): Show a thanks page.</li>
+</ol>
+<p>We can also pass the success and failure callables to the validate function to simplify the form handling.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@resource</span><span class="o">.</span><span class="n">POST</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">get_form</span><span class="p">()</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thanks</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="multiple-actions-on-a-form">
+<h2>Multiple Actions on a Form<a class="headerlink" href="#multiple-actions-on-a-form" title="Permalink to this headline">¶</a></h2>
+<p>If we have more than one action on a form</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">get_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">formish</span><span class="o">.</span><span class="n">Form</span><span class="p">(</span> <span class="p">(</span><span class="s">&#39;email&#39;</span><span class="p">,</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">())</span> <span class="p">)</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_email_domain</span><span class="p">,</span> <span class="s">&#39;check&#39;</span><span class="p">)</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_test_email</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">form</span>
+
+    <span class="k">def</span> <span class="nf">check_email_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check the domain has an MX or A record &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">send_test_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Send a test email to this address &quot;&quot;&quot;</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;test.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">form</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">POST</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">form</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we have pass the <tt class="docutils literal"><span class="pre">form.action</span></tt> method as the success callable. The whatever is in <tt class="docutils literal"><span class="pre">form.action</span></tt> (for example, <tt class="docutils literal"><span class="pre">check_email_domain</span></tt>) is called with <tt class="docutils literal"><span class="pre">(request,</span> <span class="pre">data)</span></tt>.</p>
+</div>
+<div class="section" id="multiple-forms-on-a-page">
+<h2>Multiple Forms on a Page<a class="headerlink" href="#multiple-forms-on-a-page" title="Permalink to this headline">¶</a></h2>
+<p>If we have more than one form on a page, we can use the utility function, <tt class="docutils literal"><span class="pre">form_in_request</span></tt> to find out which one was posted.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="c">##</span>
+    <span class="c"># Forms</span>
+
+    <span class="k">def</span> <span class="nf">_email_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">formish</span><span class="o">.</span><span class="n">Form</span><span class="p">(</span> <span class="p">(</span><span class="s">&#39;email&#39;</span><span class="p">,</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">()),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;email&#39;</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_domain_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">formish</span><span class="o">.</span><span class="n">Form</span><span class="p">(</span> <span class="p">(</span><span class="s">&#39;domain&#39;</span><span class="p">,</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">()),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;domain&#39;</span> <span class="p">)</span>
+
+    <span class="c">##</span>
+    <span class="c"># Form Handling</span>
+
+    <span class="k">def</span> <span class="nf">_POST_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_form</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thanks</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_POST_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_form</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">form</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thanks</span><span class="p">)</span>
+
+    <span class="c">##</span>
+    <span class="c"># GET, POST, templating and thanks</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">POST</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">handlers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;email&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_POST_email</span><span class="p">,</span> <span class="s">&#39;domain&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_POST_domain</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">handlers</span><span class="p">[</span><span class="n">formish</span><span class="o">.</span><span class="n">form_in_request</span><span class="p">(</span><span class="n">request</span><span class="p">)](</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;forms.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">form_name</span> <span class="o">=</span> <span class="n">formish</span><span class="o">.</span><span class="n">form_in_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="p">{</span><span class="n">form_name</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">form_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s">&#39;email&#39;</span><span class="p">:</span>
+            <span class="n">form</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_form</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">form_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s">&#39;domain&#39;</span><span class="p">:</span>
+            <span class="n">form</span><span class="p">[</span><span class="s">&#39;domain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_form</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;forms&#39;</span><span class="p">:</span> <span class="n">forms</span><span class="p">}</span>
+
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;thanks.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">thanks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<p>We could simplify this further, although I&#8217;m not sure this is quite as readable..</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="s">&#39;email&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">formish</span><span class="o">.</span><span class="n">Form</span><span class="p">(</span> <span class="p">(</span><span class="s">&#39;email&#39;</span><span class="p">,</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">()),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;email&#39;</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="s">&#39;domain&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">formish</span><span class="o">.</span><span class="n">Form</span><span class="p">(</span> <span class="p">(</span><span class="s">&#39;domain&#39;</span><span class="p">,</span> <span class="n">schemaish</span><span class="o">.</span><span class="n">String</span><span class="p">()),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;domain&#39;</span> <span class="p">)</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">POST</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">form_name</span> <span class="o">=</span> <span class="n">formish</span><span class="o">.</span><span class="n">form_in_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thanks</span><span class="p">)</span>
+
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;forms.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">form_name</span> <span class="o">=</span> <span class="n">formish</span><span class="o">.</span><span class="n">form_in_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="p">{</span><span class="n">form_name</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+        <span class="c"># Check each form, if it isn&#39;t the one passed in then fetch it.</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">,</span><span class="s">&#39;domain&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">form_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">form</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">form</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;forms&#39;</span><span class="p">:</span> <span class="n">forms</span><span class="p">}</span>
+
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;thanks.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">thanks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Using Formish within Restish</a><ul>
+<li><a class="reference external" href="#introduction">Introduction</a></li>
+<li><a class="reference external" href="#using-a-simple-form-withing-restish">Using a simple form withing Restish</a></li>
+<li><a class="reference external" href="#multiple-actions-on-a-form">Multiple Actions on a Form</a></li>
+<li><a class="reference external" href="#multiple-forms-on-a-page">Multiple Forms on a Page</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="templating.html" title="previous chapter">Templating in Restish</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/formish.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templating.html" title="Templating in Restish"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>

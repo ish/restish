@@ -50,6 +50,11 @@ In this case we have returned a http response with a content type of text/html. 
 
 The response is a list of tuples, each of which is a http header key and value. This is followed by the data for the http response.
 
+Other HTTP Handlers
+-------------------
+
+Restish implements resource decorators to handle GET, POST, PUT and DELETE.
+
 Other restish http response codes
 ---------------------------------
 
@@ -105,6 +110,8 @@ Wildcard content type matching also works. e.g. ``text/*``
 .. note:: Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends ``text/html;q=0.4,text/plain;q=0.5`` text/plain will be preferred. See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
 
 We sometimes want to match lists of content types, for example where we would like to use ``application/xhtml+xml``. This are honoured by restish. (See test_resource.py in the unit tests for examples)
+
+
 
 
 Resource URL Handling
@@ -240,13 +247,10 @@ You can pass your own matchers to the child method if you like. For instance, le
             results = indexer.get(category=self.category, search_term=self.search_term)
 
 
+.. warning:: Check that the matcher API has not been updated. We had discussed passing the return args of the matcher directly back to the decorated method.
 
 
 
-
-1) Other methods
-
-   -  PUT, DELETE
 
 5) example of a cookie wsgi app
 

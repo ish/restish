@@ -153,5 +153,32 @@ You can also filter particular parts of a url
 .. autoattribute:: restish.url.URL.query_list
 .. autoattribute:: restish.url.URL.fragment
 
+Pages and Elements
+==================
 
+When more complex applications are developed, it is quite common to have resources that are used repeatedly on multiple pages. Restish includes two subclassses of resource called Page and Element. A Page is a resource that has a per request scoped registry of Elements (Where Elements are simple resources but which also have a registry of Elements to allow nested Elements).
+
+An example of where this could be useful is where a login status is regularly included on pages throughout a site. 
+
+.. code-block:: python
+
+    class LoginStatusElement(page.Element):
+
+        def __call__(self, request):
+            return templating.render(request, 'login_status.html',{})
+
+    class BasePage(page.Page):
+
+        @page.element('login')
+        def login_status(self, request):
+            return auth.LoginStatusElement()
+
+.. code-block:: html
+
+    <div id="loginstatus"> ${element('login_status')()|n} </div>
+
+.. warning:: This is incomplete - just like my understanding of it .. 
+
+
+        
 
