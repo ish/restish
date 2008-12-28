@@ -45,9 +45,75 @@ http.request and response)
 
 .. note::  Matt: Add some notes here on the whys behind restish?? I don't know enough about what you did to write anything
 
+Executive Summary for Coders
+----------------------------
 
-How to start a restish project
+.. code-block:: python
+
+    # implicit resource locator
+    @resource.child()
+    def blog(self, request, segments):
+        return BlogResource()
+
+    # explicit resource locator
+    @resource.child('blog')
+    def whatever(self, request, segments):
+        return BlogResource()
+
+    # templated resource locator
+    @resource.child('blog/{entry}')
+    def whatever(self, request, segments, entry=None}:
+        return BlogEntry(entry)
+
+    # templated resource locator with partial match
+    @resource.child('blog/entry-{id}')
+    def whatever(self, request, segments, id=None}:
+        return BlogEntry(id)
+
+    # accept anything and return a 200 OK with content
+    @resource.GET()
+    def html(self, request):
+        return http.ok([('Content-Type','text/html')], '<p>Hello Wolrd</p>' )
+
+    # match json only and return 200 OK (system works out content type)
+    @resource.GET(accept='text/json')
+    def json(self, request):
+        return http.ok( [], '{"foo": "bar"}' )
+
+    # short cut for accept code
+    @resource.GET(accept='json')
+    def json(self, request):
+        return http.ok( [], simplejson.dumps({'foo': 'bar'}) )
+
+    # accept html and build a template explicitly
+    @resource.GET(accept='text/html')
+    def html(self, request):
+        content = templating.render(request, 'mytemplate.html', {'name': 'Tim'})
+        return http.ok( [('Content-Type','text/html')], content )
+
+    # short cut accept html and use templating decorator
+    @resource.GET(accept='html')
+    @templating.page('mypage.html')
+    def html(self, request):
+        return {'name': 'Tim'}
+
+    # accept anything and use url module to build a redirect
+    @resource.GET()
+    def html(self, request):
+        current_url = request.url.path_qs
+        return http.see_other( current_url.child('othersegment') )
+
+    # match a search pattern and redirect to google
+    @resource.child('search/{query}'):
+    def search(self, request, segments, query=''):
+        google_url = url("http://google.com")
+        http.see_other( google_url.add_query('u',query) )
+
+
+how to start a restish project
 ==============================
+
+.. note:: Restish doesn't make you structure your project in any particular way but we've encapsulated our way of working in a paste script
 
 Using paster create
 -------------------
@@ -125,7 +191,7 @@ The files in this project are as follows::
     |-- myproject.ini
     `-- setup.py
 
-We'll simplify that a bit in order to describe what we have in the actual project::
+We'll simplify that a bit by removing __init__'s and packaging files..::
 
     .
     |-- myproject.ini
@@ -142,19 +208,20 @@ We'll simplify that a bit in order to describe what we have in the actual projec
     |   |   `-- root.py
     |   `-- wsgiapp.py
 
-The ini files are paste configuration files and setup up the project. There is
+The ini files
+^^^^^^^^^^^^^
+
+The ini files are paste script configuration files and setup up the project. There is
 a base configuration file that contains project settings and then there are two
 deployment files, live and development, which contain information on how to
 serve the project. 
 
-The project itself has three directories. 
-
 The ``lib`` directory
 ^^^^^^^^^^^^^^^^^^^^^
 
-The lib directory has an example authenticator called 'guard.py' and a sample
-templating package which shows how to setup templating with Mako, Genshi or
-Jinja.
+The lib directory has an example authenticator called 'guard.py' (which you can
+ignore until needed) and a sample templating package which shows how to setup
+templating with Mako, Genshi or Jinja.
 
 We tend to put most of our project library code in here.
 
@@ -170,21 +237,24 @@ underneath with your assets in. Placing files directly inside public will also
 make them available on root of your website, useful for favicons, google
 analytics files, etc.
 
+.. note:: In a live project you would probably use separate server(s) for static files and hence our live.ini files does not configure a public directory
+
 The ``resource`` directory
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The resource directory contains our root resource. This is the first file that
 will handle any requests.
 
+The WSGI setup
+^^^^^^^^^^^^^^
+
 Finally, our wsgiapp.py can be used to wire up any other wsgi applications,
 such as cookies, authentication, etc.
-
-Let's take a look at the resource first as that is where the fun stuff is.. 
 
 Starting a server
 -----------------
 
-Your can start your example project right now by using the command::
+Just a quick aside as it might come in handy. You can start your example project right now by using the command::
 
   $ paster serve development.ini
 
