@@ -100,7 +100,7 @@ the following.
     def thanks(self, request, segments):
         return Thanks()
 
-    class Thanks(restish.Resource)
+    class Thanks(restish.Resource):
         """ see later for content docs """
       
 The Thanks resource would then have to process any remaining segments if there
@@ -453,27 +453,3 @@ We sometimes want to match lists of content types, for example where we would
 like to use ``application/xhtml+xml``. This are honoured by restish. (See
 test_resource.py in the unit tests for examples)
 
-
-5) example of a cookie wsgi app
-
-   - Building the app
-   - installing the app
-
-6) example of a flashmessage wsgi app
-
-   - Building the app
-   - installing the app
-
-7) Implementing guards
-
-   - using a basic guard
-   - using repoze.who
-
-8) Examples
-
-   - A rest api server
-
-9) Using formish within restish
-
-   - Typical pattern
-   - multiple forms

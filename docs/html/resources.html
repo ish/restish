@@ -118,12 +118,13 @@ and <tt class="docutils literal"><span class="pre">/thanks/foo/bar</span></tt>, 
 </div>
 <p>If we wanted to pass the remaining segments onto another resource, we would use
 the following.</p>
-<div class="highlight-python"><pre>@resource.child()
-def thanks(self, request, segments):
-    return Thanks()
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">thanks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Thanks</span><span class="p">()</span>
 
-class Thanks(restish.Resource)
-    """ see later for content docs """</pre>
+<span class="k">class</span> <span class="nc">Thanks</span><span class="p">(</span><span class="n">restish</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; see later for content docs &quot;&quot;&quot;</span>
+</pre></div>
 </div>
 <p>The Thanks resource would then have to process any remaining segments if there
 were any, and if not then the Thanks resource would provide content).</p>
@@ -473,32 +474,6 @@ to multiple encodings, give it a list (e.g. GET(acept=[&#8216;html&#8217;,&#8217
 <p>We sometimes want to match lists of content types, for example where we would
 like to use <tt class="docutils literal"><span class="pre">application/xhtml+xml</span></tt>. This are honoured by restish. (See
 test_resource.py in the unit tests for examples)</p>
-<ol class="arabic simple" start="5">
-<li>example of a cookie wsgi app<ul>
-<li>Building the app</li>
-<li>installing the app</li>
-</ul>
-</li>
-<li>example of a flashmessage wsgi app<ul>
-<li>Building the app</li>
-<li>installing the app</li>
-</ul>
-</li>
-<li>Implementing guards<ul>
-<li>using a basic guard</li>
-<li>using repoze.who</li>
-</ul>
-</li>
-<li>Examples<ul>
-<li>A rest api server</li>
-</ul>
-</li>
-<li>Using formish within restish<ul>
-<li>Typical pattern</li>
-<li>multiple forms</li>
-</ul>
-</li>
-</ol>
 </div>
 </div>
 

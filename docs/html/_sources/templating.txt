@@ -2,8 +2,13 @@
 Templating in Restish
 *********************
 
-``lib/templating.py``
-=====================
+Restish does not imply the use of any particular templating language. Instead, we have provided stubs that can be used with some of the more popular templating languages which can be enabled by uncommenting a section withing the wsgiapp.py.
+
+
+Configuring a templating language within lib/templating.py
+==========================================================
+
+Here is an example of the uncommented code that enables the mako renderer.
 
 .. code-block:: python
 
@@ -55,12 +60,12 @@ However it is a lot easier to use the templating decorator. By adding this decor
             return {'name': 'Tim'}
 
 templating.page uses the content type passed in by the request so all you need
-to do is provide a templat in the decorator and the arguments in the return.
+to do is provide a template in the decorator and the arguments for the template in the return dictionary.
 
 Template Default Variables
 ==========================
 
-Quite often you will write your own functions or supply default variables to
+Quite often you will write your own functions or want supply default variables to
 use within your template (possibly a set of site urls). This can be set up
 within the ``<project>/lib/templating.py`` by overriding the args method of the
 Rendering class.
@@ -176,8 +181,6 @@ An example of where this could be useful is where a login status is regularly in
 .. code-block:: html
 
     <div id="loginstatus"> ${element('login_status')()|n} </div>
-
-.. warning:: This is incomplete - just like my understanding of it .. 
 
 
         

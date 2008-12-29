@@ -27,8 +27,6 @@ we started to make pylons more templating agnostic, eventually removing
 templating completely. Finally, when we had removed all trace of pylons, we
 realised what we had was a new lightweight web framework. 
 
-.. note:: Matt: Why is pylons oh so crap.. 
-
 Advantages & Disadvantages
 --------------------------
 
@@ -42,8 +40,6 @@ The three libraries we have used in the creation of restsh are paste (for
 initial project template creation), decorator (used to decorate methods as
 children or http handlers and for adding page templating) and webob (for it's
 http.request and response)
-
-.. note::  Matt: Add some notes here on the whys behind restish?? I don't know enough about what you did to write anything
 
 Executive Summary for Coders
 ----------------------------
@@ -62,12 +58,12 @@ Executive Summary for Coders
 
     # templated resource locator
     @resource.child('blog/{entry}')
-    def whatever(self, request, segments, entry=None}:
+    def whatever(self, request, segments, entry=None):
         return BlogEntry(entry)
 
     # templated resource locator with partial match
     @resource.child('blog/entry-{id}')
-    def whatever(self, request, segments, id=None}:
+    def whatever(self, request, segments, id=None):
         return BlogEntry(id)
 
     # accept anything and return a 200 OK with content
@@ -104,13 +100,13 @@ Executive Summary for Coders
         return http.see_other( current_url.child('othersegment') )
 
     # match a search pattern and redirect to google
-    @resource.child('search/{query}'):
+    @resource.child('search/{query}')
     def search(self, request, segments, query=''):
         google_url = url("http://google.com")
         http.see_other( google_url.add_query('u',query) )
 
 
-how to start a restish project
+How to start a restish project
 ==============================
 
 .. note:: Restish doesn't make you structure your project in any particular way but we've encapsulated our way of working in a paste script
