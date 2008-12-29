@@ -129,7 +129,7 @@ def _best_dispatcher(dispatchers, request):
     # only those that match.
     if request.headers.get('content-type'):
         dispatchers = _filter_dispatchers_on_content_type(dispatchers, request)
-    if 'accept' in request.headers:
+    if request.headers.get('accept'):
         dispatchers = _filter_dispatchers_on_accept(dispatchers, request)
     # Return the best match or None
     return dispatchers[0] if dispatchers else None
