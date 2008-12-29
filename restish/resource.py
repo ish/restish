@@ -127,14 +127,27 @@ def _best_dispatcher(dispatchers, request):
     """
     # Use content negotation to filter the dispatchers to an ordered list of
     # only those that match.
+    if request.headers.get('content-type'):
+        dispatchers = _filter_dispatchers_on_content_type(dispatchers, request)
     if 'accept' in request.headers:
         dispatchers = _filter_dispatchers_on_accept(dispatchers, request)
     # Return the best match or None
     return dispatchers[0] if dispatchers else None
 
 
+def _filter_dispatchers_on_content_type(dispatchers, request):
+    # Build an ordered list of the supported types.
+    supported = []
+    for d in dispatchers:
+        supported.extend(d[1]['content_type'])
+    # Find the best type.
+    best_match = mimeparse.best_match(supported, str(request.headers['content-type']))
+    # Return the matching dispatchers
+    return [d for d in dispatchers if best_match in d[1]['content_type']]
+
+
 def _filter_dispatchers_on_accept(dispatchers, request):
-    # Build an ordered list of the accept matches
+    # Build an ordered list of the supported types.
     supported = []
     for d in dispatchers:
         supported.extend(d[1]['accept'])
@@ -218,11 +231,14 @@ class MethodDecorator(object):
 
     method = None
 
-    def __init__(self, accept='*/*'):
+    def __init__(self, accept='*/*', content_type='*/*'):
         if not isinstance(accept, list):
             accept = [accept]
+        if not isinstance(content_type, list):
+            content_type = [content_type]
         accept = [_normalise_mimetype(a) for a in accept]
-        self.match = {'accept': accept}
+        content_type = [_normalise_mimetype(a) for a in content_type]
+        self.match = {'accept': accept, 'content_type': content_type}
 
     def __call__(self, func):
         setattr(func, _RESTISH_METHOD, self.method)

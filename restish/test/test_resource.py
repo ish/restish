@@ -230,7 +230,7 @@ class TestChildLookup(unittest.TestCase):
         self.fail()
 
 
-class TestContentNegotiation(unittest.TestCase):
+class TestAcceptContentNegotiation(unittest.TestCase):
 
     def test_no_match(self):
         class Resource(resource.Resource):
@@ -432,6 +432,162 @@ class TestContentNegotiation(unittest.TestCase):
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
+
+
+class TestContentTypeContentNegotiation(unittest.TestCase):
+
+    def test_any(self):
+        """
+        Check that no 'content_type' matches anything, i.e. '*/*'.
+        """
+        class Resource(resource.Resource):
+            @resource.POST()
+            def json(self, request):
+                return http.ok([], 'json')
+        res = Resource()
+        response = res(self._request('application/json'))
+        assert response.status == "200 OK"
+        assert response.body == 'json'
+
+    def test_simple(self):
+        """
+        Check that a basic 'content_type' match works.
+        """
+        class Resource(resource.Resource):
+            @resource.POST(content_type='application/json')
+            def json(self, request):
+                return http.ok([], 'json')
+        res = Resource()
+        response = res(self._request('application/json'))
+        assert response.status == "200 OK"
+        assert response.body == 'json'
+
+    def test_short_list(self):
+        """
+        Check that a list of short types is ok.
+        """
+        class Resource(resource.Resource):
+            @resource.POST(content_type=['json'])
+            def json(self, request):
+                return http.ok([], 'json')
+        res = Resource()
+        response = res(self._request('application/json'))
+        assert response.status == "200 OK"
+        assert response.body == 'json'
+
+    def test_match(self):
+        """
+        Check that different handlers are used for different content types.
+        """
+        class Resource(resource.Resource):
+            @resource.POST(content_type=['json'])
+            def json(self, request):
+                return http.ok([], 'json')
+            @resource.POST(content_type=['xml'])
+            def xml(self, request):
+                return http.ok([], 'xml')
+        res = Resource()
+        response = res(self._request('application/json'))
+        assert response.status == "200 OK"
+        assert response.body == 'json'
+        response = res(self._request('application/xml'))
+        assert response.status == "200 OK"
+        assert response.body == 'xml'
+
+    def test_no_match(self):
+        """
+        Check that a match isn't always found.
+        """
+        class Resource(resource.Resource):
+            @resource.POST(content_type=['json'])
+            def json(self, request):
+                return http.ok([], 'json')
+        res = Resource()
+        response = res(self._request('application/xml'))
+        assert response.status.startswith('406')
+
+    def test_specificity(self):
+        """
+        Check that the more specific handler is used.
+        """
+        class Resource(resource.Resource):
+            @resource.POST(content_type='image/*')
+            def image_any(self, request):
+                return http.ok([], 'image/*')
+            @resource.POST(content_type='image/png')
+            def image_png(self, request):
+                return http.ok([], 'image/png')
+            @resource.POST()
+            def anything(self, request):
+                return http.ok([], '*/*')
+        res = Resource()
+        response = res(self._request('image/png'))
+        assert response.status == "200 OK"
+        assert response.body == 'image/png'
+        response = res(self._request('image/jpeg'))
+        assert response.status == "200 OK"
+        assert response.body == 'image/*'
+        response = res(self._request('text/plain'))
+        assert response.status == "200 OK"
+        assert response.body == '*/*'
+
+    def test_any(self):
+        """
+        Check that no 'content_type' matches anything, i.e. '*/*'.
+        """
+        class Resource(resource.Resource):
+            @resource.POST()
+            def json(self, request):
+                return http.ok([], 'json')
+        res = Resource()
+        response = res(self._request('application/json'))
+        assert response.status == "200 OK"
+        assert response.body == 'json'
+
+    def test_empty(self):
+        """
+        Check that an empty 'content_type' is treated as no content type.
+
+        Not sure if it's webob that's setting the content type to '' but,
+        AFAICT, my browser isn't sending it. Whatever, let's make sure we don't
+        just keel over.
+        """
+        class Resource(resource.Resource):
+            @resource.POST()
+            def json(self, request):
+                return http.ok([], 'json')
+        res = Resource()
+        response = res(self._request(''))
+        assert response.status == "200 OK"
+        assert response.body == 'json'
+
+    def test_content_type_and_accept(self):
+        """
+        Check that various combinations of content_type and accept matches are ok.
+        """
+        class Resource(resource.Resource):
+            @resource.POST(accept='json', content_type='json')
+            def json_in_json_out(self, request):
+                return http.ok([], 'json_in_json_out')
+            @resource.POST(accept='html', content_type='json')
+            def json_in_html_out(self, request):
+                return http.ok([], 'json_in_html_out')
+        res = Resource()
+        response = res(self._request('application/json', 'text/html'))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/html'
+        assert response.body == 'json_in_html_out'
+        response = res(self._request('application/json', 'application/json'))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'application/json'
+        assert response.body == 'json_in_json_out'
+
+    def _request(self, content_type, accept=None):
+        headers = {'Content-Type': content_type}
+        if accept:
+            headers['Accept'] = accept
+        return http.Request.blank('/', environ={'REQUEST_METHOD': 'POST'},
+                                  headers=headers)
 
 
 class TestAcceptLists(unittest.TestCase):
