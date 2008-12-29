@@ -97,10 +97,7 @@ def bad_request(headers=None, body=None):
 class BadRequestError(error.HTTPClientError):
     response_factory = staticmethod(bad_request)
 
-def unauthorized(headers=None, body=None):
-    if headers is None and body is None:
-        headers = [('Content-Type', 'text/plain')]
-        body = '401 Unauthorized'
+def unauthorized(headers, body):
     return Response("401 Unauthorized", headers, body)
 
 class UnauthorizedError(error.HTTPClientError):

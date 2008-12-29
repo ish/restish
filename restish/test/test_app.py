@@ -124,10 +124,10 @@ class TestApp(unittest.TestCase):
     def test_client_error(self):
         class Resource(resource.Resource):
             def __call__(self, request):
-                raise http.UnauthorizedError()
+                raise http.BadRequestError()
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('401')
+        assert R['status'].startswith('400')
 
     def test_no_root_application(self):
         class Resource(resource.Resource):
