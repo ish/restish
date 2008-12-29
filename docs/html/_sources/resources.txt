@@ -140,8 +140,11 @@ passed down from resource to resource.
     class Blog(resource.Resource):
 
         @resource.child()
-        def entries(self, request, segments):
-            return Entry(segments[0])
+        def entries(self, request, segments)A
+            # The segments contain everything below /blog/entries
+            # Pass the first segment through to Entry (should be entry id) 
+            # The empty tuple says pass no more segments to Entry
+            return Entry(segments[0]), ()
 
     class Entries(resource.Resource):
 
@@ -153,6 +156,24 @@ passed down from resource to resource.
         def entry(self, request):
             blogcontent = db.get(self.id)
             return {'content': blogcontent}
+
+Handling it yourself
+--------------------
+
+If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child. 
+
+.. code-block:: python
+
+    class Root(resources.Resource):
+
+        @resource.child(resource.any):
+        def child(self, request, segments):
+            # At his point segments contains all the segments
+            if segments[0] == 'mymatchingsegment':
+                # now I've matched a segment, I need to return the rest as follows
+                return MyMatchingResource(), segments[1:]
+
+
 
 
 Template Resource Matchers

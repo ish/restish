@@ -49,8 +49,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
-<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -65,7 +65,7 @@
 <p>This is just an example to get you going. Lets take a look at what it does.</p>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -145,29 +145,44 @@ you can pass an explicit child name to the <tt class="docutils literal"><span cl
 <p>Most applications will handled nested resources.</p>
 <p>We&#8217;re showing a contrived example where the url <tt class="docutils literal"><span class="pre">/blog/entries/28</span></tt> get&#8217;s
 passed down from resource to resource.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+<div class="highlight-python"><pre>class Root(resource.Resource):
 
-    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">blog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Blog</span><span class="p">()</span>
+    @resource.child()
+    def blog(self, request, segments):
+        return Blog()
 
-<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+class Blog(resource.Resource):
 
-    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Entry</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
+    @resource.child()
+    def entries(self, request, segments)A
+        # The segments contain everything below /blog/entries
+        # Pass the first segment through to Entry (should be entry id)
+        # The empty tuple says pass no more segments to Entry
+        return Entry(segments[0]), ()
 
-<span class="k">class</span> <span class="nc">Entries</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+class Entries(resource.Resource):
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+    def __init__(self, id):
+        self.id = id
 
-    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
-    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;entry.html&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="n">blogcontent</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;content&#39;</span><span class="p">:</span> <span class="n">blogcontent</span><span class="p">}</span>
-</pre></div>
+    @resource.GET()
+    @templating.page('entry.html')
+    def entry(self, request):
+        blogcontent = db.get(self.id)
+        return {'content': blogcontent}</pre>
+</div>
+</div>
+<div class="section" id="handling-it-yourself">
+<h3>Handling it yourself<a class="headerlink" href="#handling-it-yourself" title="Permalink to this headline">¶</a></h3>
+<p>If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child.</p>
+<div class="highlight-python"><pre>class Root(resources.Resource):
+
+    @resource.child(resource.any):
+    def child(self, request, segments):
+        # At his point segments contains all the segments
+        if segments[0] == 'mymatchingsegment':
+            # now I've matched a segment, I need to return the rest as follows
+            return MyMatchingResource(), segments[1:]</pre>
 </div>
 </div>
 <div class="section" id="template-resource-matchers">
@@ -495,6 +510,7 @@ test_resource.py in the unit tests for examples)</p>
 <li><a class="reference external" href="#implicitly-named-child">Implicitly named child</a></li>
 <li><a class="reference external" href="#explicitly-named-child">Explicitly named child</a></li>
 <li><a class="reference external" href="#chaining-resources">Chaining Resources</a></li>
+<li><a class="reference external" href="#handling-it-yourself">Handling it yourself</a></li>
 <li><a class="reference external" href="#template-resource-matchers">Template Resource Matchers</a></li>
 <li><a class="reference external" href="#which-child-to-use">Which child to use?</a><ul>
 <li><a class="reference external" href="#a-b-c">/a/b/c</a></li>

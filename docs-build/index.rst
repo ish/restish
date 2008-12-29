@@ -14,7 +14,7 @@ Contents:
    resources
    templating
    guard
-   wsgi
+   wsgiapps
 
 Indices and tables
 ==================

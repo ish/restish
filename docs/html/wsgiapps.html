@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to work with WSGI Apps &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" />
+    <link rel="prev" title="Access Control using Guard" href="guard.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="guard.html" title="Access Control using Guard"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="how-to-work-with-wsgi-apps">
+<h1>How to work with WSGI Apps<a class="headerlink" href="#how-to-work-with-wsgi-apps" title="Permalink to this headline">¶</a></h1>
+<p>This isn&#8217;t a guide to how wsgi works but should help you if you want to plug wsgi stuff into a restish app.</p>
+<div class="section" id="whats-in-the-wsgiapp-py">
+<h2>Whats in the wsgiapp.py?<a class="headerlink" href="#whats-in-the-wsgiapp-py" title="Permalink to this headline">¶</a></h2>
+<p>The wsgiapp is shown below.</p>
+<p><tt class="docutils literal"><span class="pre">make_app</span></tt> is set up to define the restish app by passing the root resource to it. The restish app is then passed to the setup_environ function</p>
+<p><tt class="docutils literal"><span class="pre">setup_environ</span></tt> can be used to set any attributes on the environ you may wish. In this case templating is setup by calling &#8216;make_renderer&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restish.app</span> <span class="kn">import</span> <span class="n">RestishApp</span>
+
+<span class="kn">from</span> <span class="nn">myproject.resource</span> <span class="kn">import</span> <span class="n">root</span>
+
+
+<span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PasteDeploy WSGI application factory.</span>
+
+<span class="sd">    Called by PasteDeply (or a compatable WSGI application host) to create the</span>
+<span class="sd">    myproject WSGI application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">RestishApp</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Root</span><span class="p">())</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">setup_environ</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">global_conf</span><span class="p">,</span> <span class="n">app_conf</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">app</span>
+
+
+<span class="k">def</span> <span class="nf">setup_environ</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">global_conf</span><span class="p">,</span> <span class="n">app_conf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    WSGI application wrapper factory for extending the WSGI environ with</span>
+<span class="sd">    application-specific keys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Create any objects that should exist for the lifetime of the application</span>
+    <span class="c"># here. Don&#39;t forget to actually include them in the environ below!</span>
+    <span class="kn">from</span> <span class="nn">myproject.lib</span> <span class="kn">import</span> <span class="n">templating</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">templating</span><span class="o">.</span><span class="n">make_renderer</span><span class="p">(</span><span class="n">app_conf</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+
+        <span class="c"># Add additional keys to the environ here.</span>
+        <span class="n">environ</span><span class="p">[</span><span class="s">&#39;restish.templating.renderer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">renderer</span>
+
+        <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">application</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-a-wsgi-app-to-our-project">
+<h2>Adding a WSGI app to our project<a class="headerlink" href="#adding-a-wsgi-app-to-our-project" title="Permalink to this headline">¶</a></h2>
+<p>To add your own middleware, include it in the appropriate place in the make_app (after setup_environ usually)</p>
+<p>For an example, here is the cookies middleware being included</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
+
+    <span class="c"># Application &quot;middleware&quot;, including environ setup</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">RestishApp</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Root</span><span class="p">())</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">setup_environ</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">global_conf</span><span class="p">,</span> <span class="n">app_conf</span><span class="p">)</span>
+
+    <span class="c"># General &quot;middleware&quot;.</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">cookies</span><span class="o">.</span><span class="n">cookies_middleware_factory</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">app</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="can-i-see-an-example-of-middleware-please">
+<h2>Can I see an example of middleware please?<a class="headerlink" href="#can-i-see-an-example-of-middleware-please" title="Permalink to this headline">¶</a></h2>
+<p>OK, we&#8217;ll take a look at an example we&#8217;ve developed while working with Restish</p>
+<div class="section" id="cookies">
+<h3>Cookies<a class="headerlink" href="#cookies" title="Permalink to this headline">¶</a></h3>
+<p>Most projects will end up using cookies in one way or another. We&#8217;ve built a middleware app to help with this.</p>
+<p>Out cookie application will store any cookies changes on the environ and then when a response header is on it&#8217;s way through the cookie middleware, it will apply the cookies onto the Set-Cookie header (handling deletion by setting a cookie to blank).</p>
+<p>Firstly we&#8217;ll create an application that can store the cookie changes..</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Cookies</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environ</span> <span class="o">=</span> <span class="n">environ</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">set_cookie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">cookie</span>
+            <span class="n">cookie</span> <span class="o">=</span> <span class="n">SimpleCookie</span><span class="p">()</span>
+            <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
+            <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;SCRIPT_NAME&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="s">&#39;/&#39;</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;expires&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0</span>
+                <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;max-age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0</span>
+            <span class="n">cookie</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cookie</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delete_cookie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">((</span><span class="n">cookie_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>We have a <tt class="docutils literal"><span class="pre">Cookies</span></tt> manager that can set a cookie (by using python&#8217;s built in Cookie module) and delete a cookie. Cookies are stored on the <tt class="docutils literal"><span class="pre">headers</span></tt> attribute.</p>
+<p>Next we&#8217;ll add a couple of utility functions make it simple to add cookies from our project code.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">set_cookie</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">cookie</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set a cookie using the Cookies in the WSGI environ.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_cookies</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">delete_cookie</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">cookie_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete a cookie using the Cookies in the WSGI environ.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_cookies</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span><span class="o">.</span><span class="n">delete_cookie</span><span class="p">(</span><span class="n">cookie_name</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_cookies</span><span class="p">(</span><span class="n">environ</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find the Cookies instance from the WSGI environ.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">environ</span><span class="p">[</span><span class="n">ENVIRON_KEY</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>We can now get, set and delete cookies by passing an environ to the cookie module</p>
+<p>Finally we need to know how to wire this into the application. We create a middleware factory that can wrap an application with out new middleware</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">cookies_middleware_factory</span><span class="p">(</span><span class="n">app</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a cookie middleware WSGI application around the given WSGI</span>
+<span class="sd">    application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">middleware</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">response_headers</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+            <span class="c"># Extend the headers with cookie setting headers.</span>
+            <span class="n">cutter</span> <span class="o">=</span> <span class="n">environ</span><span class="p">[</span><span class="n">ENVIRON_KEY</span><span class="p">]</span>
+            <span class="n">response_headers</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="s">&#39;Set-Cookie&#39;</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span> <span class="k">for</span> <span class="n">header</span> <span class="ow">in</span> <span class="n">cutter</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
+            <span class="c"># Call wrapped app&#39;s start_response.</span>
+            <span class="k">return</span> <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">response_headers</span><span class="p">,</span> <span class="n">exc_info</span><span class="p">)</span>
+        <span class="n">environ</span><span class="p">[</span><span class="n">ENVIRON_KEY</span><span class="p">]</span> <span class="o">=</span> <span class="n">Cookies</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">_start_response</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">middleware</span>
+</pre></div>
+</div>
+<p>If we pass an application to this factory, it returns the application wrapped with the cookies middleware.</p>
+<p>The middleware adds an instance of our Cookie manager onto the environ (our <tt class="docutils literal"><span class="pre">ENVIRON_KEY</span></tt> is set to <tt class="docutils literal"><span class="pre">wsgiapptools.cookies</span></tt> at the top of our code) and implements a start response.</p>
+<p>The start response gets the Cookie manager from the environ and iterates through it&#8217;s headers, adding them to the response headers.</p>
+<p>Take a look at the full code in the <tt class="docutils literal"><span class="pre">wsgiapptools</span></tt> package.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">How to work with WSGI Apps</a><ul>
+<li><a class="reference external" href="#whats-in-the-wsgiapp-py">Whats in the wsgiapp.py?</a></li>
+<li><a class="reference external" href="#adding-a-wsgi-app-to-our-project">Adding a WSGI app to our project</a></li>
+<li><a class="reference external" href="#can-i-see-an-example-of-middleware-please">Can I see an example of middleware please?</a><ul>
+<li><a class="reference external" href="#cookies">Cookies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="guard.html" title="previous chapter">Access Control using Guard</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/wsgiapps.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="guard.html" title="Access Control using Guard"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>
