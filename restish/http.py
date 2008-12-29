@@ -103,7 +103,10 @@ def unauthorized(headers, body):
 class UnauthorizedError(error.HTTPClientError):
     response_factory = staticmethod(unauthorized)
 
-def forbidden(headers, body):
+def forbidden(headers=None, body=None):
+    if headers is None and body is None:
+        headers = [('Content-Type', 'text/plain')]
+        body = '403 Forbidden'
     return Response("403 Forbidden", headers, body)
 
 class ForbiddenError(error.HTTPClientError):
