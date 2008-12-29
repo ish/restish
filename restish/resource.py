@@ -80,8 +80,8 @@ class Resource(object):
                 break
         else:
             return None
-        match_args, segments = match
-        result = func(self, request, segments, **match_args)
+        match_args, match_kwargs, segments = match
+        result = func(self, request, segments, *match_args, **match_kwargs)
         if result is None:
             return None
         elif isinstance(result, tuple):
@@ -196,7 +196,7 @@ class TemplateChildMatcher(object):
         match = self._regex.match(match_path)
         if not match:
             return None
-        return match.groupdict(), remaining_segments
+        return [], match.groupdict(), remaining_segments
 
 
 class AnyChildMatcher(object):
@@ -208,7 +208,7 @@ class AnyChildMatcher(object):
     score = ()
 
     def __call__(self, request, segments):
-        return {}, segments
+        return [], {}, segments
 
 
 any = AnyChildMatcher()
