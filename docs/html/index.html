@@ -48,6 +48,7 @@
 <li class="toctree-l2"><a class="reference external" href="introduction.html#why-restish">Why Restish?</a><ul>
 <li class="toctree-l3"><a class="reference external" href="introduction.html#background">Background</a></li>
 <li class="toctree-l3"><a class="reference external" href="introduction.html#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
+<li class="toctree-l3"><a class="reference external" href="introduction.html#executive-summary-for-coders">Executive Summary for Coders</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference external" href="introduction.html#how-to-start-a-restish-project">How to start a restish project</a><ul>
@@ -64,32 +65,54 @@
 <li class="toctree-l1"><a class="reference external" href="resources.html">Restish Resources</a><ul>
 <li class="toctree-l2"><a class="reference external" href="resources.html#our-project-resource">Our project resource</a><ul>
 <li class="toctree-l3"><a class="reference external" href="resources.html#logging">Logging</a></li>
-<li class="toctree-l3"><a class="reference external" href="resources.html#resource-resource"><tt class="docutils literal"><span class="pre">resource.Resource</span></tt></a></li>
-<li class="toctree-l3"><a class="reference external" href="resources.html#resource-get"><tt class="docutils literal"><span class="pre">&#64;resource.GET()</span></tt></a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#so-what-is-a-resource">So what is a resource?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="resources.html#resource-url-handling">Resource URL Handling</a><ul>
+<li class="toctree-l3"><a class="reference external" href="resources.html#implicitly-named-child">Implicitly named child</a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#explicitly-named-child">Explicitly named child</a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#chaining-resources">Chaining Resources</a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#handling-it-yourself">Handling it yourself</a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#template-resource-matchers">Template Resource Matchers</a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#which-child-to-use">Which child to use?</a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#custom-matchers">Custom Matchers</a></li>
+<li class="toctree-l3"><a class="reference external" href="resources.html#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="resources.html#request-handlers">Request Handlers</a><ul>
 <li class="toctree-l3"><a class="reference external" href="resources.html#other-http-handlers">Other HTTP Handlers</a></li>
 <li class="toctree-l3"><a class="reference external" href="resources.html#other-restish-http-response-codes">Other restish http response codes</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference external" href="resources.html#content-negotiation">Content Negotiation</a></li>
-<li class="toctree-l2"><a class="reference external" href="resources.html#resource-url-handling">Resource URL Handling</a><ul>
-<li class="toctree-l3"><a class="reference external" href="resources.html#implicitly-named-child">Implicitly named child</a></li>
-<li class="toctree-l3"><a class="reference external" href="resources.html#explicitly-named-child">Explicitly named child</a></li>
-<li class="toctree-l3"><a class="reference external" href="resources.html#chaining-resources">Chaining Resources</a></li>
-<li class="toctree-l3"><a class="reference external" href="resources.html#template-resource-matchers">Template Resource Matchers</a></li>
-<li class="toctree-l3"><a class="reference external" href="resources.html#custom-matchers">Custom Matchers</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference external" href="templating.html">Templating in Restish</a><ul>
-<li class="toctree-l2"><a class="reference external" href="templating.html#lib-templating-py"><tt class="docutils literal"><span class="pre">lib/templating.py</span></tt></a></li>
+<li class="toctree-l2"><a class="reference external" href="templating.html#configuring-a-templating-language-within-lib-templating-py">Configuring a templating language within lib/templating.py</a></li>
 <li class="toctree-l2"><a class="reference external" href="templating.html#explicit-templating">Explicit templating</a></li>
 <li class="toctree-l2"><a class="reference external" href="templating.html#templating-decorator">Templating decorator</a></li>
 <li class="toctree-l2"><a class="reference external" href="templating.html#template-default-variables">Template Default Variables</a></li>
 <li class="toctree-l2"><a class="reference external" href="templating.html#a-better-way-of-dealing-with-urls">A better way of dealing with URLs</a></li>
 <li class="toctree-l2"><a class="reference external" href="templating.html#pages-and-elements">Pages and Elements</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="guard.html">Access Control using Guard</a><ul>
+<li class="toctree-l2"><a class="reference external" href="guard.html#basic-auth-using-repoze-who">Basic Auth using repoze.who</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="wsgiapps.html">How to work with WSGI Apps</a><ul>
+<li class="toctree-l2"><a class="reference external" href="wsgiapps.html#whats-in-the-wsgiapp-py">Whats in the wsgiapp.py?</a></li>
+<li class="toctree-l2"><a class="reference external" href="wsgiapps.html#adding-a-wsgi-app-to-our-project">Adding a WSGI app to our project</a></li>
+<li class="toctree-l2"><a class="reference external" href="wsgiapps.html#can-i-see-an-example-of-middleware-please">Can I see an example of middleware please?</a><ul>
+<li class="toctree-l3"><a class="reference external" href="wsgiapps.html#cookies">Cookies</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

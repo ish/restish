@@ -12,11 +12,11 @@ class Rendering(object):
         """
         Render the template and args using the configured templating engine.
 
-        @param request:
+        :arg request:
             Request instance.
-        @param template:
+        :arg template:
             Name of the template file.
-        @param args:
+        :arg args:
             Dictionary of args to pass to the template renderer.
         """
         renderer = request.environ['restish.templating.renderer']
@@ -35,9 +35,9 @@ class Rendering(object):
         The decorated method must return a dict that will be passed to the
         render(request, template, args) function.
 
-        @param template:
+        :arg template:
             Name of the template file.
-        @param content_type:
+        :arg content_type:
             Optional content type, defaults to 'text/html'
         """
         def decorator(func):
@@ -67,9 +67,9 @@ class Rendering(object):
         The decorated method must return a dict that will be passed to the
         render(request, template, args) function.
 
-        @param template:
+        :arg template:
             Name of the template file.
-        @param content_type:
+        :arg content_type:
             Optional content type, defaults to 'text/html'
         """
         def decorator(func):

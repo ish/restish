@@ -66,10 +66,6 @@ precludes any use of single threaded servers. So we removed threadlocals. Next
 we started to make pylons more templating agnostic, eventually removing
 templating completely. Finally, when we had removed all trace of pylons, we
 realised what we had was a new lightweight web framework.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Matt: Why is pylons oh so crap..</p>
-</div>
 </div>
 <div class="section" id="advantages-disadvantages">
 <h3>Advantages &amp; Disadvantages<a class="headerlink" href="#advantages-disadvantages" title="Permalink to this headline">¶</a></h3>
@@ -83,14 +79,77 @@ realised what we had was a new lightweight web framework.</p>
 initial project template creation), decorator (used to decorate methods as
 children or http handlers and for adding page templating) and webob (for it&#8217;s
 http.request and response)</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Matt: Add some notes here on the whys behind restish?? I don&#8217;t know enough about what you did to write anything</p>
+</div>
+<div class="section" id="executive-summary-for-coders">
+<h3>Executive Summary for Coders<a class="headerlink" href="#executive-summary-for-coders" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># implicit resource locator</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">blog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">BlogResource</span><span class="p">()</span>
+
+<span class="c"># explicit resource locator</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;blog&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">whatever</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">BlogResource</span><span class="p">()</span>
+
+<span class="c"># templated resource locator</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;blog/{entry}&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">whatever</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">BlogEntry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+<span class="c"># templated resource locator with partial match</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;blog/entry-{id}&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">whatever</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">BlogEntry</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+<span class="c"># accept anything and return a 200 OK with content</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="s">&#39;&lt;p&gt;Hello Wolrd&lt;/p&gt;&#39;</span> <span class="p">)</span>
+
+<span class="c"># match json only and return 200 OK (system works out content type)</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;text/json&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[],</span> <span class="s">&#39;{&quot;foo&quot;: &quot;bar&quot;}&#39;</span> <span class="p">)</span>
+
+<span class="c"># short cut for accept code</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[],</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;foo&#39;</span><span class="p">:</span> <span class="s">&#39;bar&#39;</span><span class="p">})</span> <span class="p">)</span>
+
+<span class="c"># accept html and build a template explicitly</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;text/html&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">templating</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;mytemplate.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tim&#39;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="n">content</span> <span class="p">)</span>
+
+<span class="c"># short cut accept html and use templating decorator</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">)</span>
+<span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;mypage.html&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tim&#39;</span><span class="p">}</span>
+
+<span class="c"># accept anything and use url module to build a redirect</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="n">current_url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path_qs</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">see_other</span><span class="p">(</span> <span class="n">current_url</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;othersegment&#39;</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c"># match a search pattern and redirect to google</span>
+<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;search/{query}&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="n">google_url</span> <span class="o">=</span> <span class="n">url</span><span class="p">(</span><span class="s">&quot;http://google.com&quot;</span><span class="p">)</span>
+    <span class="n">http</span><span class="o">.</span><span class="n">see_other</span><span class="p">(</span> <span class="n">google_url</span><span class="o">.</span><span class="n">add_query</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">,</span><span class="n">query</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="how-to-start-a-restish-project">
 <h2>How to start a restish project<a class="headerlink" href="#how-to-start-a-restish-project" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Restish doesn&#8217;t make you structure your project in any particular way but we&#8217;ve encapsulated our way of working in a paste script</p>
+</div>
 <div class="section" id="using-paster-create">
 <h3>Using paster create<a class="headerlink" href="#using-paster-create" title="Permalink to this headline">¶</a></h3>
 <p>First you use paste with a &#8216;restish&#8217; template:</p>
@@ -162,7 +221,7 @@ http.request and response)</p>
 |-- myproject.ini
 `-- setup.py</pre>
 </div>
-<p>We&#8217;ll simplify that a bit in order to describe what we have in the actual project:</p>
+<p>We&#8217;ll simplify that a bit by removing __init__&#8217;s and packaging files..:</p>
 <div class="highlight-python"><pre>.
 |-- myproject.ini
 |-- development.ini
@@ -178,16 +237,18 @@ http.request and response)</p>
 |   |   `-- root.py
 |   `-- wsgiapp.py</pre>
 </div>
-<p>The ini files are paste configuration files and setup up the project. There is
+<div class="section" id="the-ini-files">
+<h4>The ini files<a class="headerlink" href="#the-ini-files" title="Permalink to this headline">¶</a></h4>
+<p>The ini files are paste script configuration files and setup up the project. There is
 a base configuration file that contains project settings and then there are two
 deployment files, live and development, which contain information on how to
 serve the project.</p>
-<p>The project itself has three directories.</p>
+</div>
 <div class="section" id="the-lib-directory">
 <h4>The <tt class="docutils literal"><span class="pre">lib</span></tt> directory<a class="headerlink" href="#the-lib-directory" title="Permalink to this headline">¶</a></h4>
-<p>The lib directory has an example authenticator called &#8216;guard.py&#8217; and a sample
-templating package which shows how to setup templating with Mako, Genshi or
-Jinja.</p>
+<p>The lib directory has an example authenticator called &#8216;guard.py&#8217; (which you can
+ignore until needed) and a sample templating package which shows how to setup
+templating with Mako, Genshi or Jinja.</p>
 <p>We tend to put most of our project library code in here.</p>
 </div>
 <div class="section" id="the-public-directory">
@@ -199,19 +260,25 @@ the file is for.</p>
 underneath with your assets in. Placing files directly inside public will also
 make them available on root of your website, useful for favicons, google
 analytics files, etc.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In a live project you would probably use separate server(s) for static files and hence our live.ini files does not configure a public directory</p>
+</div>
 </div>
 <div class="section" id="the-resource-directory">
 <h4>The <tt class="docutils literal"><span class="pre">resource</span></tt> directory<a class="headerlink" href="#the-resource-directory" title="Permalink to this headline">¶</a></h4>
 <p>The resource directory contains our root resource. This is the first file that
 will handle any requests.</p>
+</div>
+<div class="section" id="the-wsgi-setup">
+<h4>The WSGI setup<a class="headerlink" href="#the-wsgi-setup" title="Permalink to this headline">¶</a></h4>
 <p>Finally, our wsgiapp.py can be used to wire up any other wsgi applications,
 such as cookies, authentication, etc.</p>
-<p>Let&#8217;s take a look at the resource first as that is where the fun stuff is..</p>
 </div>
 </div>
 <div class="section" id="starting-a-server">
 <h3>Starting a server<a class="headerlink" href="#starting-a-server" title="Permalink to this headline">¶</a></h3>
-<p>Your can start your example project right now by using the command:</p>
+<p>Just a quick aside as it might come in handy. You can start your example project right now by using the command:</p>
 <div class="highlight-python"><pre>$ paster serve development.ini</pre>
 </div>
 <p>Which should return the following:</p>
@@ -239,14 +306,17 @@ serving on http://127.0.0.1:8080</pre>
 <li><a class="reference external" href="#why-restish">Why Restish?</a><ul>
 <li><a class="reference external" href="#background">Background</a></li>
 <li><a class="reference external" href="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
+<li><a class="reference external" href="#executive-summary-for-coders">Executive Summary for Coders</a></li>
 </ul>
 </li>
 <li><a class="reference external" href="#how-to-start-a-restish-project">How to start a restish project</a><ul>
 <li><a class="reference external" href="#using-paster-create">Using paster create</a></li>
 <li><a class="reference external" href="#what-is-in-the-template-project">What is in the template project</a><ul>
+<li><a class="reference external" href="#the-ini-files">The ini files</a></li>
 <li><a class="reference external" href="#the-lib-directory">The <tt class="docutils literal"><span class="pre">lib</span></tt> directory</a></li>
 <li><a class="reference external" href="#the-public-directory">The <tt class="docutils literal"><span class="pre">public</span></tt> directory</a></li>
 <li><a class="reference external" href="#the-resource-directory">The <tt class="docutils literal"><span class="pre">resource</span></tt> directory</a></li>
+<li><a class="reference external" href="#the-wsgi-setup">The WSGI setup</a></li>
 </ul>
 </li>
 <li><a class="reference external" href="#starting-a-server">Starting a server</a></li>

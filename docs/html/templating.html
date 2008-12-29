@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="Restish v1 documentation" href="index.html" />
-    <link rel="next" title="Using Formish withing Restish" href="formish.html" />
+    <link rel="next" title="Access Control using Guard" href="guard.html" />
     <link rel="prev" title="Restish Resources" href="resources.html" /> 
   </head>
   <body>
@@ -30,7 +30,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="formish.html" title="Using Formish withing Restish"
+          <a href="guard.html" title="Access Control using Guard"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="resources.html" title="Restish Resources"
@@ -46,8 +46,10 @@
   
   <div class="section" id="templating-in-restish">
 <h1>Templating in Restish<a class="headerlink" href="#templating-in-restish" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="lib-templating-py">
-<h2><tt class="docutils literal"><span class="pre">lib/templating.py</span></tt><a class="headerlink" href="#lib-templating-py" title="Permalink to this headline">¶</a></h2>
+<p>Restish does not imply the use of any particular templating language. Instead, we have provided stubs that can be used with some of the more popular templating languages which can be enabled by uncommenting a section withing the wsgiapp.py.</p>
+<div class="section" id="configuring-a-templating-language-within-lib-templating-py">
+<h2>Configuring a templating language within lib/templating.py<a class="headerlink" href="#configuring-a-templating-language-within-lib-templating-py" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example of the uncommented code that enables the mako renderer.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">make_renderer</span><span class="p">(</span><span class="n">app_conf</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create and return a restish.templating &quot;renderer&quot;.</span>
@@ -92,11 +94,11 @@
 </pre></div>
 </div>
 <p>templating.page uses the content type passed in by the request so all you need
-to do is provide a templat in the decorator and the arguments in the return.</p>
+to do is provide a template in the decorator and the arguments for the template in the return dictionary.</p>
 </div>
 <div class="section" id="template-default-variables">
 <h2>Template Default Variables<a class="headerlink" href="#template-default-variables" title="Permalink to this headline">¶</a></h2>
-<p>Quite often you will write your own functions or supply default variables to
+<p>Quite often you will write your own functions or want supply default variables to
 use within your template (possibly a set of site urls). This can be set up
 within the <tt class="docutils literal"><span class="pre">&lt;project&gt;/lib/templating.py</span></tt> by overriding the args method of the
 Rendering class.</p>
@@ -449,10 +451,6 @@ current anchor.</li>
 <div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;loginstatus&quot;</span><span class="nt">&gt;</span> ${element(&#39;login_status&#39;)()|n} <span class="nt">&lt;/div&gt;</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This is incomplete - just like my understanding of it ..</p>
-</div>
 </div>
 </div>
 
@@ -465,7 +463,7 @@ current anchor.</li>
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
 <li><a class="reference external" href="">Templating in Restish</a><ul>
-<li><a class="reference external" href="#lib-templating-py"><tt class="docutils literal"><span class="pre">lib/templating.py</span></tt></a></li>
+<li><a class="reference external" href="#configuring-a-templating-language-within-lib-templating-py">Configuring a templating language within lib/templating.py</a></li>
 <li><a class="reference external" href="#explicit-templating">Explicit templating</a></li>
 <li><a class="reference external" href="#templating-decorator">Templating decorator</a></li>
 <li><a class="reference external" href="#template-default-variables">Template Default Variables</a></li>
@@ -478,7 +476,7 @@ current anchor.</li>
             <h4>Previous topic</h4>
             <p class="topless"><a href="resources.html" title="previous chapter">Restish Resources</a></p>
             <h4>Next topic</h4>
-            <p class="topless"><a href="formish.html" title="next chapter">Using Formish withing Restish</a></p>
+            <p class="topless"><a href="guard.html" title="next chapter">Access Control using Guard</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/templating.txt">Show Source</a></li>
@@ -500,7 +498,7 @@ current anchor.</li>
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="formish.html" title="Using Formish withing Restish"
+          <a href="guard.html" title="Access Control using Guard"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="resources.html" title="Restish Resources"

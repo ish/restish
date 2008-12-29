@@ -13,6 +13,8 @@ Contents:
    introduction
    resources
    templating
+   guard
+   wsgiapps
 
 Indices and tables
 ==================

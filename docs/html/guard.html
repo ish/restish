@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Access Control using Guard &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" />
+    <link rel="prev" title="Templating in Restish" href="templating.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templating.html" title="Templating in Restish"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="access-control-using-guard">
+<h1>Access Control using Guard<a class="headerlink" href="#access-control-using-guard" title="Permalink to this headline">¶</a></h1>
+<p>Restish supplies a module called <tt class="docutils literal"><span class="pre">guard</span></tt> which makes applying access control easy to apply to</p>
+<div class="section" id="basic-auth-using-repoze-who">
+<h2>Basic Auth using repoze.who<a class="headerlink" href="#basic-auth-using-repoze-who" title="Permalink to this headline">¶</a></h2>
+<p>A short example of implementing repoze.who as a guard using htpasswd files and basic http authentication.</p>
+<p>Add the repoze line to the &lt;project&gt;.ini file</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[app:projectname]</span>
+<span class="na">use</span> <span class="o">=</span> <span class="s">egg:projectname</span>
+<span class="na">cache_dir</span> <span class="o">=</span> <span class="s">%(CACHE_DIR)s</span>
+<span class="na">repoze.who.ini</span> <span class="o">=</span> <span class="s">%(here)s/who.ini</span>
+</pre></div>
+</div>
+<p>Add the repoze middle ware by adding these lines to wsgiapp.py</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">repoze.who.config</span>
+<span class="o">...</span>
+<span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">RestishApp</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Root</span><span class="p">())</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">repoze</span><span class="o">.</span><span class="n">who</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">make_middleware_with_config</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">global_conf</span><span class="p">,</span> <span class="n">local_conf</span><span class="p">[</span><span class="s">&#39;who.ini&#39;</span><span class="p">])</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">setup_environ</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">global_conf</span><span class="p">,</span> <span class="n">app_conf</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">app</span>
+</pre></div>
+</div>
+<p>The default restish guard in <tt class="docutils literal"><span class="pre">{projectname}/lib</span></tt> includes an <tt class="docutils literal"><span class="pre">authenticated</span></tt> decorator that checks for a <tt class="docutils literal"><span class="pre">REMOTE_USER</span></tt> cookie. We can use this to decorate children or accept headers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@guard</span><span class="o">.</span><span class="n">guard</span><span class="p">(</span><span class="n">guard</span><span class="o">.</span><span class="n">authenticated</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;text/html&#39;</span><span class="p">)],</span>
+            <span class="s">&quot;&lt;p&gt;Hello from foo!&lt;/p&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All that is left to do now is to configure repoze by creating a <tt class="docutils literal"><span class="pre">who.ini</span></tt> file..</p>
+<p>The most basic configuration is &#8216;basicauth&#8217; and &#8216;htpasswd&#8217;. The configuration for this is shown below.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[general]</span>
+<span class="na">request_classifier</span> <span class="o">=</span> <span class="s">repoze.who.classifiers:default_request_classifier</span>
+<span class="na">challenge_decider</span> <span class="o">=</span> <span class="s">repoze.who.classifiers:default_challenge_decider</span>
+
+<span class="k">[identifiers]</span>
+<span class="na">plugins</span> <span class="o">=</span> <span class="s">basicauth</span>
+
+<span class="k">[authenticators]</span>
+<span class="na">plugins</span> <span class="o">=</span> <span class="s">htpasswd</span>
+
+<span class="k">[challengers]</span>
+<span class="na">plugins</span> <span class="o">=</span> <span class="s">basicauth</span>
+
+<span class="k">[plugin:basicauth]</span>
+<span class="na">use</span> <span class="o">=</span> <span class="s">repoze.who.plugins.basicauth:make_plugin</span>
+<span class="na">realm</span> <span class="o">=</span> <span class="s">&#39;sample&#39;</span>
+
+<span class="k">[plugin:htpasswd]</span>
+<span class="na">use</span> <span class="o">=</span> <span class="s">repoze.who.plugins.htpasswd:make_plugin</span>
+<span class="na">filename</span> <span class="o">=</span> <span class="s">%(here)s/passwd</span>
+<span class="na">check_fn</span> <span class="o">=</span> <span class="s">repoze.who.plugins.htpasswd:crypt_check</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">[general]</span></tt> block just sets up default classifiers and deciders which categorise the request type and decide which challenge to use (read the repoze.who docs to learn more).</p>
+<p>A list of prioritised plugins for each section need to be given and in this case basicauth can be used as an identifier and a challenger which needs configuring with a <tt class="docutils literal"><span class="pre">realm</span></tt>. We&#8217;re using htpasswd for the authenticator which needs a filename configuring and a check function (which we&#8217;re defaulting to the built in).</p>
+<p>All that is left is to create a <tt class="docutils literal"><span class="pre">passwd</span></tt> file using <tt class="docutils literal"><span class="pre">htpasswd</span></tt></p>
+<div class="highlight-bash"><div class="highlight"><pre>htpasswd -c passwd &lt;username&gt;
+</pre></div>
+</div>
+<p>and you should now be able to run your project server and get a http challenge asking for username and password.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Access Control using Guard</a><ul>
+<li><a class="reference external" href="#basic-auth-using-repoze-who">Basic Auth using repoze.who</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="templating.html" title="previous chapter">Templating in Restish</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/guard.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="templating.html" title="Templating in Restish"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+    </div>
+  </body>
+</html>
