@@ -159,13 +159,13 @@ We're showing a contrived example where the url ``/blog/entries/28`` get's passe
 
         @resource.child()
         def blog(self, request, segments):
-            return Blog(), segments
+            return Blog()
 
     class Blog(resource.Resource):
 
         @resource.child()
         def entries(self, request, segments):
-            return Entry(), segments
+            return Entry()
 
     class Entries(resource.Resource):
         
@@ -174,6 +174,24 @@ We're showing a contrived example where the url ``/blog/entries/28`` get's passe
         def entry(self, request):
             blogcontent = db.get(self.segments[0])
             return {'content': blogcontent}
+
+Handling it yourself
+--------------------
+
+If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child. 
+
+.. code-block:: python
+
+    class Root(resources.Resource):
+
+        @resource.child(resource.any):
+        def child(self, request, segments):
+            # At his point segments contains all the segments
+            if segments[0] == 'mymatchingsegment':
+                # now I've matched a segment, I need to return the rest as follows
+                return MyMatchingResource(), segments[1:]
+
+
 
 
 Template Resource Matchers
