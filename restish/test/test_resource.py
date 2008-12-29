@@ -300,6 +300,21 @@ class TestAcceptContentNegotiation(unittest.TestCase):
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
 
+    def test_empty_accept(self):
+        """
+        Check an empty "Accept" header is ignore.
+        """
+        class Resource(resource.Resource):
+            @resource.GET()
+            def html(self, request):
+                return http.ok([('Content-Type', 'text/html')], "<html />")
+        res = Resource()
+        environ = http.Request.blank('/', headers=[('Accept', '')]).environ
+        response = res(http.Request(environ))
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/html'
+        res = Resource()
+
     def test_accept_match(self):
         """
         Test that an accept'ing request is matched even if there's a generic
