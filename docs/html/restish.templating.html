@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>restish.templating &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-restish.templating">
+<h1>restish.templating<a class="headerlink" href="#module-restish.templating" title="Permalink to this headline">¶</a></h1>
+<p>Templating support.</p>
+<dl class="class">
+<dt id="restish.templating.Rendering">
+<!--[restish.templating.Rendering]-->class <tt class="descclassname">restish.templating.</tt><tt class="descname">Rendering</tt><a class="headerlink" href="#restish.templating.Rendering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<dl class="method">
+<dt id="restish.templating.Rendering.args">
+<!--[restish.templating.Rendering.args]--><tt class="descname">args</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.args" title="Permalink to this definition">¶</a></dt>
+<dd>Return a dict of args that should always be present.</dd></dl>
+
+<dl class="method">
+<dt id="restish.templating.Rendering.element">
+<!--[restish.templating.Rendering.element]--><tt class="descname">element</tt><big>(</big><em>template</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator that renders the returned dict of args using the template by
+calling render(request, template, args).</p>
+<p>The decorated method&#8217;s first argument must be a http.Request instance. All
+arguments (including the request) are passed on as-is.</p>
+<p>The decorated method must return a dict that will be passed to the
+render(request, template, args) function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>template</em> &#8211; Name of the template file.</li>
+<li><em>content_type</em> &#8211; Optional content type, defaults to &#8216;text/html&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.templating.Rendering.element_args">
+<!--[restish.templating.Rendering.element_args]--><tt class="descname">element_args</tt><big>(</big><em>request</em>, <em>element</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.element_args" title="Permalink to this definition">¶</a></dt>
+<dd>Return a dict of args that should be present when rendering elements.</dd></dl>
+
+<dl class="method">
+<dt id="restish.templating.Rendering.page">
+<!--[restish.templating.Rendering.page]--><tt class="descname">page</tt><big>(</big><em>template</em>, <em>content_type='text/html; charset=utf-8'</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator that returns an HTTP response by rendering the returned dict of
+args using the template by calling render(request, template, args).</p>
+<p>The decorated method&#8217;s first argument must be a http.Request instance. All
+arguments (including the request) are passed on as-is.</p>
+<p>The decorated method must return a dict that will be passed to the
+render(request, template, args) function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>template</em> &#8211; Name of the template file.</li>
+<li><em>content_type</em> &#8211; Optional content type, defaults to &#8216;text/html&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.templating.Rendering.page_args">
+<!--[restish.templating.Rendering.page_args]--><tt class="descname">page_args</tt><big>(</big><em>request</em>, <em>page</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.page_args" title="Permalink to this definition">¶</a></dt>
+<dd>Return a dict of args that should be present when rendering pages.</dd></dl>
+
+<dl class="method">
+<dt id="restish.templating.Rendering.render">
+<!--[restish.templating.Rendering.render]--><tt class="descname">render</tt><big>(</big><em>request</em>, <em>template</em>, <em>args={}</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the template and args using the configured templating engine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>request</em> &#8211; Request instance.</li>
+<li><em>template</em> &#8211; Name of the template file.</li>
+<li><em>args</em> &#8211; Dictionary of args to pass to the template renderer.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/restish.templating.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

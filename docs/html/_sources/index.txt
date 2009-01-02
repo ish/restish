@@ -15,6 +15,7 @@ Contents:
    templating
    guard
    wsgiapps
+   modules
 
 Indices and tables
 ==================

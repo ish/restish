@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '1',
-          COLLAPSE_MODINDEX: false,
-          FILE_SUFFIX: '.html'
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -385,71 +386,6 @@ header then we don&#8217;t have to explicitly provide it. e.g.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Returning <tt class="xref docutils literal"><span class="pre">None</span></tt> from a resource is equivalent to a 404</p>
 </div>
-<dl class="function">
-<dt id="restish.http.ok">
-<!--[restish.http.ok]--><tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.created">
-<!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>body</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.moved_permanently">
-<!--[restish.http.moved_permanently]--><tt class="descclassname">restish.http.</tt><tt class="descname">moved_permanently</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.moved_permanently" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.found">
-<!--[restish.http.found]--><tt class="descclassname">restish.http.</tt><tt class="descname">found</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.found" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.see_other">
-<!--[restish.http.see_other]--><tt class="descclassname">restish.http.</tt><tt class="descname">see_other</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.see_other" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.not_modified">
-<!--[restish.http.not_modified]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.http.not_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.bad_request">
-<!--[restish.http.bad_request]--><tt class="descclassname">restish.http.</tt><tt class="descname">bad_request</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.bad_request" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.unauthorized">
-<!--[restish.http.unauthorized]--><tt class="descclassname">restish.http.</tt><tt class="descname">unauthorized</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.unauthorized" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.forbidden">
-<!--[restish.http.forbidden]--><tt class="descclassname">restish.http.</tt><tt class="descname">forbidden</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.forbidden" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.not_found">
-<!--[restish.http.not_found]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_found</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.not_found" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.method_not_allowed">
-<!--[restish.http.method_not_allowed]--><tt class="descclassname">restish.http.</tt><tt class="descname">method_not_allowed</tt><big>(</big><em>allow</em><big>)</big><a class="headerlink" href="#restish.http.method_not_allowed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.not_acceptable">
-<!--[restish.http.not_acceptable]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_acceptable</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.not_acceptable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="restish.http.conflict">
-<!--[restish.http.conflict]--><tt class="descclassname">restish.http.</tt><tt class="descname">conflict</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.conflict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
 </div>
 <div class="section" id="content-negotiation">
@@ -484,7 +420,7 @@ to multiple encodings, give it a list (e.g. GET(acept=[&#8216;html&#8217;,&#8217
 <p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
+<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
 </div>
 <p>We sometimes want to match lists of content types, for example where we would
 like to use <tt class="docutils literal"><span class="pre">application/xhtml+xml</span></tt>. This are honoured by restish. (See
@@ -500,36 +436,36 @@ test_resource.py in the unit tests for examples)</p>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Restish Resources</a><ul>
-<li><a class="reference external" href="#our-project-resource">Our project resource</a><ul>
-<li><a class="reference external" href="#logging">Logging</a></li>
-<li><a class="reference external" href="#so-what-is-a-resource">So what is a resource?</a></li>
+<li><a class="reference" href="">Restish Resources</a><ul>
+<li><a class="reference" href="#our-project-resource">Our project resource</a><ul>
+<li><a class="reference" href="#logging">Logging</a></li>
+<li><a class="reference" href="#so-what-is-a-resource">So what is a resource?</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#resource-url-handling">Resource URL Handling</a><ul>
-<li><a class="reference external" href="#implicitly-named-child">Implicitly named child</a></li>
-<li><a class="reference external" href="#explicitly-named-child">Explicitly named child</a></li>
-<li><a class="reference external" href="#chaining-resources">Chaining Resources</a></li>
-<li><a class="reference external" href="#handling-it-yourself">Handling it yourself</a></li>
-<li><a class="reference external" href="#template-resource-matchers">Template Resource Matchers</a></li>
-<li><a class="reference external" href="#which-child-to-use">Which child to use?</a><ul>
-<li><a class="reference external" href="#a-b-c">/a/b/c</a></li>
-<li><a class="reference external" href="#a-b-foo">/a/b/foo</a></li>
-<li><a class="reference external" href="#a-b-c-foo">/a/b/c/foo</a></li>
-<li><a class="reference external" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
-<li><a class="reference external" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
+<li><a class="reference" href="#resource-url-handling">Resource URL Handling</a><ul>
+<li><a class="reference" href="#implicitly-named-child">Implicitly named child</a></li>
+<li><a class="reference" href="#explicitly-named-child">Explicitly named child</a></li>
+<li><a class="reference" href="#chaining-resources">Chaining Resources</a></li>
+<li><a class="reference" href="#handling-it-yourself">Handling it yourself</a></li>
+<li><a class="reference" href="#template-resource-matchers">Template Resource Matchers</a></li>
+<li><a class="reference" href="#which-child-to-use">Which child to use?</a><ul>
+<li><a class="reference" href="#a-b-c">/a/b/c</a></li>
+<li><a class="reference" href="#a-b-foo">/a/b/foo</a></li>
+<li><a class="reference" href="#a-b-c-foo">/a/b/c/foo</a></li>
+<li><a class="reference" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
+<li><a class="reference" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#custom-matchers">Custom Matchers</a></li>
-<li><a class="reference external" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
+<li><a class="reference" href="#custom-matchers">Custom Matchers</a></li>
+<li><a class="reference" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#request-handlers">Request Handlers</a><ul>
-<li><a class="reference external" href="#other-http-handlers">Other HTTP Handlers</a></li>
-<li><a class="reference external" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
+<li><a class="reference" href="#request-handlers">Request Handlers</a><ul>
+<li><a class="reference" href="#other-http-handlers">Other HTTP Handlers</a></li>
+<li><a class="reference" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#content-negotiation">Content Negotiation</a></li>
+<li><a class="reference" href="#content-negotiation">Content Negotiation</a></li>
 </ul>
 </li>
 </ul>
@@ -569,7 +505,7 @@ test_resource.py in the unit tests for examples)</p>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Tim Parkin, Matt Goodall.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
     </div>
   </body>
 </html>

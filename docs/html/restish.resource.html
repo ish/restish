@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>restish.resource &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-restish.resource">
+<h1>restish.resource<a class="headerlink" href="#module-restish.resource" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="restish.resource.AnyChildMatcher">
+<!--[restish.resource.AnyChildMatcher]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">AnyChildMatcher</tt><a class="headerlink" href="#restish.resource.AnyChildMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>A &#64;child matcher that will always match, returning to match args and the
+list of segments unchanged.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.DELETE">
+<!--[restish.resource.DELETE]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">DELETE</tt><big>(</big><em>accept='*/*'</em>, <em>content_type='*/*'</em><big>)</big><a class="headerlink" href="#restish.resource.DELETE" title="Permalink to this definition">¶</a></dt>
+<dd>Bases: <a title="restish.resource.MethodDecorator" class="reference" href="#restish.resource.MethodDecorator"><tt class="xref docutils literal"><span class="pre">restish.resource.MethodDecorator</span></tt></a></dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.GET">
+<!--[restish.resource.GET]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">GET</tt><big>(</big><em>accept='*/*'</em>, <em>content_type='*/*'</em><big>)</big><a class="headerlink" href="#restish.resource.GET" title="Permalink to this definition">¶</a></dt>
+<dd>Bases: <a title="restish.resource.MethodDecorator" class="reference" href="#restish.resource.MethodDecorator"><tt class="xref docutils literal"><span class="pre">restish.resource.MethodDecorator</span></tt></a></dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.MethodDecorator">
+<!--[restish.resource.MethodDecorator]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">MethodDecorator</tt><big>(</big><em>accept='*/*'</em>, <em>content_type='*/*'</em><big>)</big><a class="headerlink" href="#restish.resource.MethodDecorator" title="Permalink to this definition">¶</a></dt>
+<dd>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.POST">
+<!--[restish.resource.POST]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">POST</tt><big>(</big><em>accept='*/*'</em>, <em>content_type='*/*'</em><big>)</big><a class="headerlink" href="#restish.resource.POST" title="Permalink to this definition">¶</a></dt>
+<dd>Bases: <a title="restish.resource.MethodDecorator" class="reference" href="#restish.resource.MethodDecorator"><tt class="xref docutils literal"><span class="pre">restish.resource.MethodDecorator</span></tt></a></dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.PUT">
+<!--[restish.resource.PUT]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">PUT</tt><big>(</big><em>accept='*/*'</em>, <em>content_type='*/*'</em><big>)</big><a class="headerlink" href="#restish.resource.PUT" title="Permalink to this definition">¶</a></dt>
+<dd>Bases: <a title="restish.resource.MethodDecorator" class="reference" href="#restish.resource.MethodDecorator"><tt class="xref docutils literal"><span class="pre">restish.resource.MethodDecorator</span></tt></a></dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.Resource">
+<!--[restish.resource.Resource]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">Resource</tt><a class="headerlink" href="#restish.resource.Resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Base class for additional resource types.</p>
+<p>Provides the basic API required of a resource (resource_child(request,
+segments) and __call__(request)), possibly dispatching to annotated methods
+of the class (using metaclass magic).</p>
+<dl class="method">
+<dt id="restish.resource.Resource.resource_child">
+<!--[restish.resource.Resource.resource_child]--><tt class="descname">resource_child</tt><big>(</big><em>request</em>, <em>segments</em><big>)</big><a class="headerlink" href="#restish.resource.Resource.resource_child" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.TemplateChildMatcher">
+<!--[restish.resource.TemplateChildMatcher]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">TemplateChildMatcher</tt><big>(</big><em>pattern</em><big>)</big><a class="headerlink" href="#restish.resource.TemplateChildMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>A &#64;child matcher that parses a template in the form /fixed/{dynamic}/fixed,
+extracting segments inside {} markers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="restish.resource.child">
+<!--[restish.resource.child]--><tt class="descclassname">restish.resource.</tt><tt class="descname">child</tt><big>(</big><em>matcher=None</em><big>)</big><a class="headerlink" href="#restish.resource.child" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/restish.resource.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

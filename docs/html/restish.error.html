@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>restish.error &mdash; Restish v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Restish v1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-restish.error">
+<h1>restish.error<a class="headerlink" href="#module-restish.error" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="restish.error.HTTPClientError">
+<!--[restish.error.HTTPClientError]-->exception <tt class="descclassname">restish.error.</tt><tt class="descname">HTTPClientError</tt><a class="headerlink" href="#restish.error.HTTPClientError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="restish.error.RestishException" class="reference" href="#restish.error.RestishException"><tt class="xref docutils literal"><span class="pre">restish.error.RestishException</span></tt></a></p>
+<p>Base class for all HTTP client (4xx) errors.</p>
+<p>Each 4xx response is mirrored by an exception type that subclasses from
+HTTPClientException. The subclass should override response_factory setting
+it to a callable that will accept all the positional and keyword args and
+return an http.Response instance.</p>
+<p>Typically, response_factory factory can be set to one of the convenience
+functions in the http module.</p>
+<dl class="method">
+<dt id="restish.error.HTTPClientError.make_response">
+<!--[restish.error.HTTPClientError.make_response]--><tt class="descname">make_response</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.error.HTTPClientError.make_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="restish.error.RestishException">
+<!--[restish.error.RestishException]-->exception <tt class="descclassname">restish.error.</tt><tt class="descname">RestishException</tt><a class="headerlink" href="#restish.error.RestishException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></p>
+<p>Base class for all restish exceptions.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/restish.error.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>
