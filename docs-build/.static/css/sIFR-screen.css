@@ -1,0 +1,58 @@
+/*=:project
+    scalable Inman Flash Replacement (sIFR) version 3.
+
+  =:file
+    Copyright: 2006 Mark Wubben.
+    Author: Mark Wubben, <http://novemberborn.net/>
+
+  =:history
+    * IFR: Shaun Inman
+    * sIFR 1: Mike Davidson, Shaun Inman and Tomas Jogin
+    * sIFR 2: Mike Davidson, Shaun Inman, Tomas Jogin and Mark Wubben
+
+  =:license
+    This software is licensed and provided under the CC-GNU LGPL.
+    See <http://creativecommons.org/licenses/LGPL/2.1/>    
+*/
+
+/*---- sIFR ---*/
+.sIFR-flash {
+  visibility: visible !important;
+  margin: 0;
+  padding: 0;
+}
+
+.sIFR-unloading .sIFR-flash {
+  visibility: hidden !important;
+}
+
+.sIFR-replaced, .sIFR-ignore {
+  visibility: visible !important;
+}
+
+.sIFR-alternate {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.sIFR-replaced div.sIFR-fixfocus {
+  margin: 0pt; 
+  padding: 0pt; 
+  overflow: auto; 
+  letter-spacing: 0px; 
+  float: none;
+}
+
+.sIFR-dummy { 
+  width: 0px;
+  height: 0px;
+  margin-left: 42px;
+  z-index: 0;
+}
+
+/*---- Header styling ---*/

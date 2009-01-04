@@ -1,0 +1,359 @@
+body {
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-image: url(/images/bg/body.jpg);
+  background-color: #ffffff;
+  min-height: 1500px;
+  text-align: center;
+}
+
+body a {
+  color: #6c723f;
+  text-decoration: none;
+}
+
+body a:hover {
+  color: #6c723f;
+}
+
+body a:visited {
+  color: #6c723f;
+}
+
+body a:link {
+  color: #6c723f;
+}
+
+#wrapper {
+  margin: 0 auto 0 auto;
+  text-align: left;
+  position: relative;
+  width: 1070px;
+  background-color: transparent;
+}
+
+#logo {
+  position: absolute;
+  top: 13px;
+  left: -24px;
+}
+
+#logo a img {
+  border: 0;
+}
+
+.content {
+  color: #333333;
+}
+
+#admin {
+  padding: 0 0 0 2px;
+  font-size: 1.1em;
+}
+
+#admin h1 {
+  font-family: tahoma, arial, geneva, sans;
+  font-weight: normal;
+  font-size: 1.3em;
+  margin-bottom: 1.3em;
+}
+
+#main {
+  background-color: transparent;
+  margin-top: 15px;
+}
+
+#main h2 {
+  border: 0;
+}
+
+#sphinx #main {
+  margin-top: 0;
+}
+
+#header {
+  position: relative;
+  height: 90px;
+  background-color: transparent;
+  margin: 0 70px 0 70px;
+}
+
+#header h1 {
+  margin-left: 0.2em;
+  width: 50%;
+  font-size: 40px;
+}
+
+#header #nav ul {
+  position: absolute;
+  top: 30px;
+  left: 552.5px;
+  width: 100%;
+}
+
+#header #nav li {
+  display: inline;
+  padding-right: 10px;
+  font-size: 15px;
+}
+
+#header #nav li a {
+  color: #b8be8b;
+  font-weight: bold;
+  font-family: Rockwell, Georgia, sans;
+}
+
+#sphinx #header {
+  height: 60px;
+}
+
+#footer {
+  padding: 10px 10px 0 10px;
+  margin: 50px 70px 0 70px;
+  border-top: 1px solid #dddddd;
+  color: #999999;
+}
+
+#footer a {
+  border-right: 1px solid #dddddd;
+  padding: 0.3em 1em;
+  color: #999999;
+}
+
+#footer a.last {
+  border: 0;
+}
+
+#footer p {
+  margin-bottom: 2em;
+}
+
+#content {
+  background-color: transparent;
+  border: 0;
+  margin: 0 70px 0 70px;
+  width: 750px;
+}
+
+#maincontent {
+  float: left;
+  width: 447.5px;
+  margin-left: 70px;
+}
+
+#maincontent h1 {
+  font-size: 19px;
+  margin-bottom: 0;
+}
+
+#maincontent p {
+  margin-top: 0;
+  line-height: 1.3em;
+}
+
+#sidecontent {
+  float: right;
+  width: 447.5px;
+  margin-right: 70px;
+  margin-top: 1em;
+}
+
+#sidecontent h1 {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+#sidecontent h2 {
+  font-size: 20px;
+  font-weight: normal;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#sidecontent h3 {
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0.5em 0 0 0;
+}
+
+#sidecontent h4 {
+  font-size: 12px;
+  font-weight: normal;
+  margin: 0.5em 0 0 0;
+}
+
+#sidecontent p {
+  margin: 0 0 11px 0;
+  font-size: 12px;
+  line-height: 1.3em;
+}
+
+#top-menu,
+#wrapper .related {
+  background: transparent;
+  color: #ffffff;
+  font-size: 0.8em;
+  height: 20px;
+  padding: 2px 2px 0 10px;
+  margin: 0 70px 0 70px;
+}
+
+#wrapper .related {
+  position: relative;
+  width: auto;
+  background-color: #333333;
+  margin-left: 62px;
+  color: #ffffff;
+}
+
+#wrapper .related a {
+  color: #ffffff;
+}
+
+#main .related {
+  padding: 10px 10px 0 10px;
+  margin: 50px 70px 0 70px;
+  border-top: 1px solid #dddddd;
+  color: #999999;
+  background-color: #ffffff;
+}
+
+#main .related a {
+  padding: 0.3em 1em;
+  color: #999999;
+}
+
+#main .related a.last {
+  border: 0;
+}
+
+#main .related p {
+  margin-bottom: 2em;
+}
+
+#main-menu ul {
+  margin-left: -0.6em;
+}
+
+#main-menu li a {
+  background-color: #333333;
+  color: #aaaaaa;
+}
+
+#main-menu li a:hover {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+#main-menu li a.selected {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+#main-menu li a.selected:hover {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+#wrapper .document {
+  font-size: 90%;
+  background-color: transparent;
+  margin: 0 70px 0 70px;
+}
+
+#wrapper .document h1 {
+  font-size: 120%;
+  background-color: transparent;
+  border-bottom: 0;
+}
+
+#wrapper .document h2 {
+  font-size: 115%;
+  background-color: transparent;
+  border-bottom: 0;
+}
+
+#wrapper .document h3 {
+  font-size: 110%;
+  background-color: transparent;
+  border-bottom: 0;
+}
+
+#wrapper .document h4 {
+  font-size: 110%;
+  background-color: transparent;
+  border-bottom: 0;
+}
+
+#wrapper .documentwrapper,
+#wrapper .sphinxsidebar {
+  margin: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+#wrapper .documentwrapper {
+  float: right;
+  width: 650px;
+}
+
+#wrapper .sphinxsidebar {
+  float: left;
+  width: 250px;
+  margin-left: 0;
+}
+
+#wrapper .sphinxsidebar h2,
+#wrapper .sphinxsidebar h3,
+#wrapper .sphinxsidebar h4 {
+  color: #000000;
+}
+
+#wrapper .sphinxsidebar h2 a,
+#wrapper .sphinxsidebar h3 a,
+#wrapper .sphinxsidebar h4 a {
+  color: #000000;
+}
+
+#wrapper .bodywrapper {
+  margin: 0;
+}
+
+#sphinx .sphinxsidebar ul {
+  margin: 0;
+  font-weight: bold;
+}
+
+#sphinx .sphinxsidebar ul a {
+  color: #7e2202;
+}
+
+#sphinx .sphinxsidebar ul ul {
+  margin: 0;
+  font-weight: normal;
+}
+
+#sphinx .sphinxsidebar ul ul a {
+  color: #7e2202;
+}
+
+#sphinx .sphinxsidebar ul ul ul {
+  margin: 8px;
+}
+
+#sphinx .sphinxsidebar ul ul ul a {
+  color: #000000;
+}
+
+#sphinx .sphinxsidebar ul ul ul ul {
+  margin: 8px;
+}
+
+#sphinx .sphinxsidebar ul ul ul ul a {
+  color: #444444;
+}
+
+#sphinx .indetable {
+  font-size: 90%;
+}

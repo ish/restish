@@ -8,11 +8,10 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '1',
-        COLLAPSE_MODINDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -20,8 +19,19 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="Restish v1 documentation" href="index.html" /> 
+
+
+  <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
+  <link media="screen" href="_static/css/images.css" type="text/css" rel="stylesheet" />
+  <link media="screen" href="_static/css/sIFR-screen.css" type="text/css" rel="stylesheet" />
+  <link media="print" href="_static/css/sIFR-print.css" type="text/css" rel="stylesheet" />  
+  <script type="text/javascript" src="_static/js/sifr.js" ></script>
+  <script type="text/javascript" src="_static/js/sifr-config.js" ></script> 
+  <script type="text/javascript" src="_static/js/sifr-debug.js" ></script> 
+
   </head>
-  <body>
+  <body id="sphinx">
+    <div id="wrapper">
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -34,7 +44,13 @@
         <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
-    <div class="document">
+
+    <div id="header">
+      <div id="logo"><img src="_static/images/logo/ish.io.png" /></div>
+    </div>
+
+<div id="main">
+    <div  class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
@@ -46,12 +62,12 @@
 <dl class="class">
 <dt id="restish.page.Element">
 <!--[restish.page.Element]-->class <tt class="descclassname">restish.page.</tt><tt class="descname">Element</tt><a class="headerlink" href="#restish.page.Element" title="Permalink to this definition">¶</a></dt>
-<dd>Bases: <a title="restish.page.ElementMixin" class="reference" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></dd></dl>
+<dd>Bases: <a title="restish.page.ElementMixin" class="reference internal" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></dd></dl>
 
 <dl class="class">
 <dt id="restish.page.ElementMixin">
 <!--[restish.page.ElementMixin]-->class <tt class="descclassname">restish.page.</tt><tt class="descname">ElementMixin</tt><a class="headerlink" href="#restish.page.ElementMixin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
 <dl class="method">
 <dt id="restish.page.ElementMixin.element">
 <!--[restish.page.ElementMixin.element]--><tt class="descname">element</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="headerlink" href="#restish.page.ElementMixin.element" title="Permalink to this definition">¶</a></dt>
@@ -65,12 +81,12 @@ the same object is returned if the element is located again later.</p>
 <dl class="exception">
 <dt id="restish.page.ElementNotFound">
 <!--[restish.page.ElementNotFound]-->exception <tt class="descclassname">restish.page.</tt><tt class="descname">ElementNotFound</tt><a class="headerlink" href="#restish.page.ElementNotFound" title="Permalink to this definition">¶</a></dt>
-<dd>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></dd></dl>
+<dd>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></dd></dl>
 
 <dl class="class">
 <dt id="restish.page.Page">
 <!--[restish.page.Page]-->class <tt class="descclassname">restish.page.</tt><tt class="descname">Page</tt><a class="headerlink" href="#restish.page.Page" title="Permalink to this definition">¶</a></dt>
-<dd>Bases: <a title="restish.page.ElementMixin" class="reference" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="restish.resource.Resource" class="reference" href="restish.resource.html#restish.resource.Resource"><tt class="xref docutils literal"><span class="pre">restish.resource.Resource</span></tt></a></dd></dl>
+<dd>Bases: <a title="restish.page.ElementMixin" class="reference internal" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="restish.resource.Resource" class="reference external" href="restish.resource.html#restish.resource.Resource"><tt class="xref docutils literal"><span class="pre">restish.resource.Resource</span></tt></a></dd></dl>
 
 <dl class="function">
 <dt id="restish.page.element">
@@ -113,7 +129,8 @@ the same object is returned if the element is located again later.</p>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Tim Parkin, Matt Goodall.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
     </div>
+  </div> 
+  </div>
   </body>
 </html>

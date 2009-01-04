@@ -8,11 +8,10 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '1',
-        COLLAPSE_MODINDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+          URL_ROOT:    '',
+          VERSION:     '1',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -22,14 +21,28 @@
     <link rel="top" title="Restish v1 documentation" href="index.html" />
     <link rel="next" title="How to work with WSGI Apps" href="wsgiapps.html" />
     <link rel="prev" title="Templating in Restish" href="templating.html" /> 
+
+
+  <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
+  <link media="screen" href="_static/css/images.css" type="text/css" rel="stylesheet" />
+  <link media="screen" href="_static/css/sIFR-screen.css" type="text/css" rel="stylesheet" />
+  <link media="print" href="_static/css/sIFR-print.css" type="text/css" rel="stylesheet" />  
+  <script type="text/javascript" src="_static/js/sifr.js" ></script>
+  <script type="text/javascript" src="_static/js/sifr-config.js" ></script> 
+  <script type="text/javascript" src="_static/js/sifr-debug.js" ></script> 
+
   </head>
-  <body>
+  <body id="sphinx">
+    <div id="wrapper">
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
         <li class="right" >
           <a href="wsgiapps.html" title="How to work with WSGI Apps"
              accesskey="N">next</a> |</li>
@@ -39,7 +52,13 @@
         <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
-    <div class="document">
+
+    <div id="header">
+      <div id="logo"><img src="_static/images/logo/ish.io.png" /></div>
+    </div>
+
+<div id="main">
+    <div  class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
@@ -59,7 +78,7 @@
 </pre></div>
 </div>
 <p>Add the repoze middle ware by adding these lines to wsgiapp.py</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">repoze.who.config</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">repoze.who.config</span>
 <span class="o">...</span>
 <span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">RestishApp</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Root</span><span class="p">())</span>
@@ -121,8 +140,8 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Access Control using Guard</a><ul>
-<li><a class="reference" href="#basic-auth-using-repoze-who">Basic Auth using repoze.who</a></li>
+<li><a class="reference external" href="">Access Control using Guard</a><ul>
+<li><a class="reference external" href="#basic-auth-using-repoze-who">Basic Auth using repoze.who</a></li>
 </ul>
 </li>
 </ul>
@@ -152,6 +171,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
           <a href="wsgiapps.html" title="How to work with WSGI Apps"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -162,7 +184,8 @@
     </div>
     <div class="footer">
       &copy; Copyright 2008, Tim Parkin, Matt Goodall.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
     </div>
+  </div> 
+  </div>
   </body>
 </html>
