@@ -357,3 +357,19 @@ body a:link {
 #sphinx .indetable {
   font-size: 90%;
 }
+
+#overview {
+  position: absolute;
+  bottom: -30px;
+  left: 8px;
+  color: #FFF;
+  font-family: verdana, sans-serif;
+  font-size: 78%;
+  font-weight: bold;
+}
+
+#overview a {
+  color: #FFF;
+  text-decoration: none;
+}
+
