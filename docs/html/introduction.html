@@ -67,7 +67,14 @@
   
   <div class="section" id="an-introduction-to-restish">
 <h1>An Introduction to Restish<a class="headerlink" href="#an-introduction-to-restish" title="Permalink to this headline">¶</a></h1>
-<p>Restish is a minimal but fully formed rest oriented wsgi web framework.</p>
+<p>Restish is a simple to use, lightweight WSGI web framework and library with a
+strong focus on resources, request/response, URLs and content negotiation.
+Restish has very few dependencies and does not assume any particular templating
+or database engine.</p>
+<p>A key feature of Restish is that it makes no use of thread-locals or any other
+concurrency-dependent contexts and so works equally well under
+<a class="reference" href="http://pythonpaste.org/deploy/">Paste Deploy</a> or a thread-less web server such
+as <a class="reference" href="http://pypi.python.org/pypi/Spawning">Spawning</a>.</p>
 <div class="section" id="why-restish">
 <h2>Why Restish?<a class="headerlink" href="#why-restish" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="background">
@@ -76,13 +83,13 @@
 worked with Twisted and Nevow and had developed the Formal form handling
 library for it. However for this project we wanted something that would be a
 little more accessible and that would allow us to make use of the full range of
-libraries has to offer. The three obvious frameworks were pylons, turbogears
-and django. We wanted to use SqlAlchemy and hence Django wasn&#8217;t really a
-contender. Turbogears looked in a s tate of flux and we were looking for
-something a lot lower level. So by process of elimination we h ad to look at
-pylons.</p>
+libraries Python has to offer.</p>
+<p>The three obvious frameworks were Pylons, TurboGears and Django. We wanted to
+use SQLAlchemy and hence Django wasn&#8217;t really a contender. TurboGears looked in
+a state of flux and we were looking for something a lot lower level. So by
+process of elimination we had to look at Pylons.</p>
 <p>Pylons started out looking quite good but we started to find the odd problem.
-The initial problem w as pylon&#8217;s use of threadlocals. Using threadlocals
+The initial problem was Pylon&#8217;s use of threadlocals. Using threadlocals
 precludes any use of single threaded servers. So we removed threadlocals. Next
 we started to make pylons more templating agnostic, eventually removing
 templating completely. Finally, when we had removed all trace of pylons, we
