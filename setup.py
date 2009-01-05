@@ -7,6 +7,10 @@ setup(name='restish',
       version=version,
       description="WSGI framework/library for building resource- and rest- oriented web sites",
       long_description="""\
+Restish is a simple to use, lightweight WSGI web framework and library with a
+strong focus on resources, request/response, URLs and content negotiation.
+Restish has very few dependencies and does not assume any particular templating
+or database engine.
 """,
       classifiers=[
           "Development Status :: 4 - Beta",
