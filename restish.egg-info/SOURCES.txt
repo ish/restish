@@ -1,5 +1,4 @@
 .gitignore
-TODO
 setup.py
 docs-build/Makefile
 docs-build/_module.rst
