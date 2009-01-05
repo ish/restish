@@ -6,7 +6,11 @@ Home-page: http://ish.io/projects/show/restish
 Author: ish
 Author-email: developers@ish.io
 License: BSD
-Description: UNKNOWN
+Description: Restish is a simple to use, lightweight WSGI web framework and library with a
+        strong focus on resources, request/response, URLs and content negotiation.
+        Restish has very few dependencies and does not assume any particular templating
+        or database engine.
+        
 Keywords: web wsgi rest framework
 Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
