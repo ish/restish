@@ -1,6 +1,6 @@
 # Sphinx inventory version 1
 # Project: Restish
-# Version: 0.1
+# Version: 0.5
 restish.page mod restish.page.html
 restish.guard mod restish.guard.html
 restish.resource mod restish.resource.html
@@ -11,7 +11,7 @@ restish.app mod restish.app.html
 restish.http mod restish.http.html
 restish.resource.POST class restish.resource.html
 restish.url.URL.sibling method templating.html
-restish.url.URL.path_segments attribute templating.html
+restish.http.NotAcceptableError.response_factory attribute restish.http.html
 restish.url.URL.remove_query method templating.html
 restish.http.Request.blank attribute restish.http.html
 restish.http.Request.host_url attribute restish.http.html
@@ -26,7 +26,7 @@ restish.url.URL.query_list attribute templating.html
 restish.url.split_path function restish.url.html
 restish.url.URLAccessor.url attribute templating.html
 restish.resource.GET class restish.resource.html
-restish.http.NotAcceptableError.response_factory attribute restish.http.html
+restish.url.URL.path_segments attribute templating.html
 restish.http.Request.path attribute restish.http.html
 restish.url.join_query function restish.url.html
 restish.http.UnauthorizedError.response_factory attribute restish.http.html
