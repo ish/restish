@@ -1,22 +1,33 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1'
+version = '0.5'
 
 setup(name='restish',
       version=version,
-      description="WSGI library for resource- and rest- oriented web sites",
+      description="WSGI framework/library for building resource- and rest- oriented web sites",
       long_description="""\
 """,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      keywords='',
-      author='Matt Goodall',
-      author_email='matt@jdi-associates.com',
-      url='',
-      license='',
+      classifiers=[
+          "Development Status :: 4 - Beta",
+          "Environment :: Web Environment",
+          "Framework :: Paste",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: BSD License",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 2",
+          "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+          "Topic :: Internet :: WWW/HTTP :: WSGI",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+      ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      keywords='web wsgi rest framework',
+      author='ish',
+      author_email='developers@ish.io',
+      url='http://ish.io/projects/show/restish',
+      license='BSD',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
-      zip_safe=False,
+      zip_safe=True,
       install_requires=[
           # -*- Extra requirements: -*-
           'decorator',

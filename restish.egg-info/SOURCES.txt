@@ -1,7 +1,6 @@
-README
-setup.cfg
 setup.py
 restish/__init__.py
+restish/_mimeparse.py
 restish/app.py
 restish/error.py
 restish/guard.py
@@ -16,9 +15,9 @@ restish.egg-info/PKG-INFO
 restish.egg-info/SOURCES.txt
 restish.egg-info/dependency_links.txt
 restish.egg-info/entry_points.txt
-restish.egg-info/not-zip-safe
 restish.egg-info/requires.txt
 restish.egg-info/top_level.txt
+restish.egg-info/zip-safe
 restish/contrib/__init__.py
 restish/contrib/genshirenderer.py
 restish/contrib/jinja2renderer.py
@@ -26,8 +25,8 @@ restish/contrib/makorenderer.py
 restish/test/__init__.py
 restish/test/test_app.py
 restish/test/test_guard.py
+restish/test/test_http.py
 restish/test/test_page.py
-restish/test/test_request.py
 restish/test/test_resource.py
 restish/test/test_templating.py
 restish/test/test_url.py

@@ -1,10 +1,21 @@
 Metadata-Version: 1.0
 Name: restish
-Version: 0.1dev
-Summary: WSGI library for resource- and rest- oriented web sites
-Home-page: UNKNOWN
-Author: Matt Goodall
-Author-email: matt@jdi-associates.com
-License: UNKNOWN
+Version: 0.5
+Summary: WSGI framework/library for building resource- and rest- oriented web sites
+Home-page: http://ish.io/projects/show/restish
+Author: ish
+Author-email: developers@ish.io
+License: BSD
 Description: UNKNOWN
+Keywords: web wsgi rest framework
 Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Paste
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
