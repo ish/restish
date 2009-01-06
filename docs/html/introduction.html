@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>An Introduction to Restish &mdash; Restish v1 documentation</title>
+    <title>An Introduction to Restish &mdash; Restish v0.5 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '',
-          VERSION:     '1',
+          VERSION:     '0.5',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v1 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.5 documentation" href="index.html" />
     <link rel="next" title="Restish Resources" href="resources.html" />
     <link rel="prev" title="Welcome to Restish&#8217;s documentation!" href="index.html" /> 
 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to Restish&#8217;s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -67,7 +67,14 @@
   
   <div class="section" id="an-introduction-to-restish">
 <h1>An Introduction to Restish<a class="headerlink" href="#an-introduction-to-restish" title="Permalink to this headline">¶</a></h1>
-<p>Restish is a minimal but fully formed rest oriented wsgi web framework.</p>
+<p>Restish is a simple to use, lightweight WSGI web framework and library with a
+strong focus on resources, request/response, URLs and content negotiation.
+Restish has very few dependencies and does not assume any particular templating
+or database engine.</p>
+<p>A key feature of Restish is that it makes no use of thread-locals or any other
+concurrency-dependent contexts and so works equally well under
+<a class="reference" href="http://pythonpaste.org/deploy/">Paste Deploy</a> or a thread-less web server such
+as <a class="reference" href="http://pypi.python.org/pypi/Spawning">Spawning</a>.</p>
 <div class="section" id="why-restish">
 <h2>Why Restish?<a class="headerlink" href="#why-restish" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="background">
@@ -76,13 +83,13 @@
 worked with Twisted and Nevow and had developed the Formal form handling
 library for it. However for this project we wanted something that would be a
 little more accessible and that would allow us to make use of the full range of
-libraries has to offer. The three obvious frameworks were pylons, turbogears
-and django. We wanted to use SqlAlchemy and hence Django wasn&#8217;t really a
-contender. Turbogears looked in a s tate of flux and we were looking for
-something a lot lower level. So by process of elimination we h ad to look at
-pylons.</p>
+libraries Python has to offer.</p>
+<p>The three obvious frameworks were Pylons, TurboGears and Django. We wanted to
+use SQLAlchemy and hence Django wasn&#8217;t really a contender. TurboGears looked in
+a state of flux and we were looking for something a lot lower level. So by
+process of elimination we had to look at Pylons.</p>
 <p>Pylons started out looking quite good but we started to find the odd problem.
-The initial problem w as pylon&#8217;s use of threadlocals. Using threadlocals
+The initial problem was Pylon&#8217;s use of threadlocals. Using threadlocals
 precludes any use of single threaded servers. So we removed threadlocals. Next
 we started to make pylons more templating agnostic, eventually removing
 templating completely. Finally, when we had removed all trace of pylons, we
@@ -323,25 +330,25 @@ serving on http://127.0.0.1:8080</pre>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">An Introduction to Restish</a><ul>
-<li><a class="reference external" href="#why-restish">Why Restish?</a><ul>
-<li><a class="reference external" href="#background">Background</a></li>
-<li><a class="reference external" href="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
-<li><a class="reference external" href="#executive-summary-for-coders">Executive Summary for Coders</a></li>
+<li><a class="reference" href="">An Introduction to Restish</a><ul>
+<li><a class="reference" href="#why-restish">Why Restish?</a><ul>
+<li><a class="reference" href="#background">Background</a></li>
+<li><a class="reference" href="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
+<li><a class="reference" href="#executive-summary-for-coders">Executive Summary for Coders</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#how-to-start-a-restish-project">How to start a restish project</a><ul>
-<li><a class="reference external" href="#using-paster-create">Using paster create</a></li>
-<li><a class="reference external" href="#what-is-in-the-template-project">What is in the template project</a><ul>
-<li><a class="reference external" href="#the-ini-files">The ini files</a></li>
-<li><a class="reference external" href="#the-lib-directory">The <tt class="docutils literal"><span class="pre">lib</span></tt> directory</a></li>
-<li><a class="reference external" href="#the-public-directory">The <tt class="docutils literal"><span class="pre">public</span></tt> directory</a></li>
-<li><a class="reference external" href="#the-resource-directory">The <tt class="docutils literal"><span class="pre">resource</span></tt> directory</a></li>
-<li><a class="reference external" href="#the-wsgi-setup">The WSGI setup</a></li>
+<li><a class="reference" href="#how-to-start-a-restish-project">How to start a restish project</a><ul>
+<li><a class="reference" href="#using-paster-create">Using paster create</a></li>
+<li><a class="reference" href="#what-is-in-the-template-project">What is in the template project</a><ul>
+<li><a class="reference" href="#the-ini-files">The ini files</a></li>
+<li><a class="reference" href="#the-lib-directory">The <tt class="docutils literal"><span class="pre">lib</span></tt> directory</a></li>
+<li><a class="reference" href="#the-public-directory">The <tt class="docutils literal"><span class="pre">public</span></tt> directory</a></li>
+<li><a class="reference" href="#the-resource-directory">The <tt class="docutils literal"><span class="pre">resource</span></tt> directory</a></li>
+<li><a class="reference" href="#the-wsgi-setup">The WSGI setup</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#starting-a-server">Starting a server</a></li>
-<li><a class="reference external" href="#next-steps">Next Steps..</a></li>
+<li><a class="reference" href="#starting-a-server">Starting a server</a></li>
+<li><a class="reference" href="#next-steps">Next Steps..</a></li>
 </ul>
 </li>
 </ul>
@@ -381,11 +388,11 @@ serving on http://127.0.0.1:8080</pre>
         <li class="right" >
           <a href="index.html" title="Welcome to Restish&#8217;s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2008, Tim Parkin, Matt Goodall.
+      &copy; Copyright 2008, ish.io developers.
     </div>
   </div> 
   </div>

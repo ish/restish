@@ -2,7 +2,16 @@
 An Introduction to Restish
 **************************
 
-Restish is a minimal but fully formed rest oriented wsgi web framework.
+Restish is a simple to use, lightweight WSGI web framework and library with a
+strong focus on resources, request/response, URLs and content negotiation.
+Restish has very few dependencies and does not assume any particular templating
+or database engine.
+
+A key feature of Restish is that it makes no use of thread-locals or any other
+concurrency-dependent contexts and so works equally well under 
+`Paste Deploy <http://pythonpaste.org/deploy/>`_ or a thread-less web server such
+as `Spawning <http://pypi.python.org/pypi/Spawning>`_.
+
 
 Why Restish?
 ============
@@ -14,14 +23,15 @@ We were looking around for a web framework for a new project. Previously we had
 worked with Twisted and Nevow and had developed the Formal form handling
 library for it. However for this project we wanted something that would be a
 little more accessible and that would allow us to make use of the full range of
-libraries has to offer. The three obvious frameworks were pylons, turbogears
-and django. We wanted to use SqlAlchemy and hence Django wasn't really a
-contender. Turbogears looked in a s tate of flux and we were looking for
-something a lot lower level. So by process of elimination we h ad to look at
-pylons.
+libraries Python has to offer.
+
+The three obvious frameworks were Pylons, TurboGears and Django. We wanted to
+use SQLAlchemy and hence Django wasn't really a contender. TurboGears looked in
+a state of flux and we were looking for something a lot lower level. So by
+process of elimination we had to look at Pylons.
 
 Pylons started out looking quite good but we started to find the odd problem.
-The initial problem w as pylon's use of threadlocals. Using threadlocals
+The initial problem was Pylon's use of threadlocals. Using threadlocals
 precludes any use of single threaded servers. So we removed threadlocals. Next
 we started to make pylons more templating agnostic, eventually removing
 templating completely. Finally, when we had removed all trace of pylons, we
