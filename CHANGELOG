@@ -2,6 +2,12 @@
 Changlelog
 ==========
 
+0.5.1 (2009-01-06)
+------------------
+
+Cleaned up repo
+
+* Added files recommended by pypi including license
 
 0.5 (2009-01-05)
 ----------------
