@@ -135,7 +135,7 @@ def created(location, body, headers=None):
 def moved_permanently(location):
     """
     301 Moved Permanently
-    =====================
+
     The requested resource has been assigned a new permanent URI and any
     future references to this resource SHOULD use one of the returned URIs.
     Clients with link editing capabilities ought to automatically re-link
@@ -161,7 +161,7 @@ def moved_permanently(location):
 def found(location):
     """
     302 Found
-    =========
+
     The requested resource resides temporarily under a different URI. Since the
     redirection might be altered on occasion, the client SHOULD continue to use
     the Request-URI for future requests. This response is only cacheable if
@@ -188,7 +188,7 @@ def found(location):
 def see_other(location):
     """
     303 See Other
-    =============
+
     The response to the request can be found under a different URI and SHOULD
     be retrieved using a GET method on that resource. This method exists
     primarily to allow the output of a POST-activated script to redirect the
@@ -211,7 +211,7 @@ def see_other(location):
 def not_modified():
     """
     301 Not Modified
-    ================
+
     If the client has performed a conditional GET request and access is
     allowed, but the document has not been modified, the server SHOULD respond
     with this status code. The 304 response MUST NOT contain a message-body,
@@ -253,7 +253,7 @@ def not_modified():
 def bad_request(headers=None, body=None):
     """
     400 Bad Request
-    ===============
+
     The request could not be understood by the server due to malformed syntax.
     The client SHOULD NOT repeat the request without modifications.
     """
@@ -269,7 +269,7 @@ class BadRequestError(error.HTTPClientError):
 def unauthorized(headers, body):
     """
     401 Unauthorized
-    ================
+
     The request requires user authentication. The response MUST include a
     WWW-Authenticate header field (section 14.47) containing a challenge
     applicable to the requested resource. The client MAY repeat the request
@@ -292,7 +292,7 @@ class UnauthorizedError(error.HTTPClientError):
 def forbidden(headers=None, body=None):
     """
     403 Forbidden
-    =============
+
     The server understood the request, but is refusing to fulfill it.
     Authorization will not help and the request SHOULD NOT be repeated. If the
     request method was not HEAD and the server wishes to make public why the
@@ -313,7 +313,7 @@ class ForbiddenError(error.HTTPClientError):
 def not_found(headers=None, body=None):
     """
     404 Not Found
-    =============
+
     The server has not found anything matching the Request-URI. No indication
     is given of whether the condition is temporary or permanent. The 410 (Gone)
     status code SHOULD be used if the server knows, through some internally
@@ -334,7 +334,7 @@ class NotFoundError(error.HTTPClientError):
 def method_not_allowed(allow):
     """
     405 Not Allowed
-    ===============
+
     The method specified in the Request-Line is not allowed for the resource
     identified by the Request-URI. The response MUST include an Allow header
     containing a list of valid methods for the requested resource.
@@ -350,7 +350,7 @@ class MethodNotAllowedError(error.HTTPClientError):
 def not_acceptable(headers, body):
     """
     406 Not Acceptable
-    ==================
+
     The resource identified by the request is only capable of generating
     response entities which have content characteristics not acceptable
     according to the accept headers sent in the request.
@@ -382,7 +382,7 @@ class NotAcceptableError(error.HTTPClientError):
 def conflict(headers, body):
     """
     409 Conflict
-    ============
+
     The request could not be completed due to a conflict with the current state
     of the resource. This code is only allowed in situations where it is
     expected that the user might be able to resolve the conflict and resubmit
