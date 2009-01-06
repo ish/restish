@@ -26,7 +26,7 @@ def _encode(S):
 
 
 def _quote(S, safe):
-    """ urllib quote - see top of page for range of safe definitions """
+    """ urllib quote - see top of module for range of safe definitions """
     return urllib.quote(S, safe)
 
 

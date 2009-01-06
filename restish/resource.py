@@ -144,7 +144,7 @@ def _best_dispatcher(dispatchers, request):
 
 
 def _filter_dispatchers_on_content_type(dispatchers, request):
-    """ Build an ordered list of the supported types.  """
+    # Build an ordered list of the supported types.
     supported = []
     for d in dispatchers:
         supported.extend(d[1]['content_type'])
@@ -156,7 +156,7 @@ def _filter_dispatchers_on_content_type(dispatchers, request):
 
 
 def _filter_dispatchers_on_accept(dispatchers, request):
-    """ Build an ordered list of the supported types.  """
+    # Build an ordered list of the supported types.
     supported = []
     for d in dispatchers:
         supported.extend(d[1]['accept'])
@@ -169,10 +169,6 @@ def _filter_dispatchers_on_accept(dispatchers, request):
 def child(matcher=None):
     """ Child decorator used for finding child resources """
     def decorator(func, matcher=matcher):
-        """
-        The deocorator takes a matching function ee TemplateChildMatcher
-        for example
-        """
         # No matcher? Use the function name.
         if matcher is None:
             matcher = func.__name__
@@ -199,7 +195,7 @@ class TemplateChildMatcher(object):
         self._compile()
 
     def _calc_score(self):
-        """ set the score for this element """
+        """ Return the score for this element """
         def score(segment):
             if len(segment) >= 2 and segment[0] == '{' and segment[-1] == '}':
                 return 0

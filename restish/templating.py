@@ -8,7 +8,7 @@ from restish.page import Element
 
 class Rendering(object):
     """
-    Base rendering helper class
+    Rendering helper class, used to generate content from templates.
     """
 
     def render(self, request, template, args={}):
