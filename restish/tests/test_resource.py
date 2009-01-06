@@ -5,7 +5,7 @@ Test resource behaviour.
 import unittest
 
 from restish import app, http, resource
-from restish.test.util import wsgi_out
+from restish.tests.util import wsgi_out
 
 
 class TestResource(unittest.TestCase):
