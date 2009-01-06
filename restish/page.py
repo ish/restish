@@ -50,6 +50,9 @@ def _gather_element_factories(cls, clsattrs):
 
 
 class ElementMixin(object):
+    """
+    Mixin to allow the use of element lookups on the resource
+    """
 
     element_name = None
 
@@ -74,10 +77,12 @@ class ElementMixin(object):
 
 
 class Page(ElementMixin, resource.Resource):
+    """ Define a base Page type that includes elements """
     __metaclass__ = _metaPage
 
 
 class Element(ElementMixin, object):
+    """ Define a base Element type that is just an element """
     __metaclass__ = _metaElement
 
 

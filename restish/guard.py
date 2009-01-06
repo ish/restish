@@ -48,6 +48,7 @@ def guard(*checkers, **kwargs):
         raise TypeError('guard() got unexpected keyword arguments %r' % ('.'.join(kwargs),))
 
     def call(func, obj, request, *a, **k):
+        """ Iterate checkers accumulating errors """
         errors = _run_guard_checkers(checkers, request, obj, error_handler)
         if errors:
             return error_handler(request, obj, errors)
@@ -67,25 +68,34 @@ class GuardResource(object):
         # args so we'll have to handle it ourselves for now.
         error_handler = kwargs.pop('error_handler', _default_error_handler)
         if kwargs:
-            raise TypeError('guard() got unexpected keyword arguments %r' % ('.'.join(kwargs),))
+            raise TypeError('guard() got unexpected' \
+                       ' keyword arguments %r' % ('.'.join(kwargs),))
         self.resource = resource
         self.checkers = checkers
         self.error_handler = error_handler
 
     def resource_child(self, request, segments):
-        errors = _run_guard_checkers(self.checkers, request, self.resource, self.error_handler)
+        """
+        Check the guard methods and raise error handler if errors
+        """
+        errors = _run_guard_checkers(self.checkers, request, \
+                                     self.resource, self.error_handler)
         if errors:
             return self.error_handler(request, self.resource, errors)
         return self.resource.resource_child(request, segments)
 
     def __call__(self, request):
-        errors = _run_guard_checkers(self.checkers, request, self.resource, self.error_handler)
+        errors = _run_guard_checkers(self.checkers, request, \
+                                     self.resource, self.error_handler)
         if errors:
             return self.error_handler(request, self.resource, errors)
         return self.resource(request)
 
 
 def _run_guard_checkers(checkers, request, obj, error_handler):
+    """
+    Iterate through the checks, accumulating errors
+    """
     errors = []
     for checker in checkers:
         try:
@@ -96,6 +106,9 @@ def _run_guard_checkers(checkers, request, obj, error_handler):
 
 
 def _default_error_handler(request, obj, errors):
+    """
+    Standard error handler produced unauthorized http response
+    """
     errors_text = '\n'.join(errors)
     raise http.UnauthorizedError(
             [('Content-Type', 'text/plain')],

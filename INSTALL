@@ -1,0 +1,29 @@
+==========
+Installing
+==========
+
+Requirements
+------------
+
+You will need:
+
+* python 2.4 or later.
+
+* decorator module
+  http://pypi.python.org/pypi/decorator/3.0.0
+
+* webob module
+  http://pythonpaste.org/webob/
+
+Installation
+------------
+
+If you have easy_install, you can run the following 
+
+  easy_install restish
+
+This will also bring in all of the requirements.
+
+  
+
+

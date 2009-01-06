@@ -14,20 +14,24 @@ _UNSET = object()
 
 
 def _decode(S):
+    """ Simple decode from utf-8 """
     return S.decode('utf-8')
 
 
 def _encode(S):
+    """ Simple encode to utf8 if it's a unicode instance """
     if isinstance(S, unicode):
         return S.encode('utf-8')
     return S
 
 
 def _quote(S, safe):
+    """ urllib quote - see top of page for range of safe definitions """
     return urllib.quote(S, safe)
 
 
 def _unquote(S):
+    """ urllib unquote """
     return urllib.unquote_plus(S)
 
 
@@ -52,6 +56,9 @@ def join_path(path_segments):
 
 
 def _split_query(query):
+    """
+    Break the query into tuples of it's unquotes elements
+    """
     for x in query.split('&'):
         if '=' in x:
             yield tuple(_decode(_unquote(s)) for s in x.split('=', 1))
@@ -76,7 +83,8 @@ def join_query(query_list):
         if V is None:
             return _quote(_encode(K), SAFE_QUERY_NAME)
         else:
-            return '%s=%s' % (_quote(_encode(K), SAFE_QUERY_NAME), _quote(_encode(V), SAFE_QUERY_VALUE))
+            return '%s=%s' % (_quote(_encode(K), SAFE_QUERY_NAME), \
+                              _quote(_encode(V), SAFE_QUERY_VALUE))
     return '&'.join(one(KV) for KV in query_list)
 
 
@@ -128,7 +136,7 @@ class URL(str):
     @property
     def path_qs(self):
         """ The path, query string and fragment """
-        return self.clone(scheme=None,netloc=None)
+        return self.clone(scheme=None, netloc=None)
 
     @property
     def path_segments(self):
@@ -150,7 +158,8 @@ class URL(str):
         """ The url fragment (e.g. #anchor) """
         return self.parsed_url.fragment
 
-    def clone(self, scheme=_UNSET, netloc=_UNSET, path=_UNSET, query=_UNSET, fragment=_UNSET):
+    def clone(self, scheme=_UNSET, netloc=_UNSET, \
+              path=_UNSET, query=_UNSET, fragment=_UNSET):
         """
         Make a new instance of self, passing along the given
         arguments to its constructor.
@@ -177,19 +186,22 @@ class URL(str):
     ## path manipulations ##
 
     def root(self):
-        """ Contruct a URL to the root of the web server.
+        """
+        Contruct a URL to the root of the web server.
         """
         return self.clone(path='/')
 
     def sibling(self, segment):
-        """ Construct a url where the given path segment is a sibling of this url
+        """
+        Construct a url where the given path segment is a sibling of this url
         """
         l = list(self.path_segments)
         l[-1] = segment
         return self.clone(path=join_path(l))
 
     def child(self, *path):
-        """ Construct a url where the given path segment is a child of this url
+        """
+        Construct a url where the given path segment is a child of this url
         """
         l = list(self.path_segments)
         if l[-1:] == ['']:
@@ -199,7 +211,8 @@ class URL(str):
         return self.clone(path=join_path(l))
 
     def parent(self):
-        """ Pop a URL segment from this url.
+        """
+        Pop a URL segment from this url.
         """
         l = list(self.path_segments)
         l.pop()
@@ -218,7 +231,8 @@ class URL(str):
             return self
 
         if scheme:
-            return self.clone(scheme=scheme, netloc=netloc, path=path, query=query, fragment=fragment)
+            return self.clone(scheme=scheme, netloc=netloc, \
+                              path=path, query=query, fragment=fragment)
         else:
             scheme = self.scheme
 
@@ -236,7 +250,8 @@ class URL(str):
                     path = join_path(self.path_segments[:-1] + split_path(path))
 
         path = normalise_path(path)
-        return self.clone(scheme=scheme, netloc=netloc, path=path, query=query, fragment=fragment) 
+        return self.clone(scheme=scheme, netloc=netloc, \
+                          path=path, query=query, fragment=fragment) 
     
     def add_query(self, name, value=None):
         """
@@ -319,7 +334,7 @@ class URL(str):
             scheme, defaultPort = 'http', 80
 
         # Rebuild the netloc with port if not default.
-        netloc = self.netloc.split(':',1)[0]
+        netloc = self.netloc.split(':', 1)[0]
         if port is not None and port != defaultPort:
             netloc = '%s:%d' % (netloc, port)
 
@@ -403,9 +418,9 @@ def normalise_path(path):
     """
     segs = []
 
-    pathSegs = split_path(path)
+    path_segs = split_path(path)
 
-    for seg in pathSegs:
+    for seg in path_segs:
         if seg == '.':
             pass
         elif seg == '..':
@@ -414,7 +429,7 @@ def normalise_path(path):
         else:
             segs.append(seg)
 
-    if pathSegs[-1:] in (['.'],['..']):
+    if path_segs[-1:] in (['.'], ['..']):
         segs.append('')
 
     return join_path(segs)

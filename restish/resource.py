@@ -1,3 +1,6 @@
+"""
+Base Resource class and associates methods for children and content negotiation
+"""
 import inspect
 import mimetypes
 import re
@@ -48,17 +51,21 @@ def _gather_child_factories(cls, clsattrs):
     cls.child_factories = list(getattr(cls, 'child_factories', []))
     # Extend child_factories to include the ones found on this class.
     child_factories = _find_annotated_funcs(clsattrs, _RESTISH_CHILD)
-    cls.child_factories.extend((getattr(f, _RESTISH_CHILD), f) for f in child_factories)
+    cls.child_factories.extend((getattr(f, _RESTISH_CHILD), f) \
+                               for f in child_factories)
     # Sort the child factories by score.
-    cls.child_factories = sorted(cls.child_factories, key=lambda i: i[0].score, reverse=True)
+    cls.child_factories = sorted(cls.child_factories, \
+                                 key=lambda i: i[0].score, reverse=True)
 
 
 def _find_annotated_funcs(clsattrs, annotation):
     """
     Return a (generated) list of methods that include the given annotation.
     """
-    funcs = (item for item in clsattrs.itervalues() if inspect.isroutine(item))
-    funcs = (func for func in funcs if getattr(func, annotation, None) is not None)
+    funcs = (item for item in clsattrs.itervalues() \
+             if inspect.isroutine(item))
+    funcs = (func for func in funcs \
+             if getattr(func, annotation, None) is not None)
     return funcs
 
 
@@ -118,7 +125,8 @@ class Resource(object):
                     response.headers['content-type'] = best_match
             return response
         # No match, send 406
-        return http.not_acceptable([('Content-Type', 'text/plain')], '406 Not Acceptable')
+        return http.not_acceptable([('Content-Type', 'text/plain')], \
+                                   '406 Not Acceptable')
 
 
 def _best_dispatcher(dispatchers, request):
@@ -136,18 +144,19 @@ def _best_dispatcher(dispatchers, request):
 
 
 def _filter_dispatchers_on_content_type(dispatchers, request):
-    # Build an ordered list of the supported types.
+    """ Build an ordered list of the supported types.  """
     supported = []
     for d in dispatchers:
         supported.extend(d[1]['content_type'])
     # Find the best type.
-    best_match = mimeparse.best_match(supported, str(request.headers['content-type']))
+    best_match = mimeparse.best_match(supported, \
+                                      str(request.headers['content-type']))
     # Return the matching dispatchers
     return [d for d in dispatchers if best_match in d[1]['content_type']]
 
 
 def _filter_dispatchers_on_accept(dispatchers, request):
-    # Build an ordered list of the supported types.
+    """ Build an ordered list of the supported types.  """
     supported = []
     for d in dispatchers:
         supported.extend(d[1]['accept'])
@@ -158,7 +167,12 @@ def _filter_dispatchers_on_accept(dispatchers, request):
 
 
 def child(matcher=None):
+    """ Child decorator used for finding child resources """
     def decorator(func, matcher=matcher):
+        """
+        The deocorator takes a matching function ee TemplateChildMatcher
+        for example
+        """
         # No matcher? Use the function name.
         if matcher is None:
             matcher = func.__name__
@@ -185,6 +199,7 @@ class TemplateChildMatcher(object):
         self._compile()
 
     def _calc_score(self):
+        """ set the score for this element """
         def score(segment):
             if len(segment) >= 2 and segment[0] == '{' and segment[-1] == '}':
                 return 0
@@ -193,9 +208,11 @@ class TemplateChildMatcher(object):
         self.score = tuple(score(segment) for segment in segments)
 
     def _compile(self):
+        """ compile the regexp to match segments """
         def re_segments(segments):
             for segment in segments:
-                if len(segment) >= 2 and segment[0] == '{' and segment[-1] == '}':
+                if len(segment) >= 2 and \
+                   segment[0] == '{' and segment[-1] == '}':
                     yield '(?P<%s>.*?)' % segment[1:-1]
                 else:
                     yield segment
@@ -204,7 +221,8 @@ class TemplateChildMatcher(object):
         self._regex = re.compile('^' + '\\/'.join(re_segments(segments)) + '$')
 
     def __call__(self, request, segments):
-        match_segments, remaining_segments = segments[:self._count], segments[self._count:]
+        match_segments, remaining_segments = \
+                segments[:self._count], segments[self._count:]
         match_path = url.join_path(match_segments)[1:]
         match = self._regex.match(match_path)
         if not match:
@@ -228,6 +246,9 @@ any = AnyChildMatcher()
 
 
 class MethodDecorator(object):
+    """
+    content negotition decorator base class. See DELETE, GET, PUT, POST
+    """
 
     method = None
 
@@ -247,22 +268,29 @@ class MethodDecorator(object):
         
 
 class DELETE(MethodDecorator):
+    """ http DELETE method """
     method = 'DELETE'
 
 
 class GET(MethodDecorator):
+    """ http GET method """
     method = 'GET'
 
 
 class POST(MethodDecorator):
+    """ http POST method """
     method = 'POST'
 
 
 class PUT(MethodDecorator):
+    """ http PUT method """
     method = 'PUT'
 
 
 def _normalise_mimetype(mimetype):
+    """
+    Expand any shortcut mimetype names into a full mimetype
+    """
     if '/' in mimetype:
         return mimetype
     # Try mimetypes module, by extension.

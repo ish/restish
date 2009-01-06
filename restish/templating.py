@@ -7,6 +7,9 @@ from restish.page import Element
 
 
 class Rendering(object):
+    """
+    Base rendering helper class
+    """
 
     def render(self, request, template, args={}):
         """

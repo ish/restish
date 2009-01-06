@@ -1,3 +1,6 @@
+"""
+Core wsgi application
+"""
 from restish import error, http
 
 
@@ -21,9 +24,11 @@ class RestishApp(object):
         return response.app_iter
 
     def locate_resource(self, request):
-        # Calculate the path segments relative to the application,
-        # special-casing requests for the the root segment (because we already
-        # have a reference to the root resource).
+        """
+        Calculate the path segments relative to the application,
+        special-casing requests for the the root segment (because we already
+        have a reference to the root resource).
+        """
         segments = request.path_url.path_segments[len(request.application_url.path_segments):]
         if segments == ['']:
             segments = []
