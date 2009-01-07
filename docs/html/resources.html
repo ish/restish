@@ -70,8 +70,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
+<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -86,7 +86,7 @@
 <p>This is just an example to get you going. Lets take a look at what it does.</p>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -409,67 +409,248 @@ header then we don&#8217;t have to explicitly provide it. e.g.</p>
 <dl class="function">
 <dt id="restish.http.ok">
 <!--[restish.http.ok]--><tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The request has succeeded. The information returned with the response
+is dependent on the method used in the request, for example:</p>
+<p>GET an entity corresponding to the requested resource is sent in the
+response;</p>
+<p>HEAD the entity-header fields corresponding to the requested resource are
+sent in the response without any message-body;</p>
+<p>POST an entity describing or containing the result of the action;</p>
+<p>TRACE an entity containing the request message as received by the end
+server.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.created">
 <!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>body</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The request has been fulfilled and resulted in a new resource being
+created. The newly created resource can be referenced by the URI(s)
+returned in the entity of the response, with the most specific URI for the
+resource given by a Location header field. The response SHOULD include an
+entity containing a list of resource characteristics and location(s) from
+which the user or user agent can choose the one most appropriate. The
+entity format is specified by the media type given in the Content-Type
+header field. The origin server MUST create the resource before returning
+the 201 status code. If the action cannot be carried out immediately, the
+server SHOULD respond with 202 (Accepted) response instead.</p>
+<p>A 201 response MAY contain an ETag response header field indicating the
+current value of the entity tag for the requested variant just created, see
+section 14.19.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.moved_permanently">
 <!--[restish.http.moved_permanently]--><tt class="descclassname">restish.http.</tt><tt class="descname">moved_permanently</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.moved_permanently" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>301 Moved Permanently</p>
+<p>The requested resource has been assigned a new permanent URI and any
+future references to this resource SHOULD use one of the returned URIs.
+Clients with link editing capabilities ought to automatically re-link
+references to the Request-URI to one or more of the new references returned
+by the server, where possible. This response is cacheable unless indicated
+otherwise.</p>
+<p>The new permanent URI SHOULD be given by the Location field in the
+response. Unless the request method was HEAD, the entity of the response
+SHOULD contain a short hypertext note with a hyperlink to the new URI(s).</p>
+<p>If the 301 status code is received in response to a request other than GET
+or HEAD, the user agent MUST NOT automatically redirect the request unless
+it can be confirmed by the user, since this might change the conditions
+under which the request was issued.</p>
+<p>Note: When automatically redirecting a POST request after receiving a
+301 status code, some existing HTTP/1.0 user agents will
+erroneously change it into a GET request.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.found">
 <!--[restish.http.found]--><tt class="descclassname">restish.http.</tt><tt class="descname">found</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.found" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>302 Found</p>
+<p>The requested resource resides temporarily under a different URI. Since the
+redirection might be altered on occasion, the client SHOULD continue to use
+the Request-URI for future requests. This response is only cacheable if
+indicated by a Cache-Control or Expires header field.</p>
+<p>The temporary URI SHOULD be given by the Location field in the response.
+Unless the request method was HEAD, the entity of the response SHOULD
+contain a short hypertext note with a hyperlink to the new URI(s).</p>
+<p>If the 302 status code is received in response to a request other than GET
+or HEAD, the user agent MUST NOT automatically redirect the request unless
+it can be confirmed by the user, since this might change the conditions
+under which the request was issued.</p>
+<p>Note: RFC 1945 and RFC 2068 specify that the client is not allowed to
+change the method on the redirected request.  However, most existing user
+agent implementations treat 302 as if it were a 303 response, performing a
+GET on the Location field-value regardless of the original request method.
+The status codes 303 and 307 have been added for servers that wish to make
+unambiguously clear which kind of reaction is expected of the client.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.see_other">
 <!--[restish.http.see_other]--><tt class="descclassname">restish.http.</tt><tt class="descname">see_other</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.see_other" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>303 See Other</p>
+<p>The response to the request can be found under a different URI and SHOULD
+be retrieved using a GET method on that resource. This method exists
+primarily to allow the output of a POST-activated script to redirect the
+user agent to a selected resource. The new URI is not a substitute
+reference for the originally requested resource. The 303 response MUST NOT
+be cached, but the response to the second (redirected) request might be
+cacheable.</p>
+<p>The different URI SHOULD be given by the Location field in the response.
+Unless the request method was HEAD, the entity of the response SHOULD
+contain a short hypertext note with a hyperlink to the new URI(s).</p>
+<p>Note: Many pre-HTTP/1.1 user agents do not understand the 303 status. When
+interoperability with such clients is a concern, the 302 status code may be
+used instead, since most user agents react to a 302 response as described
+here for 303.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.not_modified">
 <!--[restish.http.not_modified]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_modified</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.http.not_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>301 Not Modified</p>
+<p>If the client has performed a conditional GET request and access is
+allowed, but the document has not been modified, the server SHOULD respond
+with this status code. The 304 response MUST NOT contain a message-body,
+and thus is always terminated by the first empty line after the header
+fields.</p>
+<p>The response MUST include the following header fields:</p>
+<blockquote>
+<ul class="simple">
+<li>Date, unless its omission is required by section 14.18.1</li>
+</ul>
+</blockquote>
+<p>If a clockless origin server obeys these rules, and proxies and clients add
+their own Date to any response received without one (as already specified
+by [RFC 2068], section 14.19), caches will operate correctly.</p>
+<blockquote>
+<ul class="simple">
+<li>ETag and/or Content-Location, if the header would have been sent in</li>
+</ul>
+</blockquote>
+<p>a 200 response to the same request</p>
+<blockquote>
+<ul class="simple">
+<li>Expires, Cache-Control, and/or Vary, if the field-value might</li>
+</ul>
+</blockquote>
+<p>differ from that sent in any previous response for the same variant</p>
+<p>If the conditional GET used a strong cache validator (see section 13.3.3),
+the response SHOULD NOT include other entity-headers. Otherwise (i.e., the
+conditional GET used a weak validator), the response MUST NOT include other
+entity-headers; this prevents inconsistencies between cached entity-bodies
+and updated headers.</p>
+<p>If a 304 response indicates an entity not currently cached, then the cache
+MUST disregard the response and repeat the request without the conditional.</p>
+<p>If a cache uses a received 304 response to update a cache entry, the cache
+MUST update the entry to reflect any new field values given in the
+response.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.bad_request">
 <!--[restish.http.bad_request]--><tt class="descclassname">restish.http.</tt><tt class="descname">bad_request</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.bad_request" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>400 Bad Request</p>
+<p>The request could not be understood by the server due to malformed syntax.
+The client SHOULD NOT repeat the request without modifications.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.unauthorized">
 <!--[restish.http.unauthorized]--><tt class="descclassname">restish.http.</tt><tt class="descname">unauthorized</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.unauthorized" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>401 Unauthorized</p>
+<p>The request requires user authentication. The response MUST include a
+WWW-Authenticate header field (section 14.47) containing a challenge
+applicable to the requested resource. The client MAY repeat the request
+with a suitable Authorization header field (section 14.8). If the request
+already included Authorization credentials, then the 401 response indicates
+that authorization has been refused for those credentials. If the 401
+response contains the same challenge as the prior response, and the user
+agent has already attempted authentication at least once, then the user
+SHOULD be presented the entity that was given in the response, since that
+entity might include relevant diagnostic information. HTTP access
+authentication is explained in &#8220;HTTP Authentication: Basic and Digest
+Access Authentication&#8221; [43].</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.forbidden">
 <!--[restish.http.forbidden]--><tt class="descclassname">restish.http.</tt><tt class="descname">forbidden</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.forbidden" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>403 Forbidden</p>
+<p>The server understood the request, but is refusing to fulfill it.
+Authorization will not help and the request SHOULD NOT be repeated. If the
+request method was not HEAD and the server wishes to make public why the
+request has not been fulfilled, it SHOULD describe the reason for the
+refusal in the entity. If the server does not wish to make this information
+available to the client, the status code 404 (Not Found) can be used
+instead.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.not_found">
 <!--[restish.http.not_found]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_found</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.not_found" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>404 Not Found</p>
+<p>The server has not found anything matching the Request-URI. No indication
+is given of whether the condition is temporary or permanent. The 410 (Gone)
+status code SHOULD be used if the server knows, through some internally
+configurable mechanism, that an old resource is permanently unavailable and
+has no forwarding address. This status code is commonly used when the
+server does not wish to reveal exactly why the request has been refused, or
+when no other response is applicable.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.method_not_allowed">
 <!--[restish.http.method_not_allowed]--><tt class="descclassname">restish.http.</tt><tt class="descname">method_not_allowed</tt><big>(</big><em>allow</em><big>)</big><a class="headerlink" href="#restish.http.method_not_allowed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>405 Not Allowed</p>
+<p>The method specified in the Request-Line is not allowed for the resource
+identified by the Request-URI. The response MUST include an Allow header
+containing a list of valid methods for the requested resource.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.not_acceptable">
 <!--[restish.http.not_acceptable]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_acceptable</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.not_acceptable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>406 Not Acceptable</p>
+<p>The resource identified by the request is only capable of generating
+response entities which have content characteristics not acceptable
+according to the accept headers sent in the request.</p>
+<p>Unless it was a HEAD request, the response SHOULD include an entity
+containing a list of available entity characteristics and location(s) from
+which the user or user agent can choose the one most appropriate. The
+entity format is specified by the media type given in the Content-Type
+header field. Depending upon the format and the capabilities of the user
+agent, selection of the most appropriate choice MAY be performed
+automatically. However, this specification does not define any standard for
+such automatic selection.</p>
+<blockquote>
+Note: HTTP/1.1 servers are allowed to return responses which are not</blockquote>
+<p>acceptable according to the accept headers sent in the request. In some
+cases, this may even be preferable to sending a 406 response. User agents
+are encouraged to inspect the headers of an incoming response to determine
+if it is acceptable.</p>
+<p>If the response could be unacceptable, a user agent SHOULD temporarily stop
+receipt of more data and query the user for a decision on further actions.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.http.conflict">
 <!--[restish.http.conflict]--><tt class="descclassname">restish.http.</tt><tt class="descname">conflict</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.conflict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>409 Conflict</p>
+<p>The request could not be completed due to a conflict with the current state
+of the resource. This code is only allowed in situations where it is
+expected that the user might be able to resolve the conflict and resubmit
+the request. The response body SHOULD include enough</p>
+<p>information for the user to recognize the source of the conflict. Ideally,
+the response entity would include enough information for the user or user
+agent to fix the problem; however, that might not be possible and is not
+required.</p>
+<p>Conflicts are most likely to occur in response to a PUT request. For
+example, if versioning were being used and the entity being PUT included
+changes to a resource which conflict with those made by an earlier
+(third-party) request, the server might use the 409 response to indicate
+that it can&#8217;t complete the request. In this case, the response entity would
+likely contain a list of the differences between the two versions in a
+format defined by the response Content-Type.</p>
+</dd></dl>
 
 </div>
 </div>
@@ -505,7 +686,7 @@ to multiple encodings, give it a list (e.g. GET(acept=[&#8216;html&#8217;,&#8217
 <p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
+<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
 </div>
 <p>We sometimes want to match lists of content types, for example where we would
 like to use <tt class="docutils literal"><span class="pre">application/xhtml+xml</span></tt>. This are honoured by restish. (See
@@ -521,36 +702,36 @@ test_resource.py in the unit tests for examples)</p>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Restish Resources</a><ul>
-<li><a class="reference" href="#our-project-resource">Our project resource</a><ul>
-<li><a class="reference" href="#logging">Logging</a></li>
-<li><a class="reference" href="#so-what-is-a-resource">So what is a resource?</a></li>
+<li><a class="reference external" href="">Restish Resources</a><ul>
+<li><a class="reference external" href="#our-project-resource">Our project resource</a><ul>
+<li><a class="reference external" href="#logging">Logging</a></li>
+<li><a class="reference external" href="#so-what-is-a-resource">So what is a resource?</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#resource-url-handling">Resource URL Handling</a><ul>
-<li><a class="reference" href="#implicitly-named-child">Implicitly named child</a></li>
-<li><a class="reference" href="#explicitly-named-child">Explicitly named child</a></li>
-<li><a class="reference" href="#chaining-resources">Chaining Resources</a></li>
-<li><a class="reference" href="#handling-it-yourself">Handling it yourself</a></li>
-<li><a class="reference" href="#template-resource-matchers">Template Resource Matchers</a></li>
-<li><a class="reference" href="#which-child-to-use">Which child to use?</a><ul>
-<li><a class="reference" href="#a-b-c">/a/b/c</a></li>
-<li><a class="reference" href="#a-b-foo">/a/b/foo</a></li>
-<li><a class="reference" href="#a-b-c-foo">/a/b/c/foo</a></li>
-<li><a class="reference" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
-<li><a class="reference" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
+<li><a class="reference external" href="#resource-url-handling">Resource URL Handling</a><ul>
+<li><a class="reference external" href="#implicitly-named-child">Implicitly named child</a></li>
+<li><a class="reference external" href="#explicitly-named-child">Explicitly named child</a></li>
+<li><a class="reference external" href="#chaining-resources">Chaining Resources</a></li>
+<li><a class="reference external" href="#handling-it-yourself">Handling it yourself</a></li>
+<li><a class="reference external" href="#template-resource-matchers">Template Resource Matchers</a></li>
+<li><a class="reference external" href="#which-child-to-use">Which child to use?</a><ul>
+<li><a class="reference external" href="#a-b-c">/a/b/c</a></li>
+<li><a class="reference external" href="#a-b-foo">/a/b/foo</a></li>
+<li><a class="reference external" href="#a-b-c-foo">/a/b/c/foo</a></li>
+<li><a class="reference external" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
+<li><a class="reference external" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#custom-matchers">Custom Matchers</a></li>
-<li><a class="reference" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
+<li><a class="reference external" href="#custom-matchers">Custom Matchers</a></li>
+<li><a class="reference external" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#request-handlers">Request Handlers</a><ul>
-<li><a class="reference" href="#other-http-handlers">Other HTTP Handlers</a></li>
-<li><a class="reference" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
+<li><a class="reference external" href="#request-handlers">Request Handlers</a><ul>
+<li><a class="reference external" href="#other-http-handlers">Other HTTP Handlers</a></li>
+<li><a class="reference external" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#content-negotiation">Content Negotiation</a></li>
+<li><a class="reference external" href="#content-negotiation">Content Negotiation</a></li>
 </ul>
 </li>
 </ul>

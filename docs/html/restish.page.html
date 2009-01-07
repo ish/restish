@@ -63,12 +63,15 @@
 <dl class="class">
 <dt id="restish.page.Element">
 <!--[restish.page.Element]-->class <tt class="descclassname">restish.page.</tt><tt class="descname">Element</tt><a class="headerlink" href="#restish.page.Element" title="Permalink to this definition">¶</a></dt>
-<dd>Bases: <a title="restish.page.ElementMixin" class="reference" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></dd></dl>
+<dd><p>Bases: <a title="restish.page.ElementMixin" class="reference internal" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Define a base Element type that is just an element</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="restish.page.ElementMixin">
 <!--[restish.page.ElementMixin]-->class <tt class="descclassname">restish.page.</tt><tt class="descname">ElementMixin</tt><a class="headerlink" href="#restish.page.ElementMixin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Mixin to allow the use of element lookups on the resource</p>
 <dl class="method">
 <dt id="restish.page.ElementMixin.element">
 <!--[restish.page.ElementMixin.element]--><tt class="descname">element</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="headerlink" href="#restish.page.ElementMixin.element" title="Permalink to this definition">¶</a></dt>
@@ -82,12 +85,14 @@ the same object is returned if the element is located again later.</p>
 <dl class="exception">
 <dt id="restish.page.ElementNotFound">
 <!--[restish.page.ElementNotFound]-->exception <tt class="descclassname">restish.page.</tt><tt class="descname">ElementNotFound</tt><a class="headerlink" href="#restish.page.ElementNotFound" title="Permalink to this definition">¶</a></dt>
-<dd>Bases: <a title="(in Python v2.7)" class="reference" href="http://docs.python.org/dev/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></dd></dl>
+<dd>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></dd></dl>
 
 <dl class="class">
 <dt id="restish.page.Page">
 <!--[restish.page.Page]-->class <tt class="descclassname">restish.page.</tt><tt class="descname">Page</tt><a class="headerlink" href="#restish.page.Page" title="Permalink to this definition">¶</a></dt>
-<dd>Bases: <a title="restish.page.ElementMixin" class="reference" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="restish.resource.Resource" class="reference" href="restish.resource.html#restish.resource.Resource"><tt class="xref docutils literal"><span class="pre">restish.resource.Resource</span></tt></a></dd></dl>
+<dd><p>Bases: <a title="restish.page.ElementMixin" class="reference internal" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="restish.resource.Resource" class="reference external" href="restish.resource.html#restish.resource.Resource"><tt class="xref docutils literal"><span class="pre">restish.resource.Resource</span></tt></a></p>
+<p>Define a base Page type that includes elements</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="restish.page.element">

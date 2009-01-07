@@ -556,19 +556,6 @@ class TestContentTypeContentNegotiation(unittest.TestCase):
         assert response.status == "200 OK"
         assert response.body == '*/*'
 
-    def test_any(self):
-        """
-        Check that no 'content_type' matches anything, i.e. '*/*'.
-        """
-        class Resource(resource.Resource):
-            @resource.POST()
-            def json(self, request):
-                return http.ok([], 'json')
-        res = Resource()
-        response = res(self._request('application/json'))
-        assert response.status == "200 OK"
-        assert response.body == 'json'
-
     def test_empty(self):
         """
         Check that an empty 'content_type' is treated as no content type.

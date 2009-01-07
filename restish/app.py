@@ -25,10 +25,12 @@ class RestishApp(object):
 
     def locate_resource(self, request):
         """
-        Calculate the path segments relative to the application,
-        special-casing requests for the the root segment (because we already
-        have a reference to the root resource).
+        Locate the resource at the path in request URL by traversing the
+        resource hierarchy.
         """
+        # Calculate the path segments relative to the application,
+        # special-casing requests for the the root segment (because we already
+        # have a reference to the root resource).
         segments = request.path_url.path_segments[len(request.application_url.path_segments):]
         if segments == ['']:
             segments = []

@@ -26,6 +26,8 @@ class HTTPClientError(RestishException):
         self.kwargs = kwargs
 
     def make_response(self):
-        """ generate http exception """
+        """
+        Create an HTTP response for this exception type.
+        """
         return self.response_factory(*self.args, **self.kwargs)
 
