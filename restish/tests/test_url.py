@@ -440,6 +440,12 @@ class TestURL(unittest.TestCase):
         self.failUnless(u == S)
         self.failUnless(u.clone() == S)
 
+    def test_path_qs(self):
+        path_qs = url.URL('http://localhost:1234/foo?a=b#c').path_qs
+        assert isinstance(path_qs, url.URL)
+        assert path_qs == '/foo?a=b#c'
+
+
 class Serialization(unittest.TestCase):
 
     def test_strangeSegs(self):
