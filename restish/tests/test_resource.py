@@ -51,6 +51,16 @@ class TestChildLookup(unittest.TestCase):
         print R
         assert R['status'].startswith('404')
 
+    def test_matcher_404(self):
+        class Resource(resource.Resource):
+            @resource.child(resource.any)
+            def child(self, request, segments):
+                return
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/404').environ)
+        print R
+        assert R['status'].startswith('404')
+
     def test_nameless_child(self):
         class Resource(resource.Resource):
             def __init__(self, segments=[]):

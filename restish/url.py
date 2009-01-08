@@ -189,7 +189,7 @@ class URL(str):
         """
         Contruct a URL to the root of the web server.
         """
-        return self.clone(path='/')
+        return self.clone(path='/', query=None, fragment=None)
 
     def sibling(self, segment):
         """
@@ -197,7 +197,7 @@ class URL(str):
         """
         l = list(self.path_segments)
         l[-1] = segment
-        return self.clone(path=join_path(l))
+        return self.clone(path=join_path(l), query=None, fragment=None)
 
     def child(self, *path):
         """
@@ -208,7 +208,7 @@ class URL(str):
             l[-1:] = path
         else:
             l.extend(path)
-        return self.clone(path=join_path(l))
+        return self.clone(path=join_path(l), query=None, fragment=None)
 
     def parent(self):
         """
@@ -216,7 +216,7 @@ class URL(str):
         """
         l = list(self.path_segments)
         l.pop()
-        return self.clone(path=join_path(l))
+        return self.clone(path=join_path(l), query=None, fragment=None)
     
     def click(self, href):
         """

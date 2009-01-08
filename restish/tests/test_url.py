@@ -153,7 +153,7 @@ class TestURL(unittest.TestCase):
 
     def test_parent(self):
         urlpath = url.URL(theurl)
-        self.assertEquals("http://www.foo.com:80/a/nice/path?zot=23&zut",
+        self.assertEquals("http://www.foo.com:80/a/nice/path",
                           urlpath.parent())
         self.assertEquals(url.URL('http://localhost/').parent(), 'http://localhost')
         self.assertRaises(IndexError, url.URL('http://localhost').parent)
@@ -183,15 +183,15 @@ class TestURL(unittest.TestCase):
 
     def test_child(self):
         urlpath = url.URL(theurl)
-        self.assertEquals("http://www.foo.com:80/a/nice/path/gong?zot=23&zut",
+        self.assertEquals("http://www.foo.com:80/a/nice/path/gong",
                           urlpath.child('gong'))
-        self.assertEquals("http://www.foo.com:80/a/nice/path/gong%2F?zot=23&zut",
+        self.assertEquals("http://www.foo.com:80/a/nice/path/gong%2F",
                           urlpath.child('gong/'))
         self.assertEquals(
-            "http://www.foo.com:80/a/nice/path/gong%2Fdouble?zot=23&zut",
+            "http://www.foo.com:80/a/nice/path/gong%2Fdouble",
             urlpath.child('gong/double'))
         self.assertEquals(
-            "http://www.foo.com:80/a/nice/path/gong%2Fdouble%2F?zot=23&zut",
+            "http://www.foo.com:80/a/nice/path/gong%2Fdouble%2F",
             urlpath.child('gong/double/'))
 
     def test_childs(self):
@@ -213,13 +213,13 @@ class TestURL(unittest.TestCase):
     def test_sibling(self):
         urlpath = url.URL(theurl)
         self.assertEquals(
-            "http://www.foo.com:80/a/nice/path/sister?zot=23&zut",
+            "http://www.foo.com:80/a/nice/path/sister",
             urlpath.sibling('sister'))
         # use an url without trailing '/' to check child removal
         theurl2 = "http://www.foo.com:80/a/nice/path?zot=23&zut"
         urlpath = url.URL(theurl2)
         self.assertEquals(
-            "http://www.foo.com:80/a/nice/sister?zot=23&zut",
+            "http://www.foo.com:80/a/nice/sister",
             urlpath.sibling('sister'))
 
 
@@ -439,6 +439,12 @@ class TestURL(unittest.TestCase):
         self.failUnless(u.query_list == [('foo', 'x=x=x'), ('bar', 'y')])
         self.failUnless(u == S)
         self.failUnless(u.clone() == S)
+
+    def test_path_qs(self):
+        path_qs = url.URL('http://localhost:1234/foo?a=b#c').path_qs
+        assert isinstance(path_qs, url.URL)
+        assert path_qs == '/foo?a=b#c'
+
 
 class Serialization(unittest.TestCase):
 
