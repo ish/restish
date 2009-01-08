@@ -84,12 +84,12 @@ and ``/thanks/foo/bar``, amongst others.
 
 .. code-block:: python
 
-    def thanks(self):
-        return http.ok( [('Content-Type','text/html')], 'thanks' )
+    def thank_you(self, request):
+        return http.ok( [('Content-Type','text/html')], 'thank you' )
         
     @resource.child()
     def thanks(self, request, segments):
-        return thanks()
+        return self.thank_you
 
 If we wanted to pass the remaining segments onto another resource, we would use
 the following.
