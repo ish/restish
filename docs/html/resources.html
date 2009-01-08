@@ -129,12 +129,12 @@ one segment.</p>
 <p>For instance, this code will match a segment named <tt class="docutils literal"><span class="pre">thanks</span></tt> and ignore any
 remaining segments. So if this were a root resource, it would match <tt class="docutils literal"><span class="pre">/thanks</span></tt>
 and <tt class="docutils literal"><span class="pre">/thanks/foo/bar</span></tt>, amongst others.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">thanks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="s">&#39;thanks&#39;</span> <span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">thank_you</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="s">&#39;thank you&#39;</span> <span class="p">)</span>
 
 <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">thanks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">thanks</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">thank_you</span>
 </pre></div>
 </div>
 <p>If we wanted to pass the remaining segments onto another resource, we would use
