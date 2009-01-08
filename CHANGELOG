@@ -2,6 +2,12 @@
 Changlelog
 ==========
 
+0.5.2 (2009-01-08)
+------------------
+
+* setup.py now specifies zip_safe=False to make it work correctly with the 
+  "paster create" command.
+
 0.5.1 (2009-01-06)
 ------------------
 
