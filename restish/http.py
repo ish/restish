@@ -103,6 +103,8 @@ class Response(object):
 
 def ok(headers, body):
     """
+    200 OK
+
     The request has succeeded. The information returned with the response
     is dependent on the method used in the request, for example:
 
@@ -119,8 +121,11 @@ def ok(headers, body):
     """
     return Response("200 OK", headers, body)
 
+
 def created(location, body, headers=None):
     """
+    201 Created
+
     The request has been fulfilled and resulted in a new resource being
     created. The newly created resource can be referenced by the URI(s)
     returned in the entity of the response, with the most specific URI for the
@@ -172,6 +177,7 @@ def moved_permanently(location):
     """
     return Response("301 Moved Permanently", [('Location', location)], "")
 
+
 def found(location):
     """
     302 Found
@@ -199,6 +205,7 @@ def found(location):
     """
     return Response("302 Found", [('Location', location)], "")
 
+
 def see_other(location):
     """
     303 See Other
@@ -221,6 +228,7 @@ def see_other(location):
     here for 303.
     """
     return Response("303 See Other", [('Location', location)], "")
+
 
 def not_modified():
     """
@@ -276,9 +284,11 @@ def bad_request(headers=None, body=None):
         body = '400 Bad Request'
     return Response("400 Bad Request", headers, body)
 
+
 class BadRequestError(error.HTTPClientError):
     """ Exception for the 400 http code """
     response_factory = staticmethod(bad_request)
+
 
 def unauthorized(headers, body):
     """
@@ -299,9 +309,11 @@ def unauthorized(headers, body):
     """
     return Response("401 Unauthorized", headers, body)
 
+
 class UnauthorizedError(error.HTTPClientError):
     """ Exception for the 401 http code """
     response_factory = staticmethod(unauthorized)
+
 
 def forbidden(headers=None, body=None):
     """
@@ -320,9 +332,11 @@ def forbidden(headers=None, body=None):
         body = '403 Forbidden'
     return Response("403 Forbidden", headers, body)
 
+
 class ForbiddenError(error.HTTPClientError):
     """ Exception for the 403 http code """
     response_factory = staticmethod(forbidden)
+
 
 def not_found(headers=None, body=None):
     """
@@ -341,9 +355,11 @@ def not_found(headers=None, body=None):
         body = '404 Not Found'
     return Response("404 Not Found", headers, body)
 
+
 class NotFoundError(error.HTTPClientError):
     """ Exception for the 404 http code """
     response_factory = staticmethod(not_found)
+
 
 def method_not_allowed(allow):
     """
@@ -357,9 +373,11 @@ def method_not_allowed(allow):
           [('Content-Type', 'text/plain'), \
            ('Allow', allow)], "405 Method Not Allowed")
 
+
 class MethodNotAllowedError(error.HTTPClientError):
     """ Exception for the 405 http code """
     response_factory = staticmethod(method_not_allowed)
+
 
 def not_acceptable(headers, body):
     """
@@ -378,9 +396,9 @@ def not_acceptable(headers, body):
     automatically. However, this specification does not define any standard for
     such automatic selection.
 
-          Note: HTTP/1.1 servers are allowed to return responses which are not
+    Note: HTTP/1.1 servers are allowed to return responses which are not
     acceptable according to the accept headers sent in the request. In some
-    cases, this may even be preferable to sending a 406 response. User agents
+    cases, this may even be preferable to sending a 406 response.  User agents
     are encouraged to inspect the headers of an incoming response to determine
     if it is acceptable.
 
@@ -389,9 +407,11 @@ def not_acceptable(headers, body):
     """
     return Response('406 Not Acceptable', headers, body)
 
+
 class NotAcceptableError(error.HTTPClientError):
     """ Exception for the 406 http code """
     response_factory = staticmethod(not_acceptable)
+
 
 def conflict(headers, body):
     """
@@ -400,12 +420,10 @@ def conflict(headers, body):
     The request could not be completed due to a conflict with the current state
     of the resource. This code is only allowed in situations where it is
     expected that the user might be able to resolve the conflict and resubmit
-    the request. The response body SHOULD include enough
-
-    information for the user to recognize the source of the conflict. Ideally,
-    the response entity would include enough information for the user or user
-    agent to fix the problem; however, that might not be possible and is not
-    required.
+    the request. The response body SHOULD include enough information for the
+    user to recognize the source of the conflict. Ideally, the response entity
+    would include enough information for the user or user agent to fix the
+    problem; however, that might not be possible and is not required.
 
     Conflicts are most likely to occur in response to a PUT request. For
     example, if versioning were being used and the entity being PUT included
