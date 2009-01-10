@@ -1,5 +1,6 @@
 """
-Request and Response http objects (and associated exceptions for errors)
+HTTP Request and Response objects, simple Response factories and exceptions
+types for common HTTP errors.
 """
 import webob
 
@@ -8,7 +9,14 @@ from restish import error, url
 
 class Request(object):
     """
-    The Request base class with default properties
+    HTTP request class.
+
+    The request represents the request from the client and is created by
+    passing a WSGI environ dictionary to the initialiser.
+
+    Request is basically a webob.Request with one important difference:
+    url-like properties are represented as url.URL instances to allow them
+    to manipulated easily and safely.
     """
 
     @classmethod
@@ -71,7 +79,13 @@ class Request(object):
 
 class Response(object):
     """
-    Base http response object
+    HTTP response class.
+
+    A Response instance represents the response that will be sent to the client
+    and is created by passing a status code, a list of (name, value) headers
+    and a body.
+
+    Response is basically just a webob.Response.
     """
 
     def __init__(self, status, headers, body):
