@@ -435,7 +435,97 @@ def conflict(headers, body):
     """
     return Response("409 Conflict", headers, body)
 
+
 class ConflictError(error.HTTPClientError):
     """ Exception for the 409 http code """
     response_factory = staticmethod(conflict)
+
+
+# Server Error 5xx
+
+def internal_server_error(headers=None, body=None):
+    """
+    500 Internal Server Error.
+
+    The server encountered an unexpected condition which prevented it from
+    fulfilling the request. 
+    """
+    if headers is None and body is None:
+        headers = [('Content-Type', 'text/plain')]
+        body = '500 Internal Server Error'
+    return Response('500 Internal Server Error', headers, body)
+
+
+class InternalServerError(error.HTTPServerError):
+    """
+    500 Internal Server Error exception.
+    """
+    response_factory = staticmethod(internal_server_error)
+
+
+def bad_gateway(headers=None, body=None):
+    """
+    502 Bad Gateway.
+
+    The server, while acting as a gateway or proxy, received an invalid
+    response from the upstream server it accessed in attempting to fulfill the
+    request.
+    """
+    if headers is None and body is None:
+        headers = [('Content-Type', 'text/plain')]
+        body = '502 Bad Gateway'
+    return Response('502 Bad Gateway', headers, body)
+
+
+class BadGatewayError(error.HTTPServerError):
+    """
+    502 Bad Gateway exception.
+    """
+    response_factory = staticmethod(bad_gateway)
+
+
+def service_unavailable(headers=None, body=None):
+    """
+    503 Service Unavailable.
+
+    The server is currently unable to handle the request due to a temporary
+    overloading or maintenance of the server. The implication is that this is a
+    temporary condition which will be alleviated after some delay. If known,
+    the length of the delay MAY be indicated in a Retry-After header. If no
+    Retry-After is given, the client SHOULD handle the response as it would for
+    a 500 response. 
+    """
+    if headers is None and body is None:
+        headers = [('Content-Type', 'text/plain')]
+        body = '503 Service Unavailable'
+    return Response('503 Service Unavailable', headers, body)
+
+
+class ServiceUnavailableError(error.HTTPServerError):
+    """
+    503 Service Unavailable exception.
+    """
+    response_factory = staticmethod(service_unavailable)
+
+
+def gateway_timeout(headers=None, body=None):
+    """
+    504 Gateway Timeout.
+
+    The server, while acting as a gateway or proxy, did not receive a timely
+    response from the upstream server specified by the URI (e.g. HTTP, FTP,
+    LDAP) or some other auxiliary server (e.g. DNS) it needed to access in
+    attempting to complete the request. 
+    """
+    if headers is None and body is None:
+        headers = [('Content-Type', 'text/plain')]
+        body = '504 Gateway Timeout'
+    return Response('504 Gateway Timeout', headers, body)
+
+
+class GatewayTimeoutError(error.HTTPServerError):
+    """
+    504 Gateway Timeout exception.
+    """
+    response_factory = staticmethod(gateway_timeout)
 

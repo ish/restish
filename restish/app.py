@@ -17,7 +17,7 @@ class RestishApp(object):
             resource = self.locate_resource(request)
             # Call the resource to render the page.
             response = self.get_response(request, resource)
-        except error.HTTPClientError, e:
+        except error.HTTPError, e:
             response = e.make_response()
         # Send the response to the WSGI parent.
         start_response(response.status, response.headerlist)

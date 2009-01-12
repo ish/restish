@@ -129,6 +129,14 @@ class TestApp(unittest.TestCase):
         R = wsgi_out(A, http.Request.blank('/').environ)
         assert R['status'].startswith('400')
 
+    def test_server_error(self):
+        class Resource(resource.Resource):
+            def __call__(self, request):
+                raise http.BadGatewayError()
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/').environ)
+        assert R['status'].startswith('502')
+
     def test_no_root_application(self):
         class Resource(resource.Resource):
             def __init__(self, segment):

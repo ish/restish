@@ -7,6 +7,8 @@ Changlelog
 
 * Changing the path (child, parent, sibling, etc) of a URL now removes the
   query string and fragment.
+* Add a set of server error response factories/exceptions to restish.http,
+  similar to those that already existed for client errors.
 
 0.5.2 (2009-01-08)
 ------------------

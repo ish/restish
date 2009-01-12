@@ -5,16 +5,17 @@ class RestishException(Exception):
     pass
 
 
-class HTTPClientError(RestishException):
+class HTTPError(RestishException):
     """
-    Base class for all HTTP client (4xx) errors.
+    Base class for all HTTP (4xx and 5xx) errors.
 
-    Each 4xx response is mirrored by an exception type that subclasses from
-    HTTPClientException. The subclass should override response_factory setting
-    it to a callable that will accept all the positional and keyword args and
-    return an http.Response instance.
-
-    Typically, response_factory factory can be set to one of the convenience
+    Each error response factory defined in restish.http is mirrored by an
+    exception type derived from HTTPException.
+    
+    The derived exception class is expected to override response_factory (None
+    by default), providing a callable that accepts all the positional and
+    keyword args and returns an http.Response instance.  Typically,
+    response_factory can be set to one of the HTTP response convenience
     functions in the http module.
     """
 
@@ -30,4 +31,16 @@ class HTTPClientError(RestishException):
         Create an HTTP response for this exception type.
         """
         return self.response_factory(*self.args, **self.kwargs)
+    pass
+
+
+class HTTPClientError(HTTPError):
+    """
+    Base class for all HTTP client (4xx) errors.
+    """
+
+class HTTPServerError(HTTPError):
+    """
+    Base class for all HTTP server (5xx) errors.
+    """
 
