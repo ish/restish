@@ -72,6 +72,8 @@ decorator on the resource base class. This child decorator has various ways of
 matching parts of urls and dispatching to other resources that we will discuss
 now.
 
+.. note:: The segments argument that is passed to a child function contains the remaining segments **after** the child match has been removed. 
+
 Implicitly named child
 ----------------------
 
@@ -144,7 +146,7 @@ passed down from resource to resource.
             # The segments contain everything below /blog/entries
             # Pass the first segment through to Entry (should be entry id) 
             # The empty tuple says pass no more segments to Entry
-            return Entry(segments[0]), ()
+            return Entry(segments[0]), []
 
     class Entries(resource.Resource):
 
@@ -157,10 +159,12 @@ passed down from resource to resource.
             blogcontent = db.get(self.id)
             return {'content': blogcontent}
 
+.. note:: If you want to stop further url traversal, explicitly return no further segments (e.g. ``return Entry(segments[0]), []`` in the Blog example above)
+
 Handling it yourself
 --------------------
 
-If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child. 
+If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child. (in this case ``, segments[1:]``)
 
 .. code-block:: python
 

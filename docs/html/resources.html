@@ -70,8 +70,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
-<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -86,7 +86,7 @@
 <p>This is just an example to get you going. Lets take a look at what it does.</p>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -122,6 +122,10 @@ segments (or an empty list if there are no segments left).</p>
 decorator on the resource base class. This child decorator has various ways of
 matching parts of urls and dispatching to other resources that we will discuss
 now.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The segments argument that is passed to a child function contains the remaining segments <strong>after</strong> the child match has been removed.</p>
+</div>
 <div class="section" id="implicitly-named-child">
 <h3>Implicitly named child<a class="headerlink" href="#implicitly-named-child" title="Permalink to this headline">¶</a></h3>
 <p>this takes its segment match from the decorated method&#8217;s name and only consumes
@@ -179,7 +183,7 @@ class Blog(resource.Resource):
         # The segments contain everything below /blog/entries
         # Pass the first segment through to Entry (should be entry id)
         # The empty tuple says pass no more segments to Entry
-        return Entry(segments[0]), ()
+        return Entry(segments[0]), []
 
 class Entries(resource.Resource):
 
@@ -192,10 +196,14 @@ class Entries(resource.Resource):
         blogcontent = db.get(self.id)
         return {'content': blogcontent}</pre>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want to stop further url traversal, explicitly return no further segments (e.g. <tt class="docutils literal"><span class="pre">return</span> <span class="pre">Entry(segments[0]),</span> <span class="pre">[]</span></tt> in the Blog example above)</p>
+</div>
 </div>
 <div class="section" id="handling-it-yourself">
 <h3>Handling it yourself<a class="headerlink" href="#handling-it-yourself" title="Permalink to this headline">¶</a></h3>
-<p>If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child.</p>
+<p>If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child. (in this case <tt class="docutils literal"><span class="pre">,</span> <span class="pre">segments[1:]</span></tt>)</p>
 <div class="highlight-python"><pre>class Root(resources.Resource):
 
     @resource.child(resource.any):
@@ -409,7 +417,8 @@ header then we don&#8217;t have to explicitly provide it. e.g.</p>
 <dl class="function">
 <dt id="restish.http.ok">
 <!--[restish.http.ok]--><tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
-<dd><p>The request has succeeded. The information returned with the response
+<dd><p>200 OK</p>
+<p>The request has succeeded. The information returned with the response
 is dependent on the method used in the request, for example:</p>
 <p>GET an entity corresponding to the requested resource is sent in the
 response;</p>
@@ -423,7 +432,8 @@ server.</p>
 <dl class="function">
 <dt id="restish.http.created">
 <!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>body</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
-<dd><p>The request has been fulfilled and resulted in a new resource being
+<dd><p>201 Created</p>
+<p>The request has been fulfilled and resulted in a new resource being
 created. The newly created resource can be referenced by the URI(s)
 returned in the entity of the response, with the most specific URI for the
 resource given by a Location header field. The response SHOULD include an
@@ -621,10 +631,9 @@ header field. Depending upon the format and the capabilities of the user
 agent, selection of the most appropriate choice MAY be performed
 automatically. However, this specification does not define any standard for
 such automatic selection.</p>
-<blockquote>
-Note: HTTP/1.1 servers are allowed to return responses which are not</blockquote>
-<p>acceptable according to the accept headers sent in the request. In some
-cases, this may even be preferable to sending a 406 response. User agents
+<p>Note: HTTP/1.1 servers are allowed to return responses which are not
+acceptable according to the accept headers sent in the request. In some
+cases, this may even be preferable to sending a 406 response.  User agents
 are encouraged to inspect the headers of an incoming response to determine
 if it is acceptable.</p>
 <p>If the response could be unacceptable, a user agent SHOULD temporarily stop
@@ -638,11 +647,10 @@ receipt of more data and query the user for a decision on further actions.</p>
 <p>The request could not be completed due to a conflict with the current state
 of the resource. This code is only allowed in situations where it is
 expected that the user might be able to resolve the conflict and resubmit
-the request. The response body SHOULD include enough</p>
-<p>information for the user to recognize the source of the conflict. Ideally,
-the response entity would include enough information for the user or user
-agent to fix the problem; however, that might not be possible and is not
-required.</p>
+the request. The response body SHOULD include enough information for the
+user to recognize the source of the conflict. Ideally, the response entity
+would include enough information for the user or user agent to fix the
+problem; however, that might not be possible and is not required.</p>
 <p>Conflicts are most likely to occur in response to a PUT request. For
 example, if versioning were being used and the entity being PUT included
 changes to a resource which conflict with those made by an earlier

@@ -59,7 +59,7 @@
 
    <h1 id="index">Index</h1>
 
-   <a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> 
+   <a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> 
 
    <hr />
 
@@ -83,8 +83,10 @@
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
+<dt><a href="restish.http.html#restish.http.bad_gateway">bad_gateway() (in module restish.http)</a></dt>
 <dt><a href="restish.http.html#restish.http.bad_request">bad_request() (in module restish.http)</a>, <a href="resources.html#restish.http.bad_request">[1]</a></dt>
-<dt><a href="restish.http.html#restish.http.BadRequestError">BadRequestError</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="restish.http.html#restish.http.BadGatewayError">BadGatewayError</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="restish.http.html#restish.http.BadRequestError">BadRequestError</a></dt>
 <dt><a href="restish.http.html#restish.http.Request.blank">blank (restish.http.Request attribute)</a></dt>
 </dl></td></tr></table>
 
@@ -140,9 +142,11 @@
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
+<dt><a href="restish.http.html#restish.http.gateway_timeout">gateway_timeout() (in module restish.http)</a></dt>
+<dt><a href="restish.http.html#restish.http.GatewayTimeoutError">GatewayTimeoutError</a></dt>
 <dt><a href="restish.resource.html#restish.resource.GET">GET (class in restish.resource)</a></dt>
-<dt><a href="restish.app.html#restish.app.RestishApp.get_response">get_response() (restish.app.RestishApp method)</a></dt>
-<dt><a href="restish.guard.html#restish.guard.guard">guard() (in module restish.guard)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="restish.app.html#restish.app.RestishApp.get_response">get_response() (restish.app.RestishApp method)</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="restish.guard.html#restish.guard.guard">guard() (in module restish.guard)</a></dt>
 <dt><a href="restish.guard.html#restish.guard.GuardError">GuardError</a></dt>
 <dt><a href="restish.guard.html#restish.guard.GuardResource">GuardResource (class in restish.guard)</a></dt>
 </dl></td></tr></table>
@@ -154,8 +158,18 @@
 <dt><a href="restish.http.html#restish.http.Request.host_url">host_url (restish.http.Request attribute)</a></dt>
   <dd><dl>
     <dt><a href="restish.url.html#restish.url.URLAccessor.host_url">(restish.url.URLAccessor attribute)</a>, <a href="templating.html#restish.url.URLAccessor.host_url">[1]</a></dt>
-  </dl></dd></dl></td><td width="33%" valign="top"><dl>
-<dt><a href="restish.error.html#restish.error.HTTPClientError">HTTPClientError</a></dt>
+  </dl></dd>
+<dt><a href="restish.error.html#restish.error.HTTPClientError">HTTPClientError</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="restish.error.html#restish.error.HTTPError">HTTPError</a></dt>
+<dt><a href="restish.error.html#restish.error.HTTPServerError">HTTPServerError</a></dt>
+</dl></td></tr></table>
+
+<h2 id="I">I</h2>
+<table width="100%" class="indextable"><tr><td width="33%" valign="top">
+<dl>
+
+<dt><a href="restish.http.html#restish.http.internal_server_error">internal_server_error() (in module restish.http)</a></dt>
+<dt><a href="restish.http.html#restish.http.InternalServerError">InternalServerError</a></dt></dl></td><td width="33%" valign="top"><dl>
 </dl></td></tr></table>
 
 <h2 id="J">J</h2>
@@ -177,7 +191,7 @@
 <table width="100%" class="indextable"><tr><td width="33%" valign="top">
 <dl>
 
-<dt><a href="restish.error.html#restish.error.HTTPClientError.make_response">make_response() (restish.error.HTTPClientError method)</a></dt>
+<dt><a href="restish.error.html#restish.error.HTTPError.make_response">make_response() (restish.error.HTTPError method)</a></dt>
 <dt><a href="restish.http.html#restish.http.method_not_allowed">method_not_allowed() (in module restish.http)</a>, <a href="resources.html#restish.http.method_not_allowed">[1]</a></dt>
 <dt><a href="restish.resource.html#restish.resource.MethodDecorator">MethodDecorator (class in restish.resource)</a></dt></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="restish.http.html#restish.http.MethodNotAllowedError">MethodNotAllowedError</a></dt>
@@ -255,13 +269,17 @@
     <dt><a href="restish.resource.html#restish.resource.Resource.resource_child">(restish.resource.Resource method)</a></dt>
   </dl></dd>
 <dt><a href="restish.http.html#restish.http.Response">Response (class in restish.http)</a></dt>
-<dt><a href="restish.http.html#restish.http.BadRequestError.response_factory">response_factory (restish.http.BadRequestError attribute)</a></dt>
+<dt><a href="restish.http.html#restish.http.BadGatewayError.response_factory">response_factory (restish.http.BadGatewayError attribute)</a></dt>
   <dd><dl>
+    <dt><a href="restish.http.html#restish.http.BadRequestError.response_factory">(restish.http.BadRequestError attribute)</a></dt>
     <dt><a href="restish.http.html#restish.http.ConflictError.response_factory">(restish.http.ConflictError attribute)</a></dt>
     <dt><a href="restish.http.html#restish.http.ForbiddenError.response_factory">(restish.http.ForbiddenError attribute)</a></dt>
+    <dt><a href="restish.http.html#restish.http.GatewayTimeoutError.response_factory">(restish.http.GatewayTimeoutError attribute)</a></dt>
+    <dt><a href="restish.http.html#restish.http.InternalServerError.response_factory">(restish.http.InternalServerError attribute)</a></dt>
     <dt><a href="restish.http.html#restish.http.MethodNotAllowedError.response_factory">(restish.http.MethodNotAllowedError attribute)</a></dt>
     <dt><a href="restish.http.html#restish.http.NotAcceptableError.response_factory">(restish.http.NotAcceptableError attribute)</a></dt>
     <dt><a href="restish.http.html#restish.http.NotFoundError.response_factory">(restish.http.NotFoundError attribute)</a></dt>
+    <dt><a href="restish.http.html#restish.http.ServiceUnavailableError.response_factory">(restish.http.ServiceUnavailableError attribute)</a></dt>
     <dt><a href="restish.http.html#restish.http.UnauthorizedError.response_factory">(restish.http.UnauthorizedError attribute)</a></dt>
   </dl></dd></dl></td><td width="33%" valign="top"><dl>
 <dt><a href="restish.app.html#module-restish.app">restish.app (module)</a></dt>
@@ -284,7 +302,9 @@
 <dt><a href="restish.url.html#restish.url.URL.scheme">scheme (restish.url.URL attribute)</a>, <a href="templating.html#restish.url.URL.scheme">[1]</a></dt>
 <dt><a href="restish.url.html#restish.url.URL.secure">secure() (restish.url.URL method)</a>, <a href="templating.html#restish.url.URL.secure">[1]</a></dt>
 <dt><a href="restish.http.html#restish.http.see_other">see_other() (in module restish.http)</a>, <a href="resources.html#restish.http.see_other">[1]</a></dt>
-<dt><a href="restish.url.html#restish.url.URL.sibling">sibling() (restish.url.URL method)</a>, <a href="templating.html#restish.url.URL.sibling">[1]</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="restish.http.html#restish.http.service_unavailable">service_unavailable() (in module restish.http)</a></dt>
+<dt><a href="restish.http.html#restish.http.ServiceUnavailableError">ServiceUnavailableError</a></dt></dl></td><td width="33%" valign="top"><dl>
+<dt><a href="restish.url.html#restish.url.URL.sibling">sibling() (restish.url.URL method)</a>, <a href="templating.html#restish.url.URL.sibling">[1]</a></dt>
 <dt><a href="restish.url.html#restish.url.split_path">split_path() (in module restish.url)</a></dt>
 <dt><a href="restish.url.html#restish.url.split_query">split_query() (in module restish.url)</a></dt>
 </dl></td></tr></table>
