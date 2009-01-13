@@ -2,8 +2,12 @@
 Changlelog
 ==========
 
-0.6
+0.7
 ---
+
+
+0.6 (2009-01-13)
+----------------
 
 * Changing the path (child, parent, sibling, etc) of a URL now removes the
   query string and fragment.
