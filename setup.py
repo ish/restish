@@ -11,6 +11,9 @@ Restish is a simple to use, lightweight WSGI web framework and library with a
 strong focus on resources, request/response, URLs and content negotiation.
 Restish has very few dependencies and does not assume any particular templating
 or database engine.
+
+      Changlog at `http://github.com/ish/restish/raw/master/CHANGELOG <http://github.com/ish/restish/raw/master/CHANGELOG>`_
+
 """,
       classifiers=[
           "Development Status :: 4 - Beta",
