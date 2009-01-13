@@ -122,6 +122,10 @@ segments (or an empty list if there are no segments left).</p>
 decorator on the resource base class. This child decorator has various ways of
 matching parts of urls and dispatching to other resources that we will discuss
 now.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The segments argument that is passed to a child function contains the remaining segments <strong>after</strong> the child match has been removed.</p>
+</div>
 <div class="section" id="implicitly-named-child">
 <h3>Implicitly named child<a class="headerlink" href="#implicitly-named-child" title="Permalink to this headline">¶</a></h3>
 <p>this takes its segment match from the decorated method&#8217;s name and only consumes
@@ -179,7 +183,7 @@ class Blog(resource.Resource):
         # The segments contain everything below /blog/entries
         # Pass the first segment through to Entry (should be entry id)
         # The empty tuple says pass no more segments to Entry
-        return Entry(segments[0]), ()
+        return Entry(segments[0]), []
 
 class Entries(resource.Resource):
 
@@ -192,10 +196,14 @@ class Entries(resource.Resource):
         blogcontent = db.get(self.id)
         return {'content': blogcontent}</pre>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want to stop further url traversal, explicitly return no further segments (e.g. <tt class="docutils literal"><span class="pre">return</span> <span class="pre">Entry(segments[0]),</span> <span class="pre">[]</span></tt> in the Blog example above)</p>
+</div>
 </div>
 <div class="section" id="handling-it-yourself">
 <h3>Handling it yourself<a class="headerlink" href="#handling-it-yourself" title="Permalink to this headline">¶</a></h3>
-<p>If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child.</p>
+<p>If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child. (in this case <tt class="docutils literal"><span class="pre">,</span> <span class="pre">segments[1:]</span></tt>)</p>
 <div class="highlight-python"><pre>class Root(resources.Resource):
 
     @resource.child(resource.any):
