@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Restish Resources &mdash; Restish v0.5 documentation</title>
+    <title>Restish Resources &mdash; Restish v0.6 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '',
-          VERSION:     '0.5',
+          VERSION:     '0.6',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.5 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.6 documentation" href="index.html" />
     <link rel="next" title="Templating in Restish" href="templating.html" />
     <link rel="prev" title="An Introduction to Restish" href="introduction.html" /> 
 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="introduction.html" title="An Introduction to Restish"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.5 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.6 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -70,8 +70,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
-<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -86,7 +86,7 @@
 <p>This is just an example to get you going. Lets take a look at what it does.</p>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -409,7 +409,8 @@ header then we don&#8217;t have to explicitly provide it. e.g.</p>
 <dl class="function">
 <dt id="restish.http.ok">
 <!--[restish.http.ok]--><tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
-<dd><p>The request has succeeded. The information returned with the response
+<dd><p>200 OK</p>
+<p>The request has succeeded. The information returned with the response
 is dependent on the method used in the request, for example:</p>
 <p>GET an entity corresponding to the requested resource is sent in the
 response;</p>
@@ -423,7 +424,8 @@ server.</p>
 <dl class="function">
 <dt id="restish.http.created">
 <!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>body</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
-<dd><p>The request has been fulfilled and resulted in a new resource being
+<dd><p>201 Created</p>
+<p>The request has been fulfilled and resulted in a new resource being
 created. The newly created resource can be referenced by the URI(s)
 returned in the entity of the response, with the most specific URI for the
 resource given by a Location header field. The response SHOULD include an
@@ -621,10 +623,9 @@ header field. Depending upon the format and the capabilities of the user
 agent, selection of the most appropriate choice MAY be performed
 automatically. However, this specification does not define any standard for
 such automatic selection.</p>
-<blockquote>
-Note: HTTP/1.1 servers are allowed to return responses which are not</blockquote>
-<p>acceptable according to the accept headers sent in the request. In some
-cases, this may even be preferable to sending a 406 response. User agents
+<p>Note: HTTP/1.1 servers are allowed to return responses which are not
+acceptable according to the accept headers sent in the request. In some
+cases, this may even be preferable to sending a 406 response.  User agents
 are encouraged to inspect the headers of an incoming response to determine
 if it is acceptable.</p>
 <p>If the response could be unacceptable, a user agent SHOULD temporarily stop
@@ -638,11 +639,10 @@ receipt of more data and query the user for a decision on further actions.</p>
 <p>The request could not be completed due to a conflict with the current state
 of the resource. This code is only allowed in situations where it is
 expected that the user might be able to resolve the conflict and resubmit
-the request. The response body SHOULD include enough</p>
-<p>information for the user to recognize the source of the conflict. Ideally,
-the response entity would include enough information for the user or user
-agent to fix the problem; however, that might not be possible and is not
-required.</p>
+the request. The response body SHOULD include enough information for the
+user to recognize the source of the conflict. Ideally, the response entity
+would include enough information for the user or user agent to fix the
+problem; however, that might not be possible and is not required.</p>
 <p>Conflicts are most likely to occur in response to a PUT request. For
 example, if versioning were being used and the entity being PUT included
 changes to a resource which conflict with those made by an earlier
@@ -686,7 +686,7 @@ to multiple encodings, give it a list (e.g. GET(acept=[&#8216;html&#8217;,&#8217
 <p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
+<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
 </div>
 <p>We sometimes want to match lists of content types, for example where we would
 like to use <tt class="docutils literal"><span class="pre">application/xhtml+xml</span></tt>. This are honoured by restish. (See
@@ -702,36 +702,36 @@ test_resource.py in the unit tests for examples)</p>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Restish Resources</a><ul>
-<li><a class="reference external" href="#our-project-resource">Our project resource</a><ul>
-<li><a class="reference external" href="#logging">Logging</a></li>
-<li><a class="reference external" href="#so-what-is-a-resource">So what is a resource?</a></li>
+<li><a class="reference" href="">Restish Resources</a><ul>
+<li><a class="reference" href="#our-project-resource">Our project resource</a><ul>
+<li><a class="reference" href="#logging">Logging</a></li>
+<li><a class="reference" href="#so-what-is-a-resource">So what is a resource?</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#resource-url-handling">Resource URL Handling</a><ul>
-<li><a class="reference external" href="#implicitly-named-child">Implicitly named child</a></li>
-<li><a class="reference external" href="#explicitly-named-child">Explicitly named child</a></li>
-<li><a class="reference external" href="#chaining-resources">Chaining Resources</a></li>
-<li><a class="reference external" href="#handling-it-yourself">Handling it yourself</a></li>
-<li><a class="reference external" href="#template-resource-matchers">Template Resource Matchers</a></li>
-<li><a class="reference external" href="#which-child-to-use">Which child to use?</a><ul>
-<li><a class="reference external" href="#a-b-c">/a/b/c</a></li>
-<li><a class="reference external" href="#a-b-foo">/a/b/foo</a></li>
-<li><a class="reference external" href="#a-b-c-foo">/a/b/c/foo</a></li>
-<li><a class="reference external" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
-<li><a class="reference external" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
+<li><a class="reference" href="#resource-url-handling">Resource URL Handling</a><ul>
+<li><a class="reference" href="#implicitly-named-child">Implicitly named child</a></li>
+<li><a class="reference" href="#explicitly-named-child">Explicitly named child</a></li>
+<li><a class="reference" href="#chaining-resources">Chaining Resources</a></li>
+<li><a class="reference" href="#handling-it-yourself">Handling it yourself</a></li>
+<li><a class="reference" href="#template-resource-matchers">Template Resource Matchers</a></li>
+<li><a class="reference" href="#which-child-to-use">Which child to use?</a><ul>
+<li><a class="reference" href="#a-b-c">/a/b/c</a></li>
+<li><a class="reference" href="#a-b-foo">/a/b/foo</a></li>
+<li><a class="reference" href="#a-b-c-foo">/a/b/c/foo</a></li>
+<li><a class="reference" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
+<li><a class="reference" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#custom-matchers">Custom Matchers</a></li>
-<li><a class="reference external" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
+<li><a class="reference" href="#custom-matchers">Custom Matchers</a></li>
+<li><a class="reference" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#request-handlers">Request Handlers</a><ul>
-<li><a class="reference external" href="#other-http-handlers">Other HTTP Handlers</a></li>
-<li><a class="reference external" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
+<li><a class="reference" href="#request-handlers">Request Handlers</a><ul>
+<li><a class="reference" href="#other-http-handlers">Other HTTP Handlers</a></li>
+<li><a class="reference" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#content-negotiation">Content Negotiation</a></li>
+<li><a class="reference" href="#content-negotiation">Content Negotiation</a></li>
 </ul>
 </li>
 </ul>
@@ -769,7 +769,7 @@ test_resource.py in the unit tests for examples)</p>
         <li class="right" >
           <a href="introduction.html" title="An Introduction to Restish"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.5 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.6 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
