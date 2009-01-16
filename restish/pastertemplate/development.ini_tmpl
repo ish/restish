@@ -14,7 +14,7 @@ filter-with = evalerror
 
 [app:public]
 use = egg:Paste#static
-document_root = ${package}/public
+document_root = %(here)s/${package}/public
 
 [server:main]
 use = egg:Paste#http
