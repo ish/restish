@@ -513,3 +513,5 @@ class TestURLAccessor(unittest.TestCase):
         assert u == 'http://localhost:1234/a/b/c' 
         self.assertTrue(isinstance(u, url.URL))
 
+if __name__ == '__main__':
+    unittest.main()

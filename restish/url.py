@@ -121,17 +121,17 @@ class URL(str):
     @property
     def scheme(self):
         """ The url scheme (http, https, etc) """
-        return self.parsed_url.scheme
+        return self.parsed_url[0]
 
     @property
     def netloc(self):
         """ The domain or network location """
-        return self.parsed_url.netloc
+        return self.parsed_url[1]
 
     @property
     def path(self):
         """ The path of the url without query string or fragment """
-        return self.__class__(self.parsed_url.path)
+        return self.__class__(self.parsed_url[2])
 
     @property
     def path_qs(self):
@@ -146,7 +146,7 @@ class URL(str):
     @property
     def query(self):
         """ The query parameters as a string """
-        return self.parsed_url.query
+        return self.parsed_url[3]
 
     @property
     def query_list(self):
@@ -156,7 +156,7 @@ class URL(str):
     @property
     def fragment(self):
         """ The url fragment (e.g. #anchor) """
-        return self.parsed_url.fragment
+        return self.parsed_url[4]
 
     def clone(self, scheme=_UNSET, netloc=_UNSET, \
               path=_UNSET, query=_UNSET, fragment=_UNSET):

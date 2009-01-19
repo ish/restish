@@ -140,8 +140,10 @@ def _best_dispatcher(dispatchers, request):
     if request.headers.get('accept'):
         dispatchers = _filter_dispatchers_on_accept(dispatchers, request)
     # Return the best match or None
-    return dispatchers[0] if dispatchers else None
-
+    if dispatchers:
+        return dispatchers[0]
+    else:
+        return None
 
 def _filter_dispatchers_on_content_type(dispatchers, request):
     # Build an ordered list of the supported types.
