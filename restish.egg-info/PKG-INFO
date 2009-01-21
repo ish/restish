@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: restish
-Version: 0.6
+Version: 0.7dev
 Summary: WSGI framework/library for building resource- and rest- oriented web sites
 Home-page: http://ish.io/projects/show/restish
 Author: ish
@@ -10,6 +10,9 @@ Description: Restish is a simple to use, lightweight WSGI web framework and libr
         strong focus on resources, request/response, URLs and content negotiation.
         Restish has very few dependencies and does not assume any particular templating
         or database engine.
+        
+        Changlog at `http://github.com/ish/restish/raw/master/CHANGELOG <http://github.com/ish/restish/raw/master/CHANGELOG>`_
+        
         
 Keywords: web wsgi rest framework
 Platform: UNKNOWN
