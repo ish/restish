@@ -15,7 +15,7 @@ class TestModule(unittest.TestCase):
         assert 'element' in keys
 
 
-class TestRenderingArgs(unittest.TestCase):
+class TestRendering(unittest.TestCase):
 
     def test_args(self):
         """
@@ -58,6 +58,44 @@ class TestRenderingArgs(unittest.TestCase):
         assert set(['urls', 'extra']) == set(rendering.args(request))
         assert set(['urls', 'element', 'extra']) == set(rendering.element_args(request, None))
         assert set(['urls', 'element', 'extra']) == set(rendering.element_args(request, None))
+
+    def test_overloading(self):
+        class Rendering(templating.Rendering):
+            def render(self, request, template, args):
+                return repr(args)
+            def args(self, request):
+                args = super(Rendering, self).args(request)
+                args['extra_arg'] = None
+                return args
+            def element_args(self, request, element):
+                args = super(Rendering, self).element_args(request, element)
+                args['extra_element_arg'] = None
+                return args
+            def page_args(self, request, page):
+                args = super(Rendering, self).page_args(request, page)
+                args['extra_page_arg'] = None
+                return args
+        rendering = Rendering()
+        # Check that the overloaded args are all present.
+        args = rendering.args(None)
+        element_args = rendering.element_args(None, None)
+        page_args = rendering.page_args(None, None)
+        for t in [args, element_args, page_args]:
+            assert 'extra_arg' in t
+        for t in [element_args, page_args]:
+            assert 'extra_element_arg' in t
+        assert 'extra_page_arg' in page_args
+        # Check that the args all get through to the render() method.
+        @rendering.page(None)
+        def page(page, request):
+            return {}
+        @rendering.element(None)
+        def element(element, request):
+            return {}
+        for name in ['extra_arg', 'extra_element_arg', 'extra_page_arg']:
+            assert name in page(None, None).body
+        for name in ['extra_arg', 'extra_element_arg']:
+            assert name in element(None, None)
 
 
 class TestPage(unittest.TestCase):

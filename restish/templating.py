@@ -54,7 +54,7 @@ class Rendering(object):
                 # Render the template and return a response.
                 return http.ok(
                         [('Content-Type', content_type)],
-                        render(request, template, args=args_)
+                        self.render(request, template, args=args_)
                         )
             return decorated
         return decorator
@@ -84,7 +84,7 @@ class Rendering(object):
                 args_ = self.element_args(request, element)
                 args_.update(args)
                 # Render the template and return a response.
-                return render(request, template, args=args_)
+                return self.render(request, template, args=args_)
             return decorated
         return decorator
 
