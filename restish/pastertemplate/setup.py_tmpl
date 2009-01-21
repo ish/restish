@@ -20,6 +20,7 @@ setup(name='${project}',
       install_requires=[
           # -*- Extra requirements: -*-
           'restish',
+          'WebError',
       ],
       entry_points="""
       # -*- Entry points: -*-

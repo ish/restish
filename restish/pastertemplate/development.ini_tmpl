@@ -22,7 +22,7 @@ host = 127.0.0.1
 port = 8080
 
 [filter:evalerror]
-use = egg:Paste#evalerror
+use = egg:WebError#evalerror
 
 # Logging configuration
 [loggers]
