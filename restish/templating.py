@@ -80,8 +80,6 @@ class Rendering(object):
 
         :arg template:
             Name of the template file.
-        :arg content_type:
-            Optional content type, defaults to 'text/html'
         """
         def decorator(func):
             def decorated(element, request, *a, **k):
