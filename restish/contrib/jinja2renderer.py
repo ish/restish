@@ -26,6 +26,9 @@ class Jinja2Renderer(object):
     def __init__(self, *a, **k):
         self.environment = jinja2.Environment(*a, **k)
 
-    def __call__(self, template, args={}):
-        return self.environment.get_template(template).render(**args)
+    def __call__(self, template, args={}, encoding=None):
+        template = self.environment.get_template(template)
+        if encoding is None:
+            return template.render(**args)
+        return template.render(**args).encode(encoding)
 

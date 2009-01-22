@@ -11,7 +11,7 @@ class Rendering(object):
     Rendering helper class, used to generate content from templates.
     """
 
-    def render(self, request, template, args={}):
+    def render(self, request, template, args={}, encoding=None):
         """
         Render the template and args using the configured templating engine.
 
@@ -21,16 +21,21 @@ class Rendering(object):
             Name of the template file.
         :arg args:
             Dictionary of args to pass to the template renderer.
+        :arg encoding:
+            Optional output encoding, defaults to None, i.e. output will be
+            unicode (or unicode-safe).
         """
         renderer = request.environ['restish.templating.renderer']
         args_ = self.args(request)
         args_.update(args)
-        return renderer(template, args_)
+        return renderer(template, args_, encoding=encoding)
 
-    def page(self, template, content_type='text/html; charset=utf-8'):
+    def page(self, template, type='text/html', encoding='utf-8'):
         """
         Decorator that returns an HTTP response by rendering the returned dict of
-        args using the template by calling render(request, template, args).
+        args using the template by calling render(request, template, args). The
+        response's Content-Type header will be constructed from the type and
+        encoding.
 
         The decorated method's first argument must be a http.Request instance. All
         arguments (including the request) are passed on as-is.
@@ -40,8 +45,10 @@ class Rendering(object):
 
         :arg template:
             Name of the template file.
-        :arg content_type:
-            Optional content type, defaults to 'text/html'
+        :arg type:
+            Optional mime type of content, defaults to 'text/html'
+        :arg encoding:
+            Optional encoding of output, default to 'utf-8'.
         """
         def decorator(func):
             def decorated(page, request, *a, **k):
@@ -53,8 +60,9 @@ class Rendering(object):
                 args_.update(args)
                 # Render the template and return a response.
                 return http.ok(
-                        [('Content-Type', content_type)],
-                        self.render(request, template, args=args_)
+                        [('Content-Type', "%s; charset=%s"%(type, encoding))],
+                        self.render(request, template, args=args_,
+                                    encoding=encoding)
                         )
             return decorated
         return decorator

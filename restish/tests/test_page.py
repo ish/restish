@@ -6,7 +6,7 @@ from restish import http, resource, page, templating
 class TestElement(unittest.TestCase):
 
     def test_rendering(self):
-        def renderer(template, args):
+        def renderer(template, args, encoding=None):
             if template == 'page.html':
                 element = args['element']
                 return '<div>page.html%s</div>' % (element('foo')(),)

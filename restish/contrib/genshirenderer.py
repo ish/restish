@@ -29,6 +29,6 @@ class GenshiRenderer(object):
     def __init__(self, *a, **k):
         self.loader = TemplateLoader(*a, **k)
 
-    def __call__(self, template, args={}):
-        return self.loader.load(template).generate(**args).render()
+    def __call__(self, template, args={}, encoding=None):
+        return self.loader.load(template).generate(**args).render(encoding=encoding)
 
