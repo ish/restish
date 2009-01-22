@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>restish.templating &mdash; Restish v0.6 documentation</title>
+    <title>restish.templating &mdash; Restish v0.7 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '',
-          VERSION:     '0.6',
+          VERSION:     '0.7',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.6 documentation" href="index.html" /> 
+    <link rel="top" title="Restish v0.7 documentation" href="index.html" /> 
 
 
   <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -85,7 +85,6 @@ render(request, template, args) function.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><em>template</em> &#8211; Name of the template file.</li>
-<li><em>content_type</em> &#8211; Optional content type, defaults to &#8216;text/html&#8217;</li>
 </ul>
 </td>
 </tr>
@@ -100,9 +99,11 @@ render(request, template, args) function.</p>
 
 <dl class="method">
 <dt id="restish.templating.Rendering.page">
-<!--[restish.templating.Rendering.page]--><tt class="descname">page</tt><big>(</big><em>template</em>, <em>content_type='text/html; charset=utf-8'</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.page" title="Permalink to this definition">¶</a></dt>
+<!--[restish.templating.Rendering.page]--><tt class="descname">page</tt><big>(</big><em>template</em>, <em>type='text/html'</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.page" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator that returns an HTTP response by rendering the returned dict of
-args using the template by calling render(request, template, args).</p>
+args using the template by calling render(request, template, args). The
+response&#8217;s Content-Type header will be constructed from the type and
+encoding.</p>
 <p>The decorated method&#8217;s first argument must be a http.Request instance. All
 arguments (including the request) are passed on as-is.</p>
 <p>The decorated method must return a dict that will be passed to the
@@ -113,7 +114,8 @@ render(request, template, args) function.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><em>template</em> &#8211; Name of the template file.</li>
-<li><em>content_type</em> &#8211; Optional content type, defaults to &#8216;text/html&#8217;</li>
+<li><em>type</em> &#8211; Optional mime type of content, defaults to &#8216;text/html&#8217;</li>
+<li><em>encoding</em> &#8211; Optional encoding of output, default to &#8216;utf-8&#8217;.</li>
 </ul>
 </td>
 </tr>
@@ -128,7 +130,7 @@ render(request, template, args) function.</p>
 
 <dl class="method">
 <dt id="restish.templating.Rendering.render">
-<!--[restish.templating.Rendering.render]--><tt class="descname">render</tt><big>(</big><em>request</em>, <em>template</em>, <em>args={}</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.render" title="Permalink to this definition">¶</a></dt>
+<!--[restish.templating.Rendering.render]--><tt class="descname">render</tt><big>(</big><em>request</em>, <em>template</em>, <em>args={}</em>, <em>encoding=None</em><big>)</big><a class="headerlink" href="#restish.templating.Rendering.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render the template and args using the configured templating engine.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -138,6 +140,8 @@ render(request, template, args) function.</p>
 <li><em>request</em> &#8211; Request instance.</li>
 <li><em>template</em> &#8211; Name of the template file.</li>
 <li><em>args</em> &#8211; Dictionary of args to pass to the template renderer.</li>
+<li><em>encoding</em> &#8211; Optional output encoding, defaults to None, i.e. output will be
+unicode (or unicode-safe).</li>
 </ul>
 </td>
 </tr>
@@ -178,7 +182,7 @@ render(request, template, args) function.</p>
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

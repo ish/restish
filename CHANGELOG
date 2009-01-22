@@ -2,8 +2,18 @@
 Changlelog
 ==========
 
-0.7
----
+0.7 (2009-01-22)
+----------------
+
+* Python 2.4 compatability (thanks to Chuck Thier for the patch).
+* Fix templating.Renderer to call the intance's method rather a module-scope
+  function.
+* Extend a renderer's signature to include the output encoding; only
+  Renderer.page() sets the encoding by default. This change makes it easier to
+  build a page form fragments without causing unicode decode errors.
+* Changed paster template to be explicit about path to public resources. (Makes
+  it work correctly with Spawning.)
+* Use WebError for the paster template's error handing. It's prettier.
 
 
 0.6 (2009-01-13)

@@ -1,6 +1,6 @@
 # Sphinx inventory version 1
 # Project: Restish
-# Version: 0.6
+# Version: 0.7
 restish.page mod restish.page.html
 restish.guard mod restish.guard.html
 restish.resource mod restish.resource.html
