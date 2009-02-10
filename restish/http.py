@@ -230,9 +230,9 @@ def see_other(location):
     return Response("303 See Other", [('Location', location)], "")
 
 
-def not_modified():
+def not_modified(headers=None):
     """
-    301 Not Modified
+    304 Not Modified
 
     If the client has performed a conditional GET request and access is
     allowed, but the document has not been modified, the server SHOULD respond
@@ -267,7 +267,9 @@ def not_modified():
     MUST update the entry to reflect any new field values given in the
     response. 
     """
-    return Response("304 Not Modified", [], "")
+    if headers is None:
+        headers = []
+    return Response("304 Not Modified", headers, '')
 
 
 # Client Error 4xx
