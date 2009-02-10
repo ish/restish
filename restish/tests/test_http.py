@@ -81,6 +81,9 @@ class TestSuccessResponseFactories(unittest.TestCase):
     def test_not_modified(self):
         r = http.not_modified()
         assert r.status.startswith('304')
+        r = http.not_modified([('ETag', '123')])
+        assert r.status.startswith('304')
+        assert r.headers['ETag'] == '123'
 
 
 class TestServerErrorResponseFactories(unittest.TestCase):
