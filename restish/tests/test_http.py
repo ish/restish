@@ -43,6 +43,9 @@ class TestResponseCreation(unittest.TestCase):
             yield ''
         return http.Response('200 OK', [('Content-Type', 'text/plain')], gen())
 
+    def test_init_with_none(self):
+        return http.Response('200 OK', [], None)
+
 
 class TestSuccessResponseFactories(unittest.TestCase):
 

@@ -89,11 +89,15 @@ class Response(object):
     """
 
     def __init__(self, status, headers, body):
-        self._response = webob.Response(status=status, headerlist=headers)
-        if isinstance(body, str):
-            self._response.body = body
+        kwargs = {'status': status,
+                  'headerlist': headers}
+        if body is None:
+            pass
+        elif isinstance(body, str):
+            kwargs['body'] = body
         else:
-            self._response.app_iter = body
+            kwargs['app_iter'] = body
+        self._response = webob.Response(**kwargs)
 
     def __getattr__(self, name):
         return getattr(self._response, name)
@@ -175,7 +179,7 @@ def moved_permanently(location):
     301 status code, some existing HTTP/1.0 user agents will
     erroneously change it into a GET request.
     """
-    return Response("301 Moved Permanently", [('Location', location)], "")
+    return Response("301 Moved Permanently", [('Location', location)], None)
 
 
 def found(location):
@@ -203,7 +207,7 @@ def found(location):
     The status codes 303 and 307 have been added for servers that wish to make
     unambiguously clear which kind of reaction is expected of the client.
     """
-    return Response("302 Found", [('Location', location)], "")
+    return Response("302 Found", [('Location', location)], None)
 
 
 def see_other(location):
@@ -227,7 +231,7 @@ def see_other(location):
     used instead, since most user agents react to a 302 response as described
     here for 303.
     """
-    return Response("303 See Other", [('Location', location)], "")
+    return Response("303 See Other", [('Location', location)], None)
 
 
 def not_modified(headers=None):
@@ -269,7 +273,7 @@ def not_modified(headers=None):
     """
     if headers is None:
         headers = []
-    return Response("304 Not Modified", headers, '')
+    return Response("304 Not Modified", headers, None)
 
 
 # Client Error 4xx
