@@ -408,22 +408,22 @@ class TestAcceptContentNegotiation(unittest.TestCase):
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
-        self.assertEquals(response._response.app_iter,['Hello!'])
+        self.assertEquals(response.app_iter,['Hello!'])
         environ = http.Request.blank('/', headers={'Accept': 'text/plain,text/html;q=0.9'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
-        self.assertEquals(response._response.app_iter,['Hello!'])
+        self.assertEquals(response.app_iter,['Hello!'])
         environ = http.Request.blank('/', headers={'Accept': 'text/html;q=0.4,text/plain;q=0.5'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/plain'
-        self.assertEquals(response._response.app_iter,['Hello!'])
+        self.assertEquals(response.app_iter,['Hello!'])
         environ = http.Request.blank('/', headers={'Accept': 'text/html;q=0.5,text/plain;q=0.4'}).environ
         response = res(http.Request(environ))
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
-        self.assertEquals(response._response.app_iter,['<p>Hello!</p>'])
+        self.assertEquals(response.app_iter,['<p>Hello!</p>'])
 
     def test_specificity(self):
         """
@@ -460,14 +460,14 @@ class TestAcceptContentNegotiation(unittest.TestCase):
         response = res(http.Request(environ))
         self.assertEquals(response.status,"200 OK")
         self.assertEquals(response.headers['Content-Type'],'text/plain')
-        self.assertEquals(response._response.app_iter,['Hello!'])
+        self.assertEquals(response.app_iter,['Hello!'])
 
         res = Resource()
         environ = http.Request.blank('/', headers={'Accept': 'application/xml'}).environ
         response = res(http.Request(environ))
         self.assertEquals(response.status,"200 OK")
         self.assertEquals(response.headers['Content-Type'],'text/html')
-        self.assertEquals(response._response.app_iter,['<p>Hello!</p>'])
+        self.assertEquals(response.app_iter,['<p>Hello!</p>'])
 
 
 class TestContentTypeContentNegotiation(unittest.TestCase):

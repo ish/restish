@@ -7,7 +7,7 @@ import webob
 from restish import error, url
 
 
-class Request(object):
+class Request(webob.Request):
     """
     HTTP request class.
 
@@ -19,46 +19,36 @@ class Request(object):
     to manipulated easily and safely.
     """
 
-    @classmethod
-    def blank(cls, *a, **k):
-        """
-        Create a new Request, compatible with webob.Request.blank.
-        """
-        return cls(webob.Request.blank(*a, **k).environ)
-
     def __init__(self, environ):
-        self._request = webob.Request(environ)
-
-    def __getattr__(self, name):
-        return getattr(self._request, name)
+        webob.Request.__init__(self, environ)
 
     @property
     def host_url(self):
         """
         Return the host's URL, i.e. the URL of the HTTP server.
         """
-        return url.URL(self._request.host_url)
+        return url.URL(super(Request, self).host_url)
 
     @property
     def application_url(self):
         """
         Return the WSGI application's URL.
         """
-        return url.URL(self._request.application_url)
+        return url.URL(super(Request, self).application_url)
 
     @property
     def path_url(self):
         """
         Return the path's URL, i.e. the current URL without the query string.
         """
-        return url.URL(self._request.path_url)
+        return url.URL(super(Request, self).path_url)
 
     @property
     def url(self):
         """
         Return the full current (i.e. requested), URL.
         """
-        return url.URL(self._request.url)
+        return url.URL(super(Request, self).url)
 
     @property
     def path(self):
@@ -66,7 +56,7 @@ class Request(object):
         Return the path part of the current URL, relative to the root of the
         web server.
         """
-        return url.URL(self._request.path)
+        return url.URL(super(Request, self).path)
 
     @property
     def path_qs(self):
@@ -74,17 +64,10 @@ class Request(object):
         Return the path of the current URL, relative to the root of the web
         server, and the query string.
         """
-        return url.URL(self._request.path_qs)
+        return url.URL(super(Request, self).path_qs)
 
 
-# webob 0.9.6 changed behaviour (it adds headers on your behalf ... thanks so
-# much) and now causes the content type to get set to the value of
-# default_content_type. Let's kill that behaviour right now!
-class _webobResponse(webob.Response):
-    default_content_type = None
-
-
-class Response(object):
+class Response(webob.Response):
     """
     HTTP response class.
 
@@ -92,8 +75,11 @@ class Response(object):
     and is created by passing a status code, a list of (name, value) headers
     and a body.
 
-    Response is basically just a webob.Response.
+    Response is basically just a webob.Response with a modified initializer and
+    less implicit behaviour.
     """
+
+    default_content_type = None
 
     def __init__(self, status, headers, body):
         kwargs = {'status': status,
@@ -104,10 +90,7 @@ class Response(object):
             kwargs['body'] = body
         else:
             kwargs['app_iter'] = body
-        self._response = _webobResponse(**kwargs)
-
-    def __getattr__(self, name):
-        return getattr(self._response, name)
+        webob.Response.__init__(self, **kwargs)
 
 
 # Successful 2xx
