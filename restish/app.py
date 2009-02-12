@@ -1,7 +1,7 @@
 """
 Core wsgi application
 """
-from restish import error, http
+from restish import error, http, url
 
 
 class RestishApp(object):
@@ -31,7 +31,7 @@ class RestishApp(object):
         # Calculate the path segments relative to the application,
         # special-casing requests for the the root segment (because we already
         # have a reference to the root resource).
-        segments = request.path_url.path_segments[len(request.application_url.path_segments):]
+        segments = url.split_path(request.environ['PATH_INFO'])
         if segments == ['']:
             segments = []
         # Recurse into the resource hierarchy until we run out of segments.
