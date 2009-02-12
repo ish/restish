@@ -43,6 +43,10 @@ class TestResponseCreation(unittest.TestCase):
             yield ''
         return http.Response('200 OK', [('Content-Type', 'text/plain')], gen())
 
+    def test_no_implicit_headers(self):
+        r = http.Response('200 OK', [], '')
+        assert r.headers == {'Content-Length': '0'}
+
 
 class TestSuccessResponseFactories(unittest.TestCase):
 

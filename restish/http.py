@@ -77,6 +77,13 @@ class Request(object):
         return url.URL(self._request.path_qs)
 
 
+# webob 0.9.6 changed behaviour (it adds headers on your behalf ... thanks so
+# much) and now causes the content type to get set to the value of
+# default_content_type. Let's kill that behaviour right now!
+class _webobResponse(webob.Response):
+    default_content_type = None
+
+
 class Response(object):
     """
     HTTP response class.
@@ -89,7 +96,7 @@ class Response(object):
     """
 
     def __init__(self, status, headers, body):
-        self._response = webob.Response(status=status, headerlist=headers)
+        self._response = _webobResponse(status=status, headerlist=headers)
         if isinstance(body, str):
             self._response.body = body
         else:
