@@ -252,6 +252,7 @@ restish/pastertemplate/+package+/resource/__init__.py
 restish/pastertemplate/+package+/resource/root.py_tmpl
 restish/tests/__init__.py
 restish/tests/test_app.py
+restish/tests/test_contrib.py
 restish/tests/test_guard.py
 restish/tests/test_http.py
 restish/tests/test_page.py
