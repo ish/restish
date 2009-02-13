@@ -221,7 +221,9 @@ class TemplateChildMatcher(object):
     def __call__(self, request, segments):
         match_segments, remaining_segments = \
                 segments[:self._count], segments[self._count:]
-        match_path = url.join_path(match_segments)[1:]
+        # Note: no need to use the url module to join the path segments here
+        # because we want the unquoted and decoded segments.
+        match_path = '/'.join(match_segments)
         match = self._regex.match(match_path)
         if not match:
             return None
