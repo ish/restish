@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Test resource behaviour.
 """
@@ -170,7 +172,7 @@ class TestChildLookup(unittest.TestCase):
         R = wsgi_out(A, http.Request.blank('/users/foo').environ)
         print R
         assert R['status'].startswith('200')
-        assert R['body'] == "['users', 'foo'] {'username': 'foo'}"
+        assert R['body'] == "['users', u'foo'] {'username': u'foo'}"
 
     def test_any_match(self):
         class Resource(resource.Resource):
@@ -235,6 +237,24 @@ class TestChildLookup(unittest.TestCase):
             R = wsgi_out(A, http.Request.blank(path).environ)
             print path, expected, R
             assert R['body'] == expected
+
+    def test_unquoted(self):
+        """
+        Check match args are unquoted.
+        """
+        class Resource(resource.Resource):
+            def __init__(self, match=None):
+                self.match = match
+            @resource.child('{match}')
+            def child(self, request, segments, match):
+                return Resource(match)
+            @resource.GET()
+            def GET(self, request):
+                return http.ok([], self.match.encode('utf-8'))
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/%C2%A3').environ)
+        print repr(R['body'])
+        assert R['body'] == '£'
 
     def _test_custom_match(self):
         self.fail()
