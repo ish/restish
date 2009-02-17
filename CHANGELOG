@@ -2,6 +2,13 @@
 Changlelog
 ==========
 
+0.7.2 (2009-02-17)
+------------------
+
+* Fix @child matching so it passes unquoted, decoded URL segments to the
+  decorated method.
+
+
 0.7.1 (2009-02-12)
 ------------------
 
