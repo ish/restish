@@ -15,7 +15,7 @@ class TestModule(unittest.TestCase):
         assert 'element' in keys
 
 
-class TestRendering(unittest.TestCase):
+class TestArgs(unittest.TestCase):
 
     def test_args(self):
         """
@@ -96,6 +96,36 @@ class TestRendering(unittest.TestCase):
             assert name in page(None, None).body
         for name in ['extra_arg', 'extra_element_arg']:
             assert name in element(None, None)
+
+
+class TestRendering(unittest.TestCase):
+
+    def test_render(self):
+        def renderer(template, args, encoding=None):
+            return "%s %r" % (template, sorted(args))
+        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        assert templating.render(request, 'render') == "render ['urls']"
+
+    def test_render_element(self):
+        def renderer(template, args, encoding=None):
+            return "%s %r" % (template, sorted(args))
+        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        assert templating.render_element(request, None, 'element') == "element ['element', 'urls']"
+
+    def test_render_page(self):
+        def renderer(template, args, encoding=None):
+            return "%s %r" % (template, sorted(args))
+        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        assert templating.render_page(request, None, 'page') == "page ['element', 'urls']"
+
+    def test_render_response(self):
+        def renderer(template, args, encoding=None):
+            return "%s %r" % (template, sorted(args))
+        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        response = templating.render_response(request, None, 'page')
+        assert response.status == "200 OK"
+        assert response.headers['Content-Type'] == 'text/html; charset=utf-8'
+        assert response.body == "page ['element', 'urls']"
 
     def test_encoding(self):
         """

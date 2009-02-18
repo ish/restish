@@ -51,6 +51,9 @@ class Rendering(templating.Rendering):
 # Expose the decorators at module-scope, just like restish.templating.
 _rendering = Rendering()
 render = _rendering.render
+render_element = _rendering.render_element
+render_page = _rendering.render_page
+render_response = _rendering.render_response
 page = _rendering.page
 element = _rendering.element
 
