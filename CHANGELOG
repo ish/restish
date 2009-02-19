@@ -2,6 +2,18 @@
 Changelog
 =========
 
+0.8dev (unreleased)
+-------------------
+
+* Extract render_page, render_response and render_element from templating
+  decorators allowing greater control over the response when the decorator's
+  convenience gets in the way.
+* Performance improvments: restish's Request and Response objects now directly
+  subclass webob's classes avoiding lots of getattr() calls; restish.app now
+  uses the PATH_INFO from the WSGI environ instead of creating a number of URL
+  instances to work out the same thing.
+
+
 0.7.2 (2009-02-17)
 ------------------
 
