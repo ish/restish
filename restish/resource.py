@@ -5,7 +5,7 @@ import inspect
 import mimetypes
 import re
 
-from restish import http, _mimeparse as mimeparse, url
+from restish import http, _mimeparse as mimeparse
 
 
 _RESTISH_CHILD = "restish_child"
