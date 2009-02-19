@@ -1,6 +1,6 @@
 # Sphinx inventory version 1
 # Project: Restish
-# Version: 0.7
+# Version: 0.8dev
 restish.page mod restish.page.html
 restish.guard mod restish.guard.html
 restish.resource mod restish.resource.html
@@ -14,7 +14,6 @@ restish.http.gateway_timeout function restish.http.html
 restish.url.URL.sibling method templating.html
 restish.http.NotAcceptableError.response_factory attribute restish.http.html
 restish.url.URL.remove_query method templating.html
-restish.http.Request.blank attribute restish.http.html
 restish.http.Request.host_url attribute restish.http.html
 restish.http.see_other function restish.http.html
 restish.url.URL.add_queries method templating.html
@@ -42,6 +41,7 @@ restish.http.MethodNotAllowedError exception restish.http.html
 restish.page.Page class restish.page.html
 restish.guard.GuardResource.resource_child method restish.guard.html
 restish.url.URL.fragment attribute templating.html
+restish.templating.Rendering.render_response method restish.templating.html
 restish.resource.Resource class restish.resource.html
 restish.resource.MethodDecorator class restish.resource.html
 restish.templating.Rendering.element method restish.templating.html
@@ -79,6 +79,7 @@ restish.guard.GuardError exception restish.guard.html
 restish.http.created function restish.http.html
 restish.http.bad_request function restish.http.html
 restish.templating.Rendering class restish.templating.html
+restish.templating.Rendering.render_element method restish.templating.html
 restish.http.unauthorized function restish.http.html
 restish.http.moved_permanently function restish.http.html
 restish.error.HTTPServerError exception restish.error.html
@@ -126,4 +127,5 @@ restish.http.UnauthorizedError exception restish.http.html
 restish.http.forbidden function restish.http.html
 restish.http.ConflictError.response_factory attribute restish.http.html
 restish.http.not_acceptable function restish.http.html
+restish.templating.Rendering.render_page method restish.templating.html
 restish.http.BadGatewayError exception restish.http.html
