@@ -155,7 +155,6 @@ class Rendering(object):
         Return a dict of args that should be present when rendering elements.
         """
         def page_element(name):
-            print element
             E = element.element(request, name)
             if isinstance(E, Element):
                 E = util.RequestBoundCallable(E, request)
