@@ -170,31 +170,32 @@ you can pass an explicit child name to the <tt class="docutils literal"><span cl
 <p>Most applications will handled nested resources.</p>
 <p>We&#8217;re showing a contrived example where the url <tt class="docutils literal"><span class="pre">/blog/entries/28</span></tt> get&#8217;s
 passed down from resource to resource.</p>
-<div class="highlight-python"><pre>class Root(resource.Resource):
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
 
-    @resource.child()
-    def blog(self, request, segments):
-        return Blog()
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">blog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Blog</span><span class="p">()</span>
 
-class Blog(resource.Resource):
+<span class="k">class</span> <span class="nc">Blog</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
 
-    @resource.child()
-    def entries(self, request, segments)A
-        # The segments contain everything below /blog/entries
-        # Pass the first segment through to Entry (should be entry id)
-        # The empty tuple says pass no more segments to Entry
-        return Entry(segments[0]), []
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+        <span class="c"># &#39;segments&#39; contains everything below /blog/entries</span>
+        <span class="c"># Pass the first segment through to Entry (should be entry id)</span>
+        <span class="c"># The empty list says pass no more segments to Entry</span>
+        <span class="k">return</span> <span class="n">Entry</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="mf">0</span><span class="p">]),</span> <span class="p">[]</span>
 
-class Entries(resource.Resource):
+<span class="k">class</span> <span class="nc">Entry</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
 
-    def __init__(self, id):
-        self.id = id
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
 
-    @resource.GET()
-    @templating.page('entry.html')
-    def entry(self, request):
-        blogcontent = db.get(self.id)
-        return {'content': blogcontent}</pre>
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+    <span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;entry.html&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">blogcontent</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;content&#39;</span><span class="p">:</span> <span class="n">blogcontent</span><span class="p">}</span>
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
