@@ -12,12 +12,12 @@ class RendererTests(object):
 
     def test_render(self):
         request = http.Request.blank('/', environ={
-            'restish.templating.renderer': self.renderer})
+            'restish.templating': templating.Templating(self.renderer)})
         assert templating.render(request, 'whatever') == TEST_STRING
 
     def test_render_different_encoding(self):
         request = http.Request.blank('/', environ={
-            'restish.templating.renderer': self.renderer})
+            'restish.templating': templating.Templating(self.renderer)})
         assert templating.render(request, 'whatever', encoding='iso-8859-1') == TEST_STRING.encode('iso-8859-1')
 
     def test_element(self):
@@ -25,7 +25,7 @@ class RendererTests(object):
         def element(element, request):
             return {}
         request = http.Request.blank('/', environ={
-            'restish.templating.renderer': self.renderer})
+            'restish.templating': templating.Templating(self.renderer)})
         assert element(None, request) == TEST_STRING
 
     def test_page(self):
@@ -33,7 +33,7 @@ class RendererTests(object):
         def page(page, request):
             return {}
         request = http.Request.blank('/', environ={
-            'restish.templating.renderer': self.renderer})
+            'restish.templating': templating.Templating(self.renderer)})
         assert page(None, request).body == TEST_STRING.encode('utf-8')
 
 

@@ -5,6 +5,9 @@ Changelog
 0.8dev (unreleased)
 -------------------
 
+* Rewrote/refactored restish.templating to be more flexible, less weird ;-) and
+  to make resources need no direct relation to an application's lib.templating
+  module. WARNING: backwards incompatible change ... sorry.
 * Extract render_page, render_response and render_element from templating
   decorators allowing greater control over the response when the decorator's
   convenience gets in the way.

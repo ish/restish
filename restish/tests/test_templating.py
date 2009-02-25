@@ -21,81 +21,82 @@ class TestArgs(unittest.TestCase):
         """
         Test that common rendering args are correct.
         """
-        rendering = templating.Rendering()
+        T = templating.Templating(None)
         request = http.Request.blank('/')
-        args = rendering.args(request)
+        args = T.args(request)
         assert set(['urls']) == set(args)
 
     def test_element_args(self):
         """
         Test that element rendering args are correct.
         """
-        rendering = templating.Rendering()
+        T = templating.Templating(None)
         request = http.Request.blank('/')
-        args = rendering.element_args(request, None)
+        args = T.element_args(request, None)
         assert set(['urls', 'element']) == set(args)
 
     def test_page_args(self):
         """
         Test that page rendering args are correct.
         """
-        rendering = templating.Rendering()
+        T = templating.Templating(None)
         request = http.Request.blank('/')
-        args = rendering.page_args(request, None)
+        args = T.page_args(request, None)
         assert set(['urls', 'element']) == set(args)
 
     def test_args_chaining(self):
         """
         Test that an extra common arg is also available to elements and pages.
         """
-        class Rendering(templating.Rendering):
+        class Templating(templating.Templating):
             def args(self, request):
-                args = super(Rendering, self).args(request)
+                args = super(Templating, self).args(request)
                 args['extra'] = None
                 return args
-        rendering = Rendering()
+        T = Templating(None)
         request = http.Request.blank('/')
-        assert set(['urls', 'extra']) == set(rendering.args(request))
-        assert set(['urls', 'element', 'extra']) == set(rendering.element_args(request, None))
-        assert set(['urls', 'element', 'extra']) == set(rendering.element_args(request, None))
+        assert set(['urls', 'extra']) == set(T.args(request))
+        assert set(['urls', 'element', 'extra']) == set(T.element_args(request, None))
+        assert set(['urls', 'element', 'extra']) == set(T.element_args(request, None))
 
     def test_overloading(self):
-        class Rendering(templating.Rendering):
-            def render(self, request, template, args, encoding=None):
+        class Templating(templating.Templating):
+            def render(self, request, template, args=None, encoding=None):
                 return repr(args)
             def args(self, request):
-                args = super(Rendering, self).args(request)
+                args = super(Templating, self).args(request)
                 args['extra_arg'] = None
                 return args
             def element_args(self, request, element):
-                args = super(Rendering, self).element_args(request, element)
+                args = super(Templating, self).element_args(request, element)
                 args['extra_element_arg'] = None
                 return args
             def page_args(self, request, page):
-                args = super(Rendering, self).page_args(request, page)
+                args = super(Templating, self).page_args(request, page)
                 args['extra_page_arg'] = None
                 return args
-        rendering = Rendering()
+        T = Templating(None)
         # Check that the overloaded args are all present.
-        args = rendering.args(None)
-        element_args = rendering.element_args(None, None)
-        page_args = rendering.page_args(None, None)
+        args = T.args(None)
+        element_args = T.element_args(None, None)
+        page_args = T.page_args(None, None)
         for t in [args, element_args, page_args]:
             assert 'extra_arg' in t
         for t in [element_args, page_args]:
             assert 'extra_element_arg' in t
         assert 'extra_page_arg' in page_args
         # Check that the args all get through to the render() method.
-        @rendering.page(None)
+        @templating.page(None)
         def page(page, request):
             return {}
-        @rendering.element(None)
+        @templating.element(None)
         def element(element, request):
             return {}
+        request = http.Request.blank('/', environ={'restish.templating': T})
         for name in ['extra_arg', 'extra_element_arg', 'extra_page_arg']:
-            assert name in page(None, None).body
+            assert name in page(None, request).body
         for name in ['extra_arg', 'extra_element_arg']:
-            assert name in element(None, None)
+            assert name in element(None, request)
 
 
 class TestRendering(unittest.TestCase):
@@ -103,25 +104,25 @@ class TestRendering(unittest.TestCase):
     def test_render(self):
         def renderer(template, args, encoding=None):
             return "%s %r" % (template, sorted(args))
-        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        request = http.Request.blank('/', environ={'restish.templating': templating.Templating(renderer)})
         assert templating.render(request, 'render') == "render ['urls']"
 
     def test_render_element(self):
         def renderer(template, args, encoding=None):
             return "%s %r" % (template, sorted(args))
-        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        request = http.Request.blank('/', environ={'restish.templating': templating.Templating(renderer)})
         assert templating.render_element(request, None, 'element') == "element ['element', 'urls']"
 
     def test_render_page(self):
         def renderer(template, args, encoding=None):
             return "%s %r" % (template, sorted(args))
-        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        request = http.Request.blank('/', environ={'restish.templating': templating.Templating(renderer)})
         assert templating.render_page(request, None, 'page') == "page ['element', 'urls']"
 
     def test_render_response(self):
         def renderer(template, args, encoding=None):
             return "%s %r" % (template, sorted(args))
-        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        request = http.Request.blank('/', environ={'restish.templating': templating.Templating(renderer)})
         response = templating.render_response(request, None, 'page')
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html; charset=utf-8'
@@ -139,7 +140,7 @@ class TestRendering(unittest.TestCase):
         @templating.page('page')
         def page(page, request):
             return {}
-        request = http.Request.blank('/', environ={'restish.templating.renderer': renderer})
+        request = http.Request.blank('/', environ={'restish.templating': templating.Templating(renderer)})
         assert templating.render(request, 'render') == 'None'
         assert element(None, request) == 'None'
         assert page(None, request).body == 'utf-8'
@@ -159,7 +160,7 @@ class TestPage(unittest.TestCase):
             @templating.page('test.html')
             def html(self, request):
                 return self.args
-        environ = {'restish.templating.renderer': renderer}
+        environ = {'restish.templating': templating.Templating(renderer)}
         request = http.Request.blank('/', environ=environ)
         response = Resource({})(request)
         assert response.status.startswith('200')

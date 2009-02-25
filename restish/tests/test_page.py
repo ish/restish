@@ -24,7 +24,7 @@ class TestElement(unittest.TestCase):
             @page.element('foo')
             def foo(self, request):
                 return Element()
-        environ = {'restish.templating.renderer': renderer}
+        environ = {'restish.templating': templating.Templating(renderer)}
         request = http.Request.blank('/', environ=environ)
         response = Page()(request)
         assert response.status.startswith('200')
