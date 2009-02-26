@@ -1,0 +1,13 @@
+import logging
+from restish import http, resource
+
+
+log = logging.getLogger(__name__)
+
+
+class Root(resource.Resource):
+    @resource.GET()
+    def html(self, request):
+        return http.ok([('Content-Type', 'text/html')],
+            "<p>Hello from example!</p>")
+
