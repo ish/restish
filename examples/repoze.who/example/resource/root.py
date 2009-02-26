@@ -1,6 +1,8 @@
 import logging
 from restish import http, resource, templating
 
+from example.lib import guard
+
 
 log = logging.getLogger(__name__)
 
@@ -16,6 +18,7 @@ class Root(resource.Resource):
     def open(self, request, segments):
         return OpenResource()
 
+    @guard.guard(guard.authenticated)
     @resource.child()
     def closed(self, request, segments):
         return ClosedResource()
