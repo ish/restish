@@ -2,8 +2,8 @@
 Genshi templating renderer than uses a Genshi TemplateLoader to find the
 template to render.
 
-An instance of a GenshiRenderer can be used as the restish.templating.renderer
-in the WSGI environ.
+A GenshiRenderer instance can be used as the renderer passed to the
+templating.Templating instance that is added to the WSGI environ.
 
 Recommended setup:
 
@@ -12,8 +12,10 @@ Recommended setup:
 
 e.g.
 
-    environ['restish.templating.renderer'] = GenshiRenderer(
-        genshi.template.loader.package('yourpackage', 'templates')
+    environ['restish.templating'] = templating.Templating(
+        GenshiRenderer(
+            genshi.template.loader.package('yourpackage', 'templates')
+            )
         )
 
 Note: this may be too simplistic as it does not allow the final rendering

@@ -11,7 +11,7 @@ The wsgiapp is shown below.
 
 ``make_app`` is set up to define the restish app by passing the root resource to it. The restish app is then passed to the setup_environ function
 
-``setup_environ`` can be used to set any attributes on the environ you may wish. In this case templating is setup by calling 'make_renderer'.
+``setup_environ`` can be used to set any attributes on the environ you may wish. In this case templating is setup by creating a Templating instance.
 
 .. code-block:: python
 
@@ -40,13 +40,13 @@ The wsgiapp is shown below.
 
         # Create any objects that should exist for the lifetime of the application
         # here. Don't forget to actually include them in the environ below!
-        from myproject.lib import templating
-        renderer = templating.make_renderer(app_conf)
+        from myproject.lib.templating import Templating
+        templating = Templating(app_conf)
 
         def application(environ, start_response):
 
             # Add additional keys to the environ here.
-            environ['restish.templating.renderer'] = renderer
+            environ['restish.templating'] = templating
 
             return app(environ, start_response)
 

@@ -67,7 +67,7 @@
   
   <div class="section" id="templating-in-restish">
 <h1>Templating in Restish<a class="headerlink" href="#templating-in-restish" title="Permalink to this headline">¶</a></h1>
-<p>Restish does not imply the use of any particular templating language. Instead, we have provided stubs that can be used with some of the more popular templating languages which can be enabled by uncommenting a section withing the wsgiapp.py.</p>
+<p>Restish does not imply the use of any particular templating engine. Instead, we have provided stubs that can be used with some of the more popular templating engines which can be enabled by uncommenting a section within the wsgiapp.py.</p>
 <div class="section" id="configuring-a-templating-language-within-lib-templating-py">
 <h2>Configuring a templating language within lib/templating.py<a class="headerlink" href="#configuring-a-templating-language-within-lib-templating-py" title="Permalink to this headline">¶</a></h2>
 <p>Here is an example of the uncommented code that enables the mako renderer.</p>
@@ -122,12 +122,12 @@ to do is provide a template in the decorator and the arguments for the template 
 <p>Quite often you will write your own functions or want supply default variables to
 use within your template (possibly a set of site urls). This can be set up
 within the <tt class="docutils literal"><span class="pre">&lt;project&gt;/lib/templating.py</span></tt> by overriding the args method of the
-Rendering class.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Rendering</span><span class="p">(</span><span class="n">templating</span><span class="o">.</span><span class="n">Rendering</span><span class="p">):</span>
+Templating class.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Templating</span><span class="p">(</span><span class="n">templating</span><span class="o">.</span><span class="n">Templating</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="c"># Call the super class to get the basic set of args.</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Rendering</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">args</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Templating</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">args</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
         <span class="c"># Push to the args and return them.</span>
         <span class="n">args</span><span class="p">[</span><span class="s">&#39;myurldict&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;about&#39;</span><span class="p">:</span> <span class="s">&#39;/about&#39;</span><span class="p">,</span> <span class="s">&#39;contact&#39;</span><span class="p">:</span><span class="s">&#39;/contact&#39;</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">args</span>

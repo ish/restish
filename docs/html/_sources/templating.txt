@@ -2,7 +2,7 @@
 Templating in Restish
 *********************
 
-Restish does not imply the use of any particular templating language. Instead, we have provided stubs that can be used with some of the more popular templating languages which can be enabled by uncommenting a section withing the wsgiapp.py.
+Restish does not imply the use of any particular templating engine. Instead, we have provided stubs that can be used with some of the more popular templating engines which can be enabled by uncommenting a section within the wsgiapp.py.
 
 
 Configuring a templating language within lib/templating.py
@@ -68,15 +68,15 @@ Template Default Variables
 Quite often you will write your own functions or want supply default variables to
 use within your template (possibly a set of site urls). This can be set up
 within the ``<project>/lib/templating.py`` by overriding the args method of the
-Rendering class.
+Templating class.
 
 .. code-block:: python
 
-    class Rendering(templating.Rendering):
+    class Templating(templating.Templating):
 
         def args(self, request):
             # Call the super class to get the basic set of args.
-            args = super(Rendering, self).args(request)
+            args = super(Templating, self).args(request)
             # Push to the args and return them.
             args['myurldict'] = {'about': '/about', 'contact':'/contact'}
             return args
@@ -181,7 +181,4 @@ An example of where this could be useful is where a login status is regularly in
 .. code-block:: html
 
     <div id="loginstatus"> ${element('login_status')()|n} </div>
-
-
-        
 

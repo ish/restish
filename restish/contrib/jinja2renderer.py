@@ -1,9 +1,9 @@
 """
-Jinja2 templating renderer than uses a Jinja2 "Environment" to find the
+Jinja2 templating renderer that uses a Jinja2 "Environment" to find the
 template to render.
 
-An instance of a Jinja2Renderer can be used as the restish.templating.renderer
-in the WSGI environ.
+A Jinja2Renderer  instance can be used as the renderer passed to the
+templating.Templating instance that is added to the WSGI environ.
 
 Recommended setup:
 
@@ -13,9 +13,12 @@ Recommended setup:
 
 e.g.
 
-    environ['restish.templating.renderer'] = Jinja2Renderer(
-        loader=jinja2.PackageLoader('yourpackage', 'templates'),
-        autoescape=True)
+    environ['restish.templating'] = templating.Templating(
+        Jinja2Renderer(
+            loader=jinja2.PackageLoader('yourpackage', 'templates'),
+            autoescape=True
+            )
+        )
 """
 
 import jinja2
