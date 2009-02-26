@@ -51,5 +51,14 @@ def make_renderer(app_conf):
     #        genshi.template.loader.package('${package}', 'templates')
     #        )
 
+    # Uncomment for an example of Tempita templating support.
+    #import pkg_resources
+    #from restish.contrib.tempitarenderer import TempitaRenderer, TempitaFileSystemLoader
+    #return TempitaRenderer(
+    #        TempitaFileSystemLoader(
+    #            pkg_resources.resource_filename('${package}', 'templates')
+    #            )
+    #        )
+
     return None
 

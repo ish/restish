@@ -15,6 +15,7 @@ Changelog
   subclass webob's classes avoiding lots of getattr() calls; restish.app now
   uses the PATH_INFO from the WSGI environ instead of creating a number of URL
   instances to work out the same thing.
+* Added Tempita templating renderer "contrib" module.
 
 
 0.7.2 (2009-02-17)

@@ -99,6 +99,24 @@ else:
         renderer = MockGenshiRenderer()
 
 
+try:
+    from restish.contrib import tempitarenderer
+except ImportError:
+    pass
+else:
+    class MockTempitaTemplateLoader(object):
+        def get_template(self, name):
+            return MockTempitaTemplate()
+    class MockTempitaTemplate(object):
+        def substitute(self, **k):
+            return TEST_STRING
+    class MockTempitaRenderer(tempitarenderer.TempitaRenderer):
+        def __init__(self):
+            self.loader = MockTempitaTemplateLoader()
+    class TestTempitaRenderer(RendererTests, unittest.TestCase):
+        renderer = MockTempitaRenderer()
+
+
 if __name__ == '__main__':
     unittest.main()
 
