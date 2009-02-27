@@ -18,9 +18,10 @@ class Templating(templating.Templating):
     data to the templates without any assistance from the resource.
     """
 
-    def __init__(self, app_conf):
-        renderer = make_renderer(app_conf)
-        templating.Templating.__init__(self, renderer)
+    def args(self, request):
+        args = super(Templating, self).args(request)
+        args['remote_user'] = request.environ.get('REMOTE_USER')
+        return args
 
 
 def make_renderer(app_conf):

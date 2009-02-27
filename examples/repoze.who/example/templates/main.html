@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>repoze.who example</title>
+  </head>
+  <body>
+    {{self.body}}
+    {{if remote_user}}
+    <hr />
+    <p>Logged in as: <strong>{{remote_user}}</strong></p>
+    {{endif}}
+  </body>
+</html>
+
