@@ -5,6 +5,11 @@ Templating support library and renderer configuration.
 from restish import templating
 
 
+def make_templating(app_conf):
+    renderer = make_renderer(app_conf)
+    return Templating(renderer)
+
+
 class Templating(templating.Templating):
     """
     Application-specific templating implementation.

@@ -27,8 +27,8 @@ def setup_environ(app, global_conf, app_conf):
 
     # Create any objects that should exist for the lifetime of the application
     # here. Don't forget to actually include them in the environ below!
-    from example.lib.templating import Templating
-    templating = Templating(app_conf)
+    from example.lib.templating import make_templating
+    templating = make_templating(app_conf)
 
     def application(environ, start_response):
 
