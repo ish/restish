@@ -3,9 +3,53 @@
 import unittest
 
 from restish import http, templating
+from restish.contrib import appurl
 
 
 TEST_STRING = "A '£' symbol often breaks web pages.".decode('utf-8')
+
+
+class TestApplicationURLAccessor(unittest.TestCase):
+
+    def test_getattr(self):
+        class Module(object):
+            def news(self, request):
+                return request.application_path.child('news')
+        app_urls = appurl.ApplicationURLAccessor(http.Request.blank('/'),
+                                                 Module())
+        self.assertTrue(app_urls.news)
+        self.assertEquals(app_urls.news(), '/news')
+
+    def test_args(self):
+        class Module(object):
+            def args(self, request, foo, bar):
+                return request.application_path.child(foo, bar)
+        app_urls = appurl.ApplicationURLAccessor(http.Request.blank('/'),
+                                                 Module())
+        self.assertEquals(app_urls.args('foo', bar='bar'), '/foo/bar')
+
+    def test_private(self):
+        class Module(object):
+            def _private(self, request):
+                return request.application_path.child('_private')
+        app_urls = appurl.ApplicationURLAccessor(http.Request.blank('/'),
+                                                 Module())
+        self.assertRaises(AttributeError, app_urls.__getattr__, '_private')
+
+    def test_all(self):
+        class Module(object):
+            __all__ = ['public']
+            def public(self, request):
+                return request.application_path.child('public')
+            def private(self, request):
+                return request.application_path.child('private')
+            def _private(self, request):
+                return request.application_path.child('_private')
+        app_urls = appurl.ApplicationURLAccessor(http.Request.blank('/'),
+                                                 Module())
+        self.assertTrue(AttributeError, app_urls.public)
+        self.assertRaises(AttributeError, app_urls.__getattr__, 'private')
+        self.assertRaises(AttributeError, app_urls.__getattr__, '_private')
 
 
 class RendererTests(object):
