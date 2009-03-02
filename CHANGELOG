@@ -17,6 +17,8 @@ Changelog
   instances to work out the same thing.
 * Added Request.application_path as a convenience for getting the path part of
   the application's root URL.
+* Added the ApplicationURLAccessor contrib util, an attempt to make it easy for
+  an application to define and create its fixed/canonical URLs.
 * Added Tempita templating renderer "contrib" module.
 
 
