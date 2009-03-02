@@ -27,10 +27,19 @@ class TestRequestAttributes(unittest.TestCase):
         request = http.Request(make_environ())
         self.assertTrue(isinstance(request.host_url, url.URL))
         self.assertTrue(isinstance(request.application_url, url.URL))
+        self.assertTrue(isinstance(request.application_path, url.URL))
         self.assertTrue(isinstance(request.path_url, url.URL))
         self.assertTrue(isinstance(request.url, url.URL))
         self.assertTrue(isinstance(request.path, url.URL))
         self.assertTrue(isinstance(request.path_qs, url.URL))
+
+    def test_application_path(self):
+        r = http.Request.blank('/')
+        self.assertEquals(r.application_path, '')
+        r = http.Request.blank('/', base_url='/foo')
+        self.assertEquals(r.application_path, '/foo')
+        r = http.Request.blank('/', base_url='/foo/')
+        self.assertEquals(r.application_path, '/foo/')
 
 
 class TestResponseCreation(unittest.TestCase):

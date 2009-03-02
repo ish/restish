@@ -15,6 +15,8 @@ Changelog
   subclass webob's classes avoiding lots of getattr() calls; restish.app now
   uses the PATH_INFO from the WSGI environ instead of creating a number of URL
   instances to work out the same thing.
+* Added Request.application_path as a convenience for getting the path part of
+  the application's root URL.
 * Added Tempita templating renderer "contrib" module.
 
 

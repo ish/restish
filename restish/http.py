@@ -37,6 +37,13 @@ class Request(webob.Request):
         return url.URL(super(Request, self).application_url)
 
     @property
+    def application_path(self):
+        """
+        Return the path part of the WSGI application's URL.
+        """
+        return self.application_url.path
+
+    @property
     def path_url(self):
         """
         Return the path's URL, i.e. the current URL without the query string.

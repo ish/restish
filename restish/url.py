@@ -405,6 +405,13 @@ class URLAccessor(object):
         """
         return self.request.application_url
 
+    @property
+    def application_path(self):
+        """
+        Return the path part of the application's URL.
+        """
+        return self.request.application_path
+
     def new(self, url):
         """
         Create a new URL instance.
