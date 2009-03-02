@@ -1,6 +1,6 @@
 # Sphinx inventory version 1
 # Project: Restish
-# Version: 0.8dev
+# Version: 0.8
 restish.page mod restish.page.html
 restish.guard mod restish.guard.html
 restish.resource mod restish.resource.html
@@ -33,6 +33,7 @@ restish.http.InternalServerError.response_factory attribute restish.http.html
 restish.url.join_query function restish.url.html
 restish.http.UnauthorizedError.response_factory attribute restish.http.html
 restish.templating.page function restish.templating.html
+restish.url.URLAccessor.application_path attribute restish.url.html
 restish.http.Response class restish.http.html
 restish.http.NotFoundError exception restish.http.html
 restish.http.ForbiddenError.response_factory attribute restish.http.html
@@ -127,6 +128,7 @@ restish.url.URL.netloc attribute templating.html
 restish.http.UnauthorizedError exception restish.http.html
 restish.templating.Templating.render method restish.templating.html
 restish.http.forbidden function restish.http.html
+restish.http.Request.application_path attribute restish.http.html
 restish.http.ConflictError.response_factory attribute restish.http.html
 restish.templating.element function restish.templating.html
 restish.http.BadGatewayError exception restish.http.html

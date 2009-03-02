@@ -2,8 +2,8 @@
 Changelog
 =========
 
-0.8dev (unreleased)
--------------------
+0.8 (2009-03-02)
+----------------
 
 * Rewrote/refactored restish.templating to be more flexible, less weird ;-) and
   to make resources need no direct relation to an application's lib.templating

@@ -235,9 +235,11 @@ restish.egg-info/not-zip-safe
 restish.egg-info/requires.txt
 restish.egg-info/top_level.txt
 restish/contrib/__init__.py
+restish/contrib/appurl.py
 restish/contrib/genshirenderer.py
 restish/contrib/jinja2renderer.py
 restish/contrib/makorenderer.py
+restish/contrib/tempitarenderer.py
 restish/pastertemplate/+package+.ini_tmpl
 restish/pastertemplate/development.ini_tmpl
 restish/pastertemplate/live.ini_tmpl
