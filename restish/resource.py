@@ -176,7 +176,7 @@ def child(matcher=None):
             matcher = func.__name__
         # If the matcher is a string then create a TemplateChildMatcher in its
         # place.
-        if isinstance(matcher, str):
+        if isinstance(matcher, basestring):
             matcher = TemplateChildMatcher(matcher)
         # Annotate the function.
         setattr(func, _RESTISH_CHILD, matcher)

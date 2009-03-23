@@ -6,7 +6,7 @@ Test resource behaviour.
 
 import unittest
 
-from restish import app, http, resource
+from restish import app, http, resource, url
 from restish.tests.util import wsgi_out
 
 
@@ -100,13 +100,19 @@ class TestChildLookup(unittest.TestCase):
             @resource.child('explicitly_named_child')
             def find_me_a_child(self, request, segments):
                 return self.__class__(self.segments + ['explicitly_named_child'])
+            @resource.child(u'éxpliçítly_nämed_child_with_unicøde')
+            def find_me_a_child_with_unicode(self, request, segments):
+                return self.__class__(self.segments + ['explicitly_named_child_with_unicode'])
             def __call__(self, request):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/explicitly_named_child').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'explicitly_named_child'
-
+        R = wsgi_out(A, http.Request.blank(url.join_path([u'éxpliçítly_nämed_child_with_unicøde'])).environ)
+        assert R['status'].startswith('200')
+        assert R['body'] == 'explicitly_named_child_with_unicode'
+    
     def test_segment_consumption(self):
         class Resource(resource.Resource):
             def __init__(self, segments=[]):
