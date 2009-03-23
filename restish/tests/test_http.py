@@ -113,7 +113,6 @@ class TestServerErrorResponseFactories(unittest.TestCase):
 
     def test_responses(self):
         for func, cls, a, k, status in self.tests:
-            print "*", func
             r = func(*a, **k)
             assert r.status.startswith(status)
             assert r.headers['Content-Type'] == 'text/plain'

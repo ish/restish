@@ -28,7 +28,6 @@ class TestElement(unittest.TestCase):
         request = http.Request.blank('/', environ=environ)
         response = Page()(request)
         assert response.status.startswith('200')
-        print response.body
         assert response.body == '<div>page.html<p>element.html</p></div>'
 
     def test_element_decorator(self):

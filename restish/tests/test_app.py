@@ -117,7 +117,6 @@ class TestApp(unittest.TestCase):
                 return func
         A = app.RestishApp(WrapperResource())
         R = wsgi_out(A, http.Request.blank('/').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'func'
 
@@ -161,7 +160,6 @@ class TestApp(unittest.TestCase):
         A = app.RestishApp(Resource(''))
         assert wsgi_out(A, http.Request.blank('/').environ)['body'] == ''
         assert wsgi_out(A, http.Request.blank('/foo').environ)['body'] == 'foo'
-        print wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body']
         assert wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body'] == 'foo+bar@example.com'
 
     def test_iterable_response_body(self):
@@ -173,7 +171,6 @@ class TestApp(unittest.TestCase):
                 yield "BANG!"
             return http.ok([('Content-Type', 'text/plain')], gen())
         A = app.RestishApp(resource)
-        print  wsgi_out(A, http.Request.blank('/').environ)['body']
         assert wsgi_out(A, http.Request.blank('/').environ)['body'] == 'Three ... two ... one ... BANG!'
 
 

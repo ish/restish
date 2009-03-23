@@ -33,12 +33,10 @@ class TestResource(unittest.TestCase):
             def DELETE(self, request):
                 return http.ok([], 'DELETE')
         for method in ['GET', 'POST', 'PUT', 'DELETE']:
-            print "*", method
             environ = http.Request.blank('/',
                     environ={'REQUEST_METHOD': method},
                     headers={'Accept': 'text/html'}).environ
             response = Resource()(http.Request(environ))
-            print response.status, response.body
             assert response.status == "200 OK"
             assert response.body == method
 
@@ -50,7 +48,6 @@ class TestChildLookup(unittest.TestCase):
             pass
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/404').environ)
-        print R
         assert R['status'].startswith('404')
 
     def test_matcher_404(self):
@@ -60,7 +57,6 @@ class TestChildLookup(unittest.TestCase):
                 return
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/404').environ)
-        print R
         assert R['status'].startswith('404')
 
     def test_nameless_child(self):
@@ -77,11 +73,9 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/foo/').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'foo/'
         R = wsgi_out(A, http.Request.blank('/foo//foo/foo///').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'foo//foo/foo///'
 
@@ -96,7 +90,6 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/implicitly_named_child').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'implicitly_named_child'
 
@@ -111,7 +104,6 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/explicitly_named_child').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'explicitly_named_child'
 
@@ -126,15 +118,12 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/first').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'first'
         R = wsgi_out(A, http.Request.blank('/first/second').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'first/second'
         R = wsgi_out(A, http.Request.blank('/first/a/b/c/d/e').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'first/a/b/c/d/e'
 
@@ -149,11 +138,9 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/foo/bar').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'foo/bar'
         R = wsgi_out(A, http.Request.blank('/foo/bar/a/b/c').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == 'foo/bar/a/b/c'
 
@@ -170,7 +157,6 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], body)
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/users/foo').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == "['users', u'foo'] {'username': u'foo'}"
 
@@ -185,7 +171,6 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], '%r' % (self.segments,))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/foo').environ)
-        print R
         assert R['status'].startswith('200')
         assert R['body'] == "[u'foo']"
 
@@ -235,7 +220,6 @@ class TestChildLookup(unittest.TestCase):
         A = app.RestishApp(Resource())
         for path, expected in tests:
             R = wsgi_out(A, http.Request.blank(path).environ)
-            print path, expected, R
             assert R['body'] == expected
 
     def test_unquoted(self):
@@ -253,7 +237,6 @@ class TestChildLookup(unittest.TestCase):
                 return http.ok([], self.match.encode('utf-8'))
         A = app.RestishApp(Resource())
         R = wsgi_out(A, http.Request.blank('/%C2%A3').environ)
-        print repr(R['body'])
         assert R['body'] == '£'
 
     def _test_custom_match(self):
@@ -270,7 +253,6 @@ class TestAcceptContentNegotiation(unittest.TestCase):
         res = Resource()
         environ = http.Request.blank('/', headers={'Accept': 'text/plain'}).environ
         response = res(http.Request(environ))
-        print response.status
         assert response.status.startswith("406")
 
     def test_implicit_content_type(self):
@@ -298,7 +280,6 @@ class TestAcceptContentNegotiation(unittest.TestCase):
         res = Resource()
         environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
-        print response.headers.get('Content-Type')
         assert response.headers.get('Content-Type') is None
 
     def test_explicit_content_type(self):
@@ -692,7 +673,6 @@ class TestShortAccepts(unittest.TestCase):
         res = Resource()
         environ = http.Request.blank('/', headers=[('Accept', 'text/html')]).environ
         response = res(http.Request(environ))
-        print response.status
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'text/html'
 
@@ -707,7 +687,6 @@ class TestShortAccepts(unittest.TestCase):
         res = Resource()
         environ = http.Request.blank('/', headers=[('Accept', 'application/json')]).environ
         response = res(http.Request(environ))
-        print response.status
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'application/json'
 
@@ -722,7 +701,6 @@ class TestShortAccepts(unittest.TestCase):
         res = Resource()
         environ = http.Request.blank('/').environ
         response = res(http.Request(environ))
-        print response.status
         assert response.status == "200 OK"
         assert response.headers['Content-Type'] == 'unknown'
 

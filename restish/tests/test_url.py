@@ -494,7 +494,6 @@ class TestURLAccessor(unittest.TestCase):
         self.assertTrue(isinstance(self.url_accessor.path_url, url.URL))
 
     def test_url(self):
-        print "*", self.url_accessor.url, self.request.url, self.url
         self.assertEquals(self.url_accessor.url, self.request.url)
         self.assertEquals(self.url_accessor.url, self.url)
         self.assertTrue(isinstance(self.url_accessor.url, url.URL))
