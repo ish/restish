@@ -24,7 +24,10 @@ setup(name='${project}',
       ],
       entry_points="""
       # -*- Entry points: -*-
-      [paste.app_factory]
-      main = ${package}.wsgiapp:make_app
+[paste.app_factory]
+main = ${package}.wsgiapp:make_app
+
+[paste.app_install]
+main = paste.script.appinstall:Installer
       """,
       )

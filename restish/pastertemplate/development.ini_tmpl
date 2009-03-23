@@ -9,8 +9,11 @@ CACHE_DIR = %(here)s/cache
 [composite:main]
 use = egg:Paste#cascade
 app1 = public
-app2 = config:${package}.ini#${package}
+app2 = ${package}
 filter-with = evalerror
+
+[app:${package}]
+use = config:${package}.ini#${package}
 
 [app:public]
 use = egg:Paste#static
