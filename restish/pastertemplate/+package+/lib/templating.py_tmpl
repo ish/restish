@@ -34,9 +34,9 @@ def make_renderer(app_conf):
     #from restish.contrib.makorenderer import MakoRenderer
     #return MakoRenderer(
     #        directories=[
-    #            pkg_resources.resource_filename('${package}', 'templates')
+    #            pkg_resources.resource_filename('${package}', 'template')
     #            ],
-    #        module_directory=os.path.join(app_conf['cache_dir'], 'templates'),
+    #        module_directory=os.path.join(app_conf['cache_dir'], 'template'),
     #        input_encoding='utf-8', output_encoding='utf-8',
     #        default_filters=['unicode', 'h']
     #        )
@@ -45,7 +45,7 @@ def make_renderer(app_conf):
     #from restish.contrib.jinja2renderer import Jinja2Renderer
     #from jinja2 import PackageLoader
     #return Jinja2Renderer(
-    #        loader=PackageLoader('${package}', 'templates'),
+    #        loader=PackageLoader('${package}', 'template'),
     #        autoescape=True
     #        )
 
@@ -53,7 +53,7 @@ def make_renderer(app_conf):
     #from restish.contrib.genshirenderer import GenshiRenderer
     #import genshi.template.loader
     #return GenshiRenderer(
-    #        genshi.template.loader.package('${package}', 'templates')
+    #        genshi.template.loader.package('${package}', 'template')
     #        )
 
     # Uncomment for an example of Tempita templating support.
@@ -61,7 +61,7 @@ def make_renderer(app_conf):
     #from restish.contrib.tempitarenderer import TempitaRenderer, TempitaFileSystemLoader
     #return TempitaRenderer(
     #        TempitaFileSystemLoader(
-    #            pkg_resources.resource_filename('${package}', 'templates')
+    #            pkg_resources.resource_filename('${package}', 'template')
     #            )
     #        )
 
