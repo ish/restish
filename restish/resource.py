@@ -4,8 +4,9 @@ Base Resource class and associates methods for children and content negotiation
 import inspect
 import mimetypes
 import re
+import mimeparse
 
-from restish import http, _mimeparse as mimeparse
+from restish import http
 
 
 _RESTISH_CHILD = "restish_child"

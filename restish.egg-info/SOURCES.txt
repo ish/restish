@@ -216,7 +216,6 @@ docs/html/_static/js/ui/i18n/ui.datepicker-uk.js
 docs/html/_static/js/ui/i18n/ui.datepicker-zh-CN.js
 docs/html/_static/js/ui/i18n/ui.datepicker-zh-TW.js
 restish/__init__.py
-restish/_mimeparse.py
 restish/app.py
 restish/error.py
 restish/guard.py
@@ -245,6 +244,7 @@ restish/pastertemplate/development.ini_tmpl
 restish/pastertemplate/live.ini_tmpl
 restish/pastertemplate/setup.py_tmpl
 restish/pastertemplate/+package+/__init__.py
+restish/pastertemplate/+package+/websetup.py_tmpl
 restish/pastertemplate/+package+/wsgiapp.py_tmpl
 restish/pastertemplate/+package+/lib/__init__.py
 restish/pastertemplate/+package+/lib/guard.py

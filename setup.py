@@ -38,6 +38,7 @@ or database engine.
       install_requires=[
           # -*- Extra requirements: -*-
           'decorator',
+          'mimeparse',
           'WebOb',
       ],
       entry_points="""
