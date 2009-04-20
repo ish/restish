@@ -45,7 +45,7 @@ class RestishApp(object):
             # No result returned? 404.
             if result is None:
                 raise http.NotFoundError()
-            # Either aa (resource, remaining segments) tuple or an object to
+            # Either a (resource, remaining segments) tuple or an object to
             # forward the lookup to is acceptable.
             if isinstance(result, tuple):
                 resource, segments = result
