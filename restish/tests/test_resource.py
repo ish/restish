@@ -245,6 +245,25 @@ class TestChildLookup(unittest.TestCase):
         R = wsgi_out(A, http.Request.blank('/%C2%A3').environ)
         assert R['body'] == '£'
 
+    def test_child_is_a_response(self):
+        class Resource(resource.Resource):
+            @resource.child()
+            def foo(self, request, segments):
+                return http.ok([], 'foobar')
+        # Check a leaf child (no more segments).
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/foo').environ)
+        assert R['body'] == 'foobar'
+        # Check a branch child (additional segments)
+        A = app.RestishApp(Resource())
+        R = wsgi_out(A, http.Request.blank('/foo/bar').environ)
+        assert R['body'] == 'foobar'
+
+    def test_root_is_a_response(self):
+        A = app.RestishApp(http.ok([], 'foobar'))
+        R = wsgi_out(A, http.Request.blank('/foo').environ)
+        assert R['body'] == 'foobar'
+
     def _test_custom_match(self):
         self.fail()
 

@@ -13,10 +13,9 @@ class RestishApp(object):
         # Create a request object.
         request = http.Request(environ)
         try:
-            # Locate the resource.
-            resource = self.locate_resource(request)
-            # Call the resource to render the page.
-            response = self.get_response(request, resource)
+            # Locate the resource and convert it to a response.
+            resource_or_response = self.locate_resource(request)
+            response = self.get_response(request, resource_or_response)
         except error.HTTPError, e:
             response = e.make_response()
         # Send the response to the WSGI parent.
@@ -34,9 +33,10 @@ class RestishApp(object):
         segments = url.split_path(request.environ['PATH_INFO'])
         if segments == ['']:
             segments = []
-        # Recurse into the resource hierarchy until we run out of segments.
+        # Recurse into the resource hierarchy until we run out of segments or
+        # find a Response.
         resource = self.root
-        while segments:
+        while segments and not isinstance(resource, http.Response):
             resource_child = getattr(resource, 'resource_child', None)
             # No resource_child method? 404.
             if resource_child is None:
@@ -53,17 +53,15 @@ class RestishApp(object):
                 resource = result
         return resource
 
-    def get_response(self, request, resource):
+    def get_response(self, request, resource_or_response):
         """
-        Recursively call the resource until we get a response.
-        
-        A resource is allowed to return another resource to be used in its
-        place. This method handles the recursive calling.
+        Resolve the resource/response until we get a response.
+
+        The resource_or_response arg may be either an http.Response instance or
+        a callable resource. A callable resource may return another callable to
+        use in its place.
         """
-        while True:
-            response = resource(request)
-            if isinstance(response, http.Response):
-                break
-            resource = response
-        return response
+        while not isinstance(resource_or_response, http.Response):
+            resource_or_response = resource_or_response(request)
+        return resource_or_response
 

@@ -7,6 +7,8 @@ Changelog
 
 * Replaced copy of mimeparse with an external dependency to the mimeparse
   package.
+* Allow a response to be returned during URL traversal, i.e. the result of a
+  @child-decorated method.
 
 
 0.8 (2009-03-02)
