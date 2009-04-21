@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: restish
-Version: 0.9
+Version: 0.10dev
 Summary: WSGI framework/library for building resource- and rest- oriented web sites
 Home-page: http://ish.io/projects/show/restish
 Author: ish
