@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>How to work with WSGI Apps &mdash; Restish v0.8 documentation</title>
+    <title>How to work with WSGI Apps &mdash; Restish v0.9 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '',
-          VERSION:     '0.8',
+          VERSION:     '0.9',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.8 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.9 documentation" href="index.html" />
     <link rel="next" title="Core restish Modules" href="modules.html" />
     <link rel="prev" title="Access Control using Guard" href="guard.html" /> 
 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="guard.html" title="Access Control using Guard"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.8 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -73,9 +73,9 @@
 <p>The wsgiapp is shown below.</p>
 <p><tt class="docutils literal"><span class="pre">make_app</span></tt> is set up to define the restish app by passing the root resource to it. The restish app is then passed to the setup_environ function</p>
 <p><tt class="docutils literal"><span class="pre">setup_environ</span></tt> can be used to set any attributes on the environ you may wish. In this case templating is setup by creating a Templating instance.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restish.app</span> <span class="kn">import</span> <span class="n">RestishApp</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">from</span> <span class="nn">restish.app</span> <span class="k">import</span> <span class="n">RestishApp</span>
 
-<span class="kn">from</span> <span class="nn">myproject.resource</span> <span class="kn">import</span> <span class="n">root</span>
+<span class="k">from</span> <span class="nn">myproject.resource</span> <span class="k">import</span> <span class="n">root</span>
 
 
 <span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
@@ -98,7 +98,7 @@
 
     <span class="c"># Create any objects that should exist for the lifetime of the application</span>
     <span class="c"># here. Don&#39;t forget to actually include them in the environ below!</span>
-    <span class="kn">from</span> <span class="nn">myproject.lib.templating</span> <span class="kn">import</span> <span class="n">Templating</span>
+    <span class="k">from</span> <span class="nn">myproject.lib.templating</span> <span class="k">import</span> <span class="n">Templating</span>
     <span class="n">templating</span> <span class="o">=</span> <span class="n">Templating</span><span class="p">(</span><span class="n">app_conf</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
@@ -221,11 +221,11 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">How to work with WSGI Apps</a><ul>
-<li><a class="reference" href="#whats-in-the-wsgiapp-py">Whats in the wsgiapp.py?</a></li>
-<li><a class="reference" href="#adding-a-wsgi-app-to-our-project">Adding a WSGI app to our project</a></li>
-<li><a class="reference" href="#can-i-see-an-example-of-middleware-please">Can I see an example of middleware please?</a><ul>
-<li><a class="reference" href="#cookies">Cookies</a></li>
+<li><a class="reference external" href="">How to work with WSGI Apps</a><ul>
+<li><a class="reference external" href="#whats-in-the-wsgiapp-py">Whats in the wsgiapp.py?</a></li>
+<li><a class="reference external" href="#adding-a-wsgi-app-to-our-project">Adding a WSGI app to our project</a></li>
+<li><a class="reference external" href="#can-i-see-an-example-of-middleware-please">Can I see an example of middleware please?</a><ul>
+<li><a class="reference external" href="#cookies">Cookies</a></li>
 </ul>
 </li>
 </ul>
@@ -265,7 +265,7 @@
         <li class="right" >
           <a href="guard.html" title="Access Control using Guard"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.8 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

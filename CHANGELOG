@@ -2,13 +2,16 @@
 Changelog
 =========
 
-0.9 (not yet released)
-----------------------
+0.9 (2009-04-21)
+----------------
 
+* Allow a response to be returned during URL traversal, i.e. as the result of a
+  @child-decorated method.
 * Replaced copy of mimeparse with an external dependency to the mimeparse
   package.
-* Allow a response to be returned during URL traversal, i.e. the result of a
-  @child-decorated method.
+* Fixed @child decorator to match static, unicode strings.
+* Add setup-app entry point for newly generated paster template projects.
+* Add test suite location to setup.py so "python setup.py test" just works.
 
 
 0.8 (2009-03-02)

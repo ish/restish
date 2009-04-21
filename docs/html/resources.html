@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Restish Resources &mdash; Restish v0.8 documentation</title>
+    <title>Restish Resources &mdash; Restish v0.9 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '',
-          VERSION:     '0.8',
+          VERSION:     '0.9',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.8 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.9 documentation" href="index.html" />
     <link rel="next" title="Templating in Restish" href="templating.html" />
     <link rel="prev" title="An Introduction to Restish" href="introduction.html" /> 
 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="introduction.html" title="An Introduction to Restish"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.8 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -70,8 +70,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
+<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -86,7 +86,7 @@
 <p>This is just an example to get you going. Lets take a look at what it does.</p>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -695,7 +695,7 @@ to multiple encodings, give it a list (e.g. GET(acept=[&#8216;html&#8217;,&#8217
 <p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
+<p class="last">Content negotiation within restish also honours the clients accept-quality scores. e.g. if a client sends <tt class="docutils literal"><span class="pre">text/html;q=0.4,text/plain;q=0.5</span></tt> text/plain will be preferred. See <a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html</a></p>
 </div>
 <p>We sometimes want to match lists of content types, for example where we would
 like to use <tt class="docutils literal"><span class="pre">application/xhtml+xml</span></tt>. This are honoured by restish. (See
@@ -711,36 +711,36 @@ test_resource.py in the unit tests for examples)</p>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference" href="">Restish Resources</a><ul>
-<li><a class="reference" href="#our-project-resource">Our project resource</a><ul>
-<li><a class="reference" href="#logging">Logging</a></li>
-<li><a class="reference" href="#so-what-is-a-resource">So what is a resource?</a></li>
+<li><a class="reference external" href="">Restish Resources</a><ul>
+<li><a class="reference external" href="#our-project-resource">Our project resource</a><ul>
+<li><a class="reference external" href="#logging">Logging</a></li>
+<li><a class="reference external" href="#so-what-is-a-resource">So what is a resource?</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#resource-url-handling">Resource URL Handling</a><ul>
-<li><a class="reference" href="#implicitly-named-child">Implicitly named child</a></li>
-<li><a class="reference" href="#explicitly-named-child">Explicitly named child</a></li>
-<li><a class="reference" href="#chaining-resources">Chaining Resources</a></li>
-<li><a class="reference" href="#handling-it-yourself">Handling it yourself</a></li>
-<li><a class="reference" href="#template-resource-matchers">Template Resource Matchers</a></li>
-<li><a class="reference" href="#which-child-to-use">Which child to use?</a><ul>
-<li><a class="reference" href="#a-b-c">/a/b/c</a></li>
-<li><a class="reference" href="#a-b-foo">/a/b/foo</a></li>
-<li><a class="reference" href="#a-b-c-foo">/a/b/c/foo</a></li>
-<li><a class="reference" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
-<li><a class="reference" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
+<li><a class="reference external" href="#resource-url-handling">Resource URL Handling</a><ul>
+<li><a class="reference external" href="#implicitly-named-child">Implicitly named child</a></li>
+<li><a class="reference external" href="#explicitly-named-child">Explicitly named child</a></li>
+<li><a class="reference external" href="#chaining-resources">Chaining Resources</a></li>
+<li><a class="reference external" href="#handling-it-yourself">Handling it yourself</a></li>
+<li><a class="reference external" href="#template-resource-matchers">Template Resource Matchers</a></li>
+<li><a class="reference external" href="#which-child-to-use">Which child to use?</a><ul>
+<li><a class="reference external" href="#a-b-c">/a/b/c</a></li>
+<li><a class="reference external" href="#a-b-foo">/a/b/foo</a></li>
+<li><a class="reference external" href="#a-b-c-foo">/a/b/c/foo</a></li>
+<li><a class="reference external" href="#a-foo-c-bar">/a/foo/c/bar</a></li>
+<li><a class="reference external" href="#a-b-foo-bar">/a/b/foo/bar</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#custom-matchers">Custom Matchers</a></li>
-<li><a class="reference" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
+<li><a class="reference external" href="#custom-matchers">Custom Matchers</a></li>
+<li><a class="reference external" href="#parse-it-all-yourself-matcher">&#8216;Parse it all yourself&#8217; matcher</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#request-handlers">Request Handlers</a><ul>
-<li><a class="reference" href="#other-http-handlers">Other HTTP Handlers</a></li>
-<li><a class="reference" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
+<li><a class="reference external" href="#request-handlers">Request Handlers</a><ul>
+<li><a class="reference external" href="#other-http-handlers">Other HTTP Handlers</a></li>
+<li><a class="reference external" href="#other-restish-http-response-codes">Other restish http response codes</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#content-negotiation">Content Negotiation</a></li>
+<li><a class="reference external" href="#content-negotiation">Content Negotiation</a></li>
 </ul>
 </li>
 </ul>
@@ -778,7 +778,7 @@ test_resource.py in the unit tests for examples)</p>
         <li class="right" >
           <a href="introduction.html" title="An Introduction to Restish"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.8 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
