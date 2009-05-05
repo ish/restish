@@ -1,0 +1,34 @@
+repoze.who integration example
+==============================
+
+This example demonstrates:
+
+* Handling authentication against a custom user "database" using repoze.who.
+* Using repoze.who to load additional information about the authenticated user.
+* Protecting a resource (/secret) from anonymous access.
+* Login/logout.
+* Passing the authenticated user's identity to the templates to allow templates
+  to adapt the UI.
+
+
+Main points of interest:
+
+Most, if not all, of the repoze.who-specific code is in example/who.py. The
+repoze.who middleware configuration is in who.ini.
+
+The repoze.who middleware is configured in example/wsgiapp.py. It's after the
+basic environ setup to allow it to see the WSGI environ for database
+configuration etc, and before the actual application so the middleware can
+intercept "401 Unauthorized" errors.
+
+The Templating class in example/lib/templating.py adds the repoze.who identity
+to the template args so the templates can display user information and adapt
+the UI where appropriate.
+
+Because the /secret resource is protected from unauthorized access all of its
+children (if it had any) would be protected too.
+
+The "user database" is a stupid dict of information to keep the example simple
+but could easily be a full database, a file on disk, or a call to a remote
+system.
+
