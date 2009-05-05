@@ -27,9 +27,15 @@ class GuardError(Exception):
     """
     Guard check failure.
     """
+
     def __init__(self, message):
         Exception.__init__(self, message)
         self.message = message
+
+    # Add a property for 'message' to hide Python 2.6 deprecation warnings.
+    def _get_message(self): return self._message
+    def _set_message(self, message): self._message = message
+    message = property(_get_message, _set_message)
 
 
 def guard(*checkers, **kwargs):
