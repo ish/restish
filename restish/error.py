@@ -31,7 +31,6 @@ class HTTPError(RestishException):
         Create an HTTP response for this exception type.
         """
         return self.response_factory(*self.args, **self.kwargs)
-    pass
 
 
 class HTTPClientError(HTTPError):
