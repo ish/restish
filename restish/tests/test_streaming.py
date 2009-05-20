@@ -36,21 +36,24 @@ class TestStreaming(unittest.TestCase):
         assert R['body'] == 'cstringio'
 
     def test_file(self):
-        def file_closing_iter(f):
-            try:
-                while True:
-                    data = f.read(100)
-                    if not data:
-                        return
-                    yield data
-            finally:
-                f.close()
+        class FileStreamer(object):
+            def __init__(self, f):
+                self.f = f
+            def __iter__(self):
+                return self
+            def next(self):
+                data = self.f.read(100)
+                if data:
+                    return data
+                raise StopIteration()
+            def close(self):
+                self.f.close()
         (fd, filename) = tempfile.mkstemp()
         f = os.fdopen(fd, 'w')
         f.write('file')
         f.close()
         f = open(filename)
-        R = wsgi_out(app.RestishApp(Resource(file_closing_iter(f))),
+        R = wsgi_out(app.RestishApp(Resource(FileStreamer(f))),
                      http.Request.blank('/').environ)
         assert R['status'].startswith('200')
         assert R['body'] == 'file'
