@@ -262,4 +262,5 @@ restish/tests/test_resource.py
 restish/tests/test_streaming.py
 restish/tests/test_templating.py
 restish/tests/test_url.py
+restish/tests/test_util.py
 restish/tests/util.py
