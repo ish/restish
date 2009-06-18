@@ -46,7 +46,6 @@ class TestResourceFunc(unittest.TestCase):
         assert response.body == 'Hello'
         request = http.Request.blank('/', headers={'Accept': 'text/html'})
         response = func(http.Request(request.environ))
-        print "*****", response.status
         assert response.status == '406 Not Acceptable'
 
 
