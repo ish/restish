@@ -37,10 +37,10 @@ def _gather_request_dispatchers(cls, clsattrs):
     """
     # Copy the super class's 'request_dispatchers' dict (if any) to this class.
     cls.request_dispatchers = dict(getattr(cls, 'request_dispatchers', {}))
-    for callable in _find_annotated_funcs(clsattrs, _RESTISH_METHOD):
-        method = getattr(callable, _RESTISH_METHOD, None)
-        match = getattr(callable, _RESTISH_MATCH)
-        cls.request_dispatchers.setdefault(method, []).append((callable, match))
+    for wrapper in _find_annotated_funcs(clsattrs, _RESTISH_METHOD):
+        method = getattr(wrapper, _RESTISH_METHOD, None)
+        match = getattr(wrapper, _RESTISH_MATCH)
+        cls.request_dispatchers.setdefault(method, []).append((wrapper.func, match))
 
 
 def _gather_child_factories(cls, clsattrs):
@@ -63,9 +63,7 @@ def _find_annotated_funcs(clsattrs, annotation):
     """
     Return a (generated) list of methods that include the given annotation.
     """
-    funcs = (item for item in clsattrs.itervalues() \
-             if inspect.isroutine(item))
-    funcs = (func for func in funcs \
+    funcs = (func for func in clsattrs.itervalues() \
              if getattr(func, annotation, None) is not None)
     return funcs
 
@@ -107,27 +105,31 @@ class Resource(object):
         dispatcher = _best_dispatcher(dispatchers, request)
         if dispatcher is not None:
             (callable, match) = dispatcher
-            response = callable(self, request)
-            # Try to autocomplete the content-type header if not set
-            # explicitly.
-            # If there's no accept from the client and there's only one
-            # possible type from the match then use that as the best match.
-            # Otherwise use mimeparse to work out what the best match was. If
-            # the best match if not a wildcard then we know what content-type
-            # should be.
-            if isinstance(response, http.Response) and \
-                    not response.headers.get('content-type'):
-                accept = str(request.accept)
-                if not accept and len(match['accept']) == 1:
-                    best_match = match['accept'][0]
-                else:
-                    best_match = mimeparse.best_match(match['accept'], accept)
-                if '*' not in best_match:
-                    response.headers['content-type'] = best_match
-            return response
+            return _dispatch(request, match, lambda r: callable(self, r))
         # No match, send 406
         return http.not_acceptable([('Content-Type', 'text/plain')], \
                                    '406 Not Acceptable')
+
+
+def _dispatch(request, match, func):
+    response = func(request)
+    # Try to autocomplete the content-type header if not set
+    # explicitly.
+    # If there's no accept from the client and there's only one
+    # possible type from the match then use that as the best match.
+    # Otherwise use mimeparse to work out what the best match was. If
+    # the best match if not a wildcard then we know what content-type
+    # should be.
+    if isinstance(response, http.Response) and \
+            not response.headers.get('content-type'):
+        accept = str(request.accept)
+        if not accept and len(match['accept']) == 1:
+            best_match = match['accept'][0]
+        else:
+            best_match = mimeparse.best_match(match['accept'], accept)
+        if '*' not in best_match:
+            response.headers['content-type'] = best_match
+    return response
 
 
 def _best_dispatcher(dispatchers, request):
@@ -263,9 +265,42 @@ class MethodDecorator(object):
         self.match = {'accept': accept, 'content_type': content_type}
 
     def __call__(self, func):
-        setattr(func, _RESTISH_METHOD, self.method)
-        setattr(func, _RESTISH_MATCH, self.match)
-        return func
+        wrapper = ResourceMethodWrapper(func)
+        setattr(wrapper, _RESTISH_METHOD, self.method)
+        setattr(wrapper, _RESTISH_MATCH, self.match)
+        return wrapper
+
+
+class ResourceMethodWrapper(object):
+    """
+    Wraps a @resource.GET etc -decorated function to ensure the function is
+    only called with a matching request. If the request does not match then an
+    HTTP error response is returned.
+
+    Implementation note: The wrapper class is always added to decorated
+    functions. However, the wrapper is discarded for Resource methods at the
+    time the annotated methods are collected by the metaclass. This is because
+    the Resource._call__ is already doing basicall the same work, only it has a
+    whole suite of dispatchers to worry about.
+    """
+
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, request):
+        # Extract annotations.
+        method = getattr(self, _RESTISH_METHOD)
+        match = getattr(self, _RESTISH_MATCH)
+        # Check for correct method.
+        if request.method != method:
+            return http.method_not_allowed([method])
+        # Look for a dispatcher.
+        dispatcher = _best_dispatcher([(self.func, match)], request)
+        if dispatcher is not None:
+            return _dispatch(request, match, self.func)
+        # No dispatcher.
+        return http.not_acceptable([('Content-Type', 'text/plain')], \
+                                   '406 Not Acceptable')
         
 
 class DELETE(MethodDecorator):

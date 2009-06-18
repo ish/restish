@@ -10,6 +10,46 @@ from restish import app, http, resource, url
 from restish.tests.util import wsgi_out
 
 
+class TestResourceFunc(unittest.TestCase):
+
+    def test_anything(self):
+        def func(request):
+            return http.ok([('Content-Type', 'text/plain')], 'Hello')
+        request = http.Request.blank('/', environ={'REQUEST_METHOD': 'GET'})
+        response = func(http.Request(request.environ))
+        assert response.status == '200 OK'
+        assert response.body == 'Hello'
+        request = http.Request.blank('/', environ={'REQUEST_METHOD': 'POST'})
+        response = func(http.Request(request.environ))
+        assert response.status == '200 OK'
+        assert response.body == 'Hello'
+
+    def test_method_match(self):
+        @resource.GET()
+        def func(request):
+            return http.ok([('Content-Type', 'text/plain')], 'Hello')
+        request = http.Request.blank('/', environ={'REQUEST_METHOD': 'GET'})
+        response = func(http.Request(request.environ))
+        assert response.status == '200 OK'
+        assert response.body == 'Hello'
+        request = http.Request.blank('/', environ={'REQUEST_METHOD': 'POST'})
+        response = func(http.Request(request.environ))
+        assert response.status == '405 Method Not Allowed'
+
+    def test_accept_match(self):
+        @resource.GET(accept='text/plain')
+        def func(request):
+            return http.ok([], 'Hello')
+        request = http.Request.blank('/', headers={'Accept': 'text/plain'})
+        response = func(http.Request(request.environ))
+        assert response.status == '200 OK'
+        assert response.body == 'Hello'
+        request = http.Request.blank('/', headers={'Accept': 'text/html'})
+        response = func(http.Request(request.environ))
+        print "*****", response.status
+        assert response.status == '406 Not Acceptable'
+
+
 class TestResource(unittest.TestCase):
 
     def test_no_method_handler(self):
