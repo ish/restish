@@ -30,4 +30,6 @@ main = ${package}.wsgiapp:make_app
 [paste.app_install]
 main = paste.script.appinstall:Installer
       """,
+      test_suite="${package}.tests",
+      tests_require=['WebTest'],
       )

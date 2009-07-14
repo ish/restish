@@ -1,0 +1,15 @@
+[DEFAULT]
+CACHE_DIR = %(here)s/cache
+
+[composite:main]
+use = egg:Paste#cascade
+app1 = public
+app2 = ${package}
+
+[app:${package}]
+use = config:${package}.ini#${package}
+
+[app:public]
+use = egg:Paste#static
+document_root = %(here)s/${package}/public
+
