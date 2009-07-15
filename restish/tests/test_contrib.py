@@ -52,10 +52,13 @@ class TestApplicationURLAccessor(unittest.TestCase):
         self.assertRaises(AttributeError, app_urls.__getattr__, '_private')
 
 
-class _RendererTestBase(unittest.TestCase):
+class RendererTestMixin(object):
     """
-    Base class for any templating engine -specific tests we can run (depends on
+    Mixin class for any templating engine -specific tests we can run (depends on
     imports).
+
+    XXX This is written as a mixin-style thingy to stop the standard unittest
+    test collector picking it up as a TestCase.
     """
 
     def setUp(self):
@@ -107,7 +110,7 @@ class _RendererTestBase(unittest.TestCase):
 
 try:
     from restish.contrib import makorenderer
-    class TestMakoRenderer(_RendererTestBase):
+    class TestMakoRenderer(RendererTestMixin, unittest.TestCase):
         def setUp(self):
             super(TestMakoRenderer, self).setUp()
             self.renderer = makorenderer.MakoRenderer(
@@ -119,7 +122,7 @@ except ImportError:
 try:
     from restish.contrib import jinja2renderer
     import jinja2
-    class TestJinja2Renderer(_RendererTestBase):
+    class TestJinja2Renderer(RendererTestMixin, unittest.TestCase):
         def setUp(self):
             super(TestJinja2Renderer, self).setUp()
             self.renderer = jinja2renderer.Jinja2Renderer(
@@ -131,7 +134,7 @@ except ImportError:
 try:
     from restish.contrib import genshirenderer
     from genshi.template import loader
-    class TestGenshiRenderer(_RendererTestBase):
+    class TestGenshiRenderer(RendererTestMixin, unittest.TestCase):
         def setUp(self):
             super(TestGenshiRenderer, self).setUp()
             self.renderer = genshirenderer.GenshiRenderer(
@@ -142,7 +145,7 @@ except ImportError:
 
 try:
     from restish.contrib import tempitarenderer
-    class TestTempitaRenderer(_RendererTestBase):
+    class TestTempitaRenderer(RendererTestMixin, unittest.TestCase):
         def setUp(self):
             super(TestTempitaRenderer, self).setUp()
             self.renderer = tempitarenderer.TempitaRenderer(
