@@ -5,9 +5,25 @@ General-purpose utilities.
 from restish import http, url
 
 
+class WSGIResource(object):
+    """
+    Resource that will call out to the provided WSGI application.
+    """
+
+    def __init__(self, wsgi_app, _path_info_segments=None):
+        self.wsgi_app = wsgi_app
+        self._path_info_segments = _path_info_segments or []
+
+    def resource_child(self, request, segments):
+        return self.__class__(self.wsgi_app, segments), []
+
+    def __call__(self, request):
+        return wsgi(request, self.wsgi_app, self._path_info_segments)
+
+
 def wsgi(request, app, path_info_segments):
     """
-    Call out to another wsgi application.
+    Low-level function to call out to another wsgi application.
 
     WARNING: This is only a partial implementation for now. It does not handle
     the start_response exc_info arg, nor does it handle calls to the write
