@@ -8,9 +8,13 @@ Changelog
 * Extend the @resource.GET et al decorators so they can be used on functions
   (i.e. not methods) to benefit from request method checking and content
   negotiation checking.
-* Minor Python 2.4/2.6 compatability changes.
-* Improvements to "python setup.py test".
+* Fix "method not allowed" response when the Resource has no handlers for the
+  request's method.
 * Add support for resources that are WSGI applications.
+* Start using WebTest in unittests for improved response validation and simpler
+  testing.
+* Improvements to "python setup.py test".
+* Minor Python 2.4/2.6 compatability changes.
 
 
 0.9 (2009-04-21)

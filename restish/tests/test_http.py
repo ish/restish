@@ -101,6 +101,12 @@ class TestSuccessResponseFactories(unittest.TestCase):
         assert r.status.startswith('304')
         assert r.headers['ETag'] == '123'
 
+    def test_method_not_allowed(self):
+        r = http.method_not_allowed('GET, POST')
+        assert r.headers['Allow'] == 'GET, POST'
+        r = http.method_not_allowed(['GET', 'POST'])
+        assert r.headers['Allow'] == 'GET, POST'
+
 
 class TestServerErrorResponseFactories(unittest.TestCase):
 

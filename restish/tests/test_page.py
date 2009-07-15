@@ -1,6 +1,11 @@
 import unittest
+import webtest
 
-from restish import http, resource, page, templating
+from restish import app, http, resource, page, templating
+
+
+def make_app(root):
+    return webtest.TestApp(app.RestishApp(root))
 
 
 class TestElement(unittest.TestCase):
@@ -24,10 +29,7 @@ class TestElement(unittest.TestCase):
             @page.element('foo')
             def foo(self, request):
                 return Element()
-        environ = {'restish.templating': templating.Templating(renderer)}
-        request = http.Request.blank('/', environ=environ)
-        response = Page()(request)
-        assert response.status.startswith('200')
+        response = make_app(Page()).get('/', extra_environ={'restish.templating': templating.Templating(renderer)}, status=200)
         assert response.body == '<div>page.html<p>element.html</p></div>'
 
     def test_element_decorator(self):

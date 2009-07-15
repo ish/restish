@@ -372,6 +372,8 @@ def method_not_allowed(allow):
     identified by the Request-URI. The response MUST include an Allow header
     containing a list of valid methods for the requested resource.
     """
+    if isinstance(allow, list):
+        allow = ', '.join(allow)
     return Response("405 Method Not Allowed",
           [('Content-Type', 'text/plain'), \
            ('Allow', allow)], "405 Method Not Allowed")

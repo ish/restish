@@ -1,7 +1,7 @@
 import unittest
+import webtest
 
 from restish import app, http, resource, url
-from restish.tests.util import wsgi_out
 
 
 class Resource(resource.Resource):
@@ -24,43 +24,36 @@ class TestApp(unittest.TestCase):
 
     def test_root(self):
         A = app.RestishApp(Resource('root'))
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'root'
+        R = webtest.TestApp(A).get('/', status=200)
+        assert R.body == 'root'
 
     def test_not_found(self):
         A = app.RestishApp(resource.Resource())
-        R = wsgi_out(A, http.Request.blank('/not_found').environ)
-        assert R['status'].startswith('404')
+        R = webtest.TestApp(A).get('/not_found', status=404)
 
     def test_not_found_on_none(self):
         class Resource(resource.Resource):
             def resource_child(self, request, segments):
                 return None
         A = app.RestishApp(Resource())
-        R = wsgi_out(A, http.Request.blank('/not_found').environ)
-        assert R['status'].startswith('404')
+        R = webtest.TestApp(A).get('/not_found', status=404)
 
     def test_children(self):
         A = app.RestishApp(Resource('root', {'foo': Resource('foo'), 'bar': Resource('bar')}))
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'root'
-        R = wsgi_out(A, http.Request.blank('/foo').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'foo'
-        R = wsgi_out(A, http.Request.blank('/bar').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'bar'
+        R = webtest.TestApp(A).get('/', status=200)
+        assert R.body == 'root'
+        R = webtest.TestApp(A).get('/foo', status=200)
+        assert R.body == 'foo'
+        R = webtest.TestApp(A).get('/bar', status=200)
+        assert R.body == 'bar'
 
     def test_resource_returns_resource_when_called(self):
         class WrapperResource(resource.Resource):
             def __call__(self, request):
                 return Resource('root')
         A = app.RestishApp(WrapperResource())
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'root'
+        R = webtest.TestApp(A).get('/', status=200)
+        assert R.body == 'root'
 
     def test_resource_returns_resource(self):
         """
@@ -72,7 +65,7 @@ class TestApp(unittest.TestCase):
             def resource_child(self, request, segments):
                 return self.__class__(segments), []
             def __call__(self, request):
-                return http.ok([], repr(self.segments))
+                return http.ok([('Content-Type', 'text/plain')], repr(self.segments))
         class WrapperResource(object):
             def resource_child(self, request, segments):
                 return WrappedResource()
@@ -80,13 +73,11 @@ class TestApp(unittest.TestCase):
                 return WrappedResource()
         A = app.RestishApp(WrapperResource())
         # Call the wrapper
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == "None"
+        R = webtest.TestApp(A).get('/', status=200)
+        assert R.body == "None"
         # Call a child of the wrapper
-        R = wsgi_out(A, http.Request.blank('/foo/bar').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == "[u'foo', u'bar']"
+        R = webtest.TestApp(A).get('/foo/bar', status=200)
+        assert R.body == "[u'foo', u'bar']"
 
     def test_accepting_resource_returns_resource(self):
         """
@@ -98,43 +89,39 @@ class TestApp(unittest.TestCase):
         """
         class WrappedResource(resource.Resource):
             def __call__(self, request):
-                return http.ok([], "WrappedResource")
+                return http.ok([('Content-Type', 'text/html')], "WrappedResource")
         class WrapperResource(resource.Resource):
             @resource.GET(accept='html')
             def html(self, request):
                 return WrappedResource()
         A = app.RestishApp(WrapperResource())
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == "WrappedResource"
+        R = webtest.TestApp(A).get('/', status=200)
+        assert R.body == "WrappedResource"
 
     def test_resource_returns_func(self):
         def func(request):
-            return http.ok([], 'func')
+            return http.ok([('Content-Type', 'text/plain')], 'func')
         class WrapperResource(resource.Resource):
             @resource.GET()
             def GET(self, request):
                 return func
         A = app.RestishApp(WrapperResource())
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'func'
+        R = webtest.TestApp(A).get('/', status=200)
+        assert R.body == 'func'
 
     def test_client_error(self):
         class Resource(resource.Resource):
             def __call__(self, request):
                 raise http.BadRequestError()
         A = app.RestishApp(Resource())
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('400')
+        R = webtest.TestApp(A).get('/', status=400)
 
     def test_server_error(self):
         class Resource(resource.Resource):
             def __call__(self, request):
                 raise http.BadGatewayError()
         A = app.RestishApp(Resource())
-        R = wsgi_out(A, http.Request.blank('/').environ)
-        assert R['status'].startswith('502')
+        R = webtest.TestApp(A).get('/', status=502)
 
     def test_no_root_application(self):
         class Resource(resource.Resource):
@@ -145,9 +132,9 @@ class TestApp(unittest.TestCase):
             def __call__(self, request):
                 return http.ok([('Content-Type', 'text/plain')], self.segment.encode('utf-8'))
         A = app.RestishApp(Resource(''))
-        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == ''
-        assert wsgi_out(A, http.Request.blank('/', base_url='http://localhost/base').environ)['body'] == ''
-        assert wsgi_out(A, http.Request.blank('/foo', base_url='http://localhost/base').environ)['body'] == 'foo'
+        assert webtest.TestApp(A).get('/').body == ''
+        assert webtest.TestApp(A).get('/', extra_environ={'SCRIPT_NAME': '/base'}).body == ''
+        assert webtest.TestApp(A).get('/foo', extra_environ={'SCRIPT_NAME': '/base'}).body == 'foo'
 
     def test_weird_path_segments(self):
         class Resource(resource.Resource):
@@ -158,9 +145,9 @@ class TestApp(unittest.TestCase):
             def __call__(self, request):
                 return http.ok([('Content-Type', 'text/plain')], self.segment.encode('utf-8'))
         A = app.RestishApp(Resource(''))
-        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == ''
-        assert wsgi_out(A, http.Request.blank('/foo').environ)['body'] == 'foo'
-        assert wsgi_out(A, http.Request.blank(url.URL('/').child('foo+bar@example.com').path).environ)['body'] == 'foo+bar@example.com'
+        assert webtest.TestApp(A).get('/').body == ''
+        assert webtest.TestApp(A).get('/foo').body == 'foo'
+        assert webtest.TestApp(A).get(url.URL('/').child('foo+bar@example.com').path).body == 'foo+bar@example.com'
 
     def test_iterable_response_body(self):
         def resource(request):
@@ -171,12 +158,12 @@ class TestApp(unittest.TestCase):
                 yield "BANG!"
             return http.ok([('Content-Type', 'text/plain')], gen())
         A = app.RestishApp(resource)
-        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == 'Three ... two ... one ... BANG!'
+        assert webtest.TestApp(A).get('/').body == 'Three ... two ... one ... BANG!'
 
 
 class CallableResource(object):
     def __call__(self, request):
-        return http.ok([], 'CallableResource')
+        return http.ok([('Content-Type', 'text/plain')], 'CallableResource')
 
 
 class TraversableResource(object):
@@ -185,7 +172,7 @@ class TraversableResource(object):
 
 
 def resource_func(request):
-    return http.ok([], 'resource_func')
+    return http.ok([('Content-Type', 'text/plain')], 'resource_func')
 
 
 class TestResourceLike(unittest.TestCase):
@@ -195,27 +182,27 @@ class TestResourceLike(unittest.TestCase):
 
     def test_callable(self):
         A = app.RestishApp(CallableResource())
-        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == 'CallableResource'
+        assert webtest.TestApp(A).get('/').body == 'CallableResource'
 
     def test_not_callable(self):
         A = app.RestishApp(TraversableResource())
-        self.assertRaises(TypeError, wsgi_out, A, http.Request.blank('/').environ)
+        self.assertRaises(TypeError, webtest.TestApp(A).get, '/')
         
     def test_traversable(self):
         A = app.RestishApp(TraversableResource())
-        assert wsgi_out(A, http.Request.blank('/foo').environ)['body'] == 'CallableResource'
+        assert webtest.TestApp(A).get('/foo').body == 'CallableResource'
 
     def test_not_traversable(self):
         A = app.RestishApp(CallableResource())
-        wsgi_out(A, http.Request.blank('/foo').environ)['status'].startswith('404')
+        webtest.TestApp(A).get('/foo', status=404)
 
     def test_func_callable(self):
         A = app.RestishApp(resource_func)
-        assert wsgi_out(A, http.Request.blank('/').environ)['body'] == 'resource_func'
+        assert webtest.TestApp(A).get('/').body == 'resource_func'
 
     def test_func_not_traversable(self):
         A = app.RestishApp(resource_func)
-        wsgi_out(A, http.Request.blank('/foo').environ)['status'].startswith('404')
+        webtest.TestApp(A).get('/foo', status=404)
         
 
 if __name__ == '__main__':

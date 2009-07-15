@@ -3,37 +3,34 @@ import StringIO
 import os
 import tempfile
 import unittest
+import webtest
 
 from restish import app, http, resource
-from restish.tests.util import wsgi_out
 
 
 class Resource(resource.Resource):
     def __init__(self, body):
         self.body = body
     def __call__(self, request):
-        return http.ok([], self.body)
+        return http.ok([('Content-Type', 'text/plain')], self.body)
 
 
 class TestStreaming(unittest.TestCase):
 
     def test_string(self):
-        R = wsgi_out(app.RestishApp(Resource('string')),
-                     http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'string'
+        R = webtest.TestApp(app.RestishApp(Resource('string'))).get('/')
+        assert R.status.startswith('200')
+        assert R.body == 'string'
 
     def test_stringio(self):
-        R = wsgi_out(app.RestishApp(Resource(StringIO.StringIO('stringio'))),
-                     http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'stringio'
+        R = webtest.TestApp(app.RestishApp(Resource(StringIO.StringIO('stringio')))).get('/')
+        assert R.status.startswith('200')
+        assert R.body == 'stringio'
 
     def test_cstringio(self):
-        R = wsgi_out(app.RestishApp(Resource(cStringIO.StringIO('cstringio'))),
-                     http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'cstringio'
+        R = webtest.TestApp(app.RestishApp(Resource(cStringIO.StringIO('cstringio')))).get('/')
+        assert R.status.startswith('200')
+        assert R.body == 'cstringio'
 
     def test_file(self):
         class FileStreamer(object):
@@ -53,10 +50,9 @@ class TestStreaming(unittest.TestCase):
         f.write('file')
         f.close()
         f = open(filename)
-        R = wsgi_out(app.RestishApp(Resource(FileStreamer(f))),
-                     http.Request.blank('/').environ)
-        assert R['status'].startswith('200')
-        assert R['body'] == 'file'
+        R = webtest.TestApp(app.RestishApp(Resource(FileStreamer(f)))).get('/')
+        assert R.status.startswith('200')
+        assert R.body == 'file'
         assert f.closed
         os.remove(filename)
 
