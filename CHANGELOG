@@ -11,6 +11,7 @@ Changelog
 * Fix "method not allowed" response when the Resource has no handlers for the
   request's method.
 * Add support for resources that are WSGI applications.
+* Added unittest setup to paster template.
 * Start using WebTest in unittests for improved response validation and simpler
   testing.
 * Improvements to "python setup.py test".
