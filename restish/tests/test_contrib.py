@@ -1,12 +1,12 @@
 # ~*~ coding: utf-8
 
+import os.path
+import shutil
+import tempfile
 import unittest
 
 from restish import http, templating
 from restish.contrib import appurl
-
-
-TEST_STRING = "A '£' symbol often breaks web pages.".decode('utf-8')
 
 
 class TestApplicationURLAccessor(unittest.TestCase):
@@ -52,113 +52,103 @@ class TestApplicationURLAccessor(unittest.TestCase):
         self.assertRaises(AttributeError, app_urls.__getattr__, '_private')
 
 
-class RendererTests(object):
+class _RendererTestBase(unittest.TestCase):
+    """
+    Base class for any templating engine -specific tests we can run (depends on
+    imports).
+    """
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+        self.add_content('static', "<p>A '£' symbol often breaks web pages.</p>".decode('utf-8'))
+
+    def tearDown(self):
+        shutil.rmtree(self.tmpdir)
+
+    def add_content(self, name, content):
+        f = file(os.path.join(self.tmpdir, name), 'w')
+        f.write(content.encode('utf-8'))
+        f.close()
+
+    def content(self, name, encoding=None):
+        f = file(os.path.join(self.tmpdir, name))
+        content = f.read().decode('utf-8')
+        if encoding:
+            content = content.encode(encoding)
+        f.close()
+        return content
 
     def test_render(self):
         request = http.Request.blank('/', environ={
             'restish.templating': templating.Templating(self.renderer)})
-        assert templating.render(request, 'whatever') == TEST_STRING
+        assert templating.render(request, 'static') == self.content('static')
 
     def test_render_different_encoding(self):
         request = http.Request.blank('/', environ={
             'restish.templating': templating.Templating(self.renderer)})
-        assert templating.render(request, 'whatever', encoding='iso-8859-1') == TEST_STRING.encode('iso-8859-1')
+        assert templating.render(request, 'static', encoding='iso-8859-1') == self.content('static', 'iso-8859-1')
 
     def test_element(self):
-        @templating.element('whatever')
+        @templating.element('static')
         def element(element, request):
             return {}
         request = http.Request.blank('/', environ={
             'restish.templating': templating.Templating(self.renderer)})
-        assert element(None, request) == TEST_STRING
+        assert element(None, request) == self.content('static')
 
     def test_page(self):
-        @templating.page('whatever')
+        @templating.page('static')
         def page(page, request):
             return {}
         request = http.Request.blank('/', environ={
             'restish.templating': templating.Templating(self.renderer)})
-        assert page(None, request).body == TEST_STRING.encode('utf-8')
+        assert page(None, request).body == self.content('static', 'utf-8')
 
 
 try:
     from restish.contrib import makorenderer
+    class TestMakoRenderer(_RendererTestBase):
+        def setUp(self):
+            super(TestMakoRenderer, self).setUp()
+            self.renderer = makorenderer.MakoRenderer(
+                directories=self.tmpdir, input_encoding='utf-8')
 except ImportError:
     pass
-else:
-    class MockMakoTemplateLookup(object):
-        def get_template(self, name):
-            return MockMakoTemplate()
-    class MockMakoTemplate(object):
-        output_encoding = 'utf-8'
-        def render(self, **kw):
-            return TEST_STRING.encode('utf-8')
-        def render_unicode(self, **kw):
-            return TEST_STRING
-    class MockMakoRenderer(makorenderer.MakoRenderer):
-        def __init__(self):
-            self.lookup = MockMakoTemplateLookup()
-    class TestMakoRenderer(RendererTests, unittest.TestCase):
-        renderer = MockMakoRenderer()
 
 
 try:
     from restish.contrib import jinja2renderer
+    import jinja2
+    class TestJinja2Renderer(_RendererTestBase):
+        def setUp(self):
+            super(TestJinja2Renderer, self).setUp()
+            self.renderer = jinja2renderer.Jinja2Renderer(
+                loader=jinja2.FileSystemLoader(self.tmpdir))
 except ImportError:
     pass
-else:
-    class MockJinja2Environment(object):
-        def get_template(self, name):
-            return MockJinja2Template()
-    class MockJinja2Template(object):
-        def render(self, **kw):
-            return TEST_STRING
-    class MockJinja2Renderer(jinja2renderer.Jinja2Renderer):
-        def __init__(self):
-            self.environment = MockJinja2Environment()
-    class TestJinja2Renderer(RendererTests, unittest.TestCase):
-        renderer = MockJinja2Renderer()
 
 
 try:
     from restish.contrib import genshirenderer
+    from genshi.template import loader
+    class TestGenshiRenderer(_RendererTestBase):
+        def setUp(self):
+            super(TestGenshiRenderer, self).setUp()
+            self.renderer = genshirenderer.GenshiRenderer(
+                loader.directory(self.tmpdir))
 except ImportError:
     pass
-else:
-    class MockGenshiTemplateLoader(object):
-        def load(self, name):
-            return MockGenshiTemplate()
-    class MockGenshiTemplate(object):
-        def generate(self, **k):
-            # I'll pretend to be the stream, too.
-            return self
-        def render(self, encoding='utf-8'):
-            if encoding is None:
-                return TEST_STRING
-            return TEST_STRING.encode(encoding)
-    class MockGenshiRenderer(genshirenderer.GenshiRenderer):
-        def __init__(self):
-            self.loader = MockGenshiTemplateLoader()
-    class TestGenshiRenderer(RendererTests, unittest.TestCase):
-        renderer = MockGenshiRenderer()
 
 
 try:
     from restish.contrib import tempitarenderer
+    class TestTempitaRenderer(_RendererTestBase):
+        def setUp(self):
+            super(TestTempitaRenderer, self).setUp()
+            self.renderer = tempitarenderer.TempitaRenderer(
+                tempitarenderer.TempitaFileSystemLoader(self.tmpdir))
 except ImportError:
     pass
-else:
-    class MockTempitaTemplateLoader(object):
-        def get_template(self, name):
-            return MockTempitaTemplate()
-    class MockTempitaTemplate(object):
-        def substitute(self, **k):
-            return TEST_STRING
-    class MockTempitaRenderer(tempitarenderer.TempitaRenderer):
-        def __init__(self):
-            self.loader = MockTempitaTemplateLoader()
-    class TestTempitaRenderer(RendererTests, unittest.TestCase):
-        renderer = MockTempitaRenderer()
 
 
 if __name__ == '__main__':
