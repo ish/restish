@@ -123,7 +123,7 @@ def ok(headers, body):
     return Response("200 OK", headers, body)
 
 
-def created(location, body, headers=None):
+def created(location, headers, body):
     """
     201 Created
 
@@ -142,10 +142,6 @@ def created(location, body, headers=None):
     current value of the entity tag for the requested variant just created, see
     section 14.19. 
     """
-    if headers is None:
-        headers = []
-    else:
-        headers = list(headers)
     headers.append(('Location', location))
     return Response("201 Created", headers, body)
 

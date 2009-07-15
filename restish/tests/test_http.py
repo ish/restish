@@ -70,7 +70,7 @@ class TestSuccessResponseFactories(unittest.TestCase):
 
     def test_created(self):
         location = 'http://localhost/abc'
-        r = http.created(location, location, [('Content-Type', 'text/plain')])
+        r = http.created(location, [('Content-Type', 'text/plain')], location)
         assert r.status.startswith('201')
         assert r.headers['Content-Type'] == 'text/plain'
         assert r.headers['Location'] == location
