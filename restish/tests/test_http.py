@@ -1,6 +1,8 @@
+import cgi
 import unittest
+import webtest
 
-from restish import http, url
+from restish import app, http, url
 
 
 def make_environ(path='/bar', base_url='http://localhost:1234/foo', **k):
@@ -76,30 +78,52 @@ class TestSuccessResponseFactories(unittest.TestCase):
         assert r.headers['Location'] == location
         assert r.body == location
 
+
+class TestRedirectionResponseFactories(unittest.TestCase):
+
     def test_moved_permanently(self):
-        location = 'http://localhost/abc'
+        location = 'http://localhost/abc?a=1&b=2'
         r = http.moved_permanently(location)
+        # Pass through WebTest for lint-like checks
+        webtest.TestApp(app.RestishApp(r)).get('/')
+        # Test response details.
         assert r.status.startswith('301')
         assert r.headers['Location'] == location
+        assert r.headers['Content-Length']
+        assert '301 Moved Permanently' in r.body
+        assert cgi.escape(location) in r.body
 
     def test_found(self):
-        location = 'http://localhost/abc'
+        location = 'http://localhost/abc?a=1&b=2'
         r = http.found(location)
+        # Pass through WebTest for lint-like checks
+        webtest.TestApp(app.RestishApp(r)).get('/')
+        # Test response details.
         assert r.status.startswith('302')
         assert r.headers['Location'] == location
+        assert r.headers['Content-Length']
+        assert '302 Found' in r.body
+        assert cgi.escape(location) in r.body
 
     def test_see_other(self):
-        location = 'http://localhost/abc'
+        location = 'http://localhost/abc?a=1&b=2'
         r = http.see_other(location)
+        # Pass through WebTest for lint-like checks
+        webtest.TestApp(app.RestishApp(r)).get('/')
+        # Test response details.
         assert r.status.startswith('303')
         assert r.headers['Location'] == location
+        assert r.headers['Content-Length']
+        assert '303 See Other' in r.body
+        assert cgi.escape(location) in r.body
 
     def test_not_modified(self):
         r = http.not_modified()
         assert r.status.startswith('304')
         r = http.not_modified([('ETag', '123')])
         assert r.status.startswith('304')
-        assert r.headers['ETag'] == '123'
+        assert r.headers['Content-Length'] == '0'
+        assert r.body == ''
 
 
 class TestClientErrorResponseFactories(unittest.TestCase):

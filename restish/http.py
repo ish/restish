@@ -2,6 +2,7 @@
 HTTP Request and Response objects, simple Response factories and exceptions
 types for common HTTP errors.
 """
+import cgi
 import webob
 
 from restish import error, url
@@ -148,6 +149,32 @@ def created(location, headers, body):
 
 # Redirection 3xx
 
+_REDIRECTION_PAGE = """<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>%(status)s</title>
+</head>
+<body>
+<h1>%(status)s</h1>
+<p>This document has moved to <a href="%(location)s">%(location)s</a>.</p>
+</body>
+</html>"""
+
+def _redirect(status, location, body=None):
+    """
+    Creating a standard HTML content for the common redirects:
+     * 301 Moved Permanently
+     * 302 Found
+     * 303 See Other
+    """
+    body = _REDIRECTION_PAGE % {"status": cgi.escape(status),
+                                "location": cgi.escape(location)}
+    return Response(status,
+                    [('Location', location),
+                     ('Content-Type', 'text/html')],
+                    body)
+
+
 def moved_permanently(location):
     """
     301 Moved Permanently
@@ -172,7 +199,7 @@ def moved_permanently(location):
     301 status code, some existing HTTP/1.0 user agents will
     erroneously change it into a GET request.
     """
-    return Response("301 Moved Permanently", [('Location', location)], None)
+    return _redirect("301 Moved Permanently", location)
 
 
 def found(location):
@@ -200,7 +227,7 @@ def found(location):
     The status codes 303 and 307 have been added for servers that wish to make
     unambiguously clear which kind of reaction is expected of the client.
     """
-    return Response("302 Found", [('Location', location)], None)
+    return _redirect("302 Found", location)
 
 
 def see_other(location):
@@ -224,7 +251,7 @@ def see_other(location):
     used instead, since most user agents react to a 302 response as described
     here for 303.
     """
-    return Response("303 See Other", [('Location', location)], None)
+    return _redirect("303 See Other", location)
 
 
 def not_modified(headers=None):
