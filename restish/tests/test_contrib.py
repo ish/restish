@@ -152,7 +152,25 @@ try:
             self.renderer = tempitarenderer.TempitaRenderer(
                 tempitarenderer.TempitaFileSystemLoader(self.tmpdir))
 except ImportError:
-    pass
+    warnings.warn('Skipping TempitaRenderer tests due to missing packages.', RuntimeWarning)
+
+
+try:
+    from restish.contrib import djangorenderer
+    from django.conf import settings
+    class TestDjangoRenderer(RendererTestMixin, unittest.TestCase):
+        def setUp(self):
+            super(TestDjangoRenderer, self).setUp()
+            self.renderer = djangorenderer.DjangoRenderer()
+            # Configure Django's global config a bit. Yuck, yuck, yuck!
+            if not settings.configured:
+                settings.configure(
+                    TEMPLATE_LOADERS=['django.template.loaders.filesystem.load_template_source'],
+                )
+            # Configure the per-test settings.
+            settings.TEMPLATE_DIRS = [self.tmpdir]
+except ImportError:
+    warnings.warn('Skipping DjangoRenderer tests due to missing packages.', RuntimeWarning)
 
 
 if __name__ == '__main__':

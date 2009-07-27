@@ -235,6 +235,7 @@ restish.egg-info/requires.txt
 restish.egg-info/top_level.txt
 restish/contrib/__init__.py
 restish/contrib/appurl.py
+restish/contrib/djangorenderer.py
 restish/contrib/genshirenderer.py
 restish/contrib/jinja2renderer.py
 restish/contrib/makorenderer.py

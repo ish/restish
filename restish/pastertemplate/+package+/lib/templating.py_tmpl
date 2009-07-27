@@ -65,5 +65,13 @@ def make_renderer(app_conf):
     #            )
     #        )
 
+    # Uncomment for an example of Django templating support.
+    #import pkg_resources
+    #from django.conf import settings
+    #from restish.contrib.djangorenderer import DjangoRenderer
+    #settings.configure()
+    #settings.TEMPLATE_DIRS = [pkg_resources.resource_filename('${package}', 'template')]
+    #return DjangoRenderer()
+
     return None
 
