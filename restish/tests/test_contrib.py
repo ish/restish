@@ -4,6 +4,7 @@ import os.path
 import shutil
 import tempfile
 import unittest
+import warnings
 
 from restish import http, templating
 from restish.contrib import appurl
@@ -116,7 +117,7 @@ try:
             self.renderer = makorenderer.MakoRenderer(
                 directories=self.tmpdir, input_encoding='utf-8')
 except ImportError:
-    pass
+    warnings.warn('Skipping MakoRenderer tests due to missing packages.', RuntimeWarning)
 
 
 try:
@@ -128,7 +129,7 @@ try:
             self.renderer = jinja2renderer.Jinja2Renderer(
                 loader=jinja2.FileSystemLoader(self.tmpdir))
 except ImportError:
-    pass
+    warnings.warn('Skipping Jinja2Renderer tests due to missing packages.', RuntimeWarning)
 
 
 try:
@@ -140,7 +141,7 @@ try:
             self.renderer = genshirenderer.GenshiRenderer(
                 loader.directory(self.tmpdir))
 except ImportError:
-    pass
+    warnings.warn('Skipping GenshiRenderer tests due to missing packages.', RuntimeWarning)
 
 
 try:
