@@ -5,6 +5,8 @@ Changelog
 0.10 (unreleased)
 -----------------
 
+* Added default HEAD implementation (calls GET, discards content) with ability
+  for Resource subclasses to specialise when necessary.
 * Fixed http.created signature. If there's a body there has to be a content
   type header too. [INCOMPATIBLE]
 * Extend the @resource.GET et al decorators so they can be used on functions

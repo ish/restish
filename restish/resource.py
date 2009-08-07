@@ -71,6 +71,103 @@ def _find_annotated_funcs(clsattrs, annotation):
     return funcs
 
 
+class MethodDecorator(object):
+    """
+    content negotition decorator base class. See DELETE, GET, PUT, POST
+    """
+
+    method = None
+
+    def __init__(self, accept='*/*', content_type='*/*'):
+        if not isinstance(accept, list):
+            accept = [accept]
+        if not isinstance(content_type, list):
+            content_type = [content_type]
+        accept = [_normalise_mimetype(a) for a in accept]
+        content_type = [_normalise_mimetype(a) for a in content_type]
+        self.match = {'accept': accept, 'content_type': content_type}
+
+    def __call__(self, func):
+        wrapper = ResourceMethodWrapper(func)
+        setattr(wrapper, _RESTISH_METHOD, self.method)
+        setattr(wrapper, _RESTISH_MATCH, self.match)
+        return wrapper
+
+
+class ResourceMethodWrapper(object):
+    """
+    Wraps a @resource.GET etc -decorated function to ensure the function is
+    only called with a matching request. If the request does not match then an
+    HTTP error response is returned.
+
+    Implementation note: The wrapper class is always added to decorated
+    functions. However, the wrapper is discarded for Resource methods at the
+    time the annotated methods are collected by the metaclass. This is because
+    the Resource._call__ is already doing basicall the same work, only it has a
+    whole suite of dispatchers to worry about.
+    """
+
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, request):
+        # Extract annotations.
+        method = getattr(self, _RESTISH_METHOD)
+        match = getattr(self, _RESTISH_MATCH)
+        # Check for correct method.
+        if request.method != method:
+            return http.method_not_allowed([method])
+        # Look for a dispatcher.
+        dispatcher = _best_dispatcher([(self.func, match)], request)
+        if dispatcher is not None:
+            return _dispatch(request, match, self.func)
+        # No dispatcher.
+        return http.not_acceptable([('Content-Type', 'text/plain')], \
+                                   '406 Not Acceptable')
+
+def _normalise_mimetype(mimetype):
+    """
+    Expand any shortcut mimetype names into a full mimetype
+    """
+    if '/' in mimetype:
+        return mimetype
+    # Try mimetypes module, by extension.
+    real = mimetypes.guess_type('filename.%s'%mimetype)[0]
+    if real is not None:
+        return real
+    # Try extra extension mapping.
+    real = SHORT_CONTENT_TYPE_EXTRA.get(mimetype)
+    if real is not None:
+        return real
+    # Oh well.
+    return mimetype
+
+
+class DELETE(MethodDecorator):
+    """ http DELETE method """
+    method = 'DELETE'
+
+
+class GET(MethodDecorator):
+    """ http GET method """
+    method = 'GET'
+
+
+class HEAD(MethodDecorator):
+    """ http HEAD method """
+    method = 'HEAD'
+
+
+class POST(MethodDecorator):
+    """ http POST method """
+    method = 'POST'
+
+
+class PUT(MethodDecorator):
+    """ http PUT method """
+    method = 'PUT'
+
+
 class Resource(object):
     """
     Base class for additional resource types.
@@ -112,6 +209,27 @@ class Resource(object):
         # No match, send 406
         return http.not_acceptable([('Content-Type', 'text/plain')], \
                                    '406 Not Acceptable')
+
+    @HEAD()
+    def head(self, request):
+        """
+        Handle a HEAD request by calling the resource again as if a GET was
+        sent and then discarding the content.
+
+        This default HEAD behaviour works very well for dynamically generated
+        content. However, it is not suitable for static content where the size
+        is already known, e.g. large blobs stored in a database.
+
+        In that scenario add a HEAD-decorated method to the application
+        resource's class that includes a Content-Length header but no body.
+        """
+        request.method = 'GET'
+        response = self(request)
+        content_length = response.headers.get('content-length')
+        response.body = ''
+        if content_length is not None:
+            response.headers['content-length'] = content_length
+        return response
 
 
 def _dispatch(request, match, func):
@@ -249,97 +367,3 @@ class AnyChildMatcher(object):
 
 
 any = AnyChildMatcher()
-
-
-class MethodDecorator(object):
-    """
-    content negotition decorator base class. See DELETE, GET, PUT, POST
-    """
-
-    method = None
-
-    def __init__(self, accept='*/*', content_type='*/*'):
-        if not isinstance(accept, list):
-            accept = [accept]
-        if not isinstance(content_type, list):
-            content_type = [content_type]
-        accept = [_normalise_mimetype(a) for a in accept]
-        content_type = [_normalise_mimetype(a) for a in content_type]
-        self.match = {'accept': accept, 'content_type': content_type}
-
-    def __call__(self, func):
-        wrapper = ResourceMethodWrapper(func)
-        setattr(wrapper, _RESTISH_METHOD, self.method)
-        setattr(wrapper, _RESTISH_MATCH, self.match)
-        return wrapper
-
-
-class ResourceMethodWrapper(object):
-    """
-    Wraps a @resource.GET etc -decorated function to ensure the function is
-    only called with a matching request. If the request does not match then an
-    HTTP error response is returned.
-
-    Implementation note: The wrapper class is always added to decorated
-    functions. However, the wrapper is discarded for Resource methods at the
-    time the annotated methods are collected by the metaclass. This is because
-    the Resource._call__ is already doing basicall the same work, only it has a
-    whole suite of dispatchers to worry about.
-    """
-
-    def __init__(self, func):
-        self.func = func
-
-    def __call__(self, request):
-        # Extract annotations.
-        method = getattr(self, _RESTISH_METHOD)
-        match = getattr(self, _RESTISH_MATCH)
-        # Check for correct method.
-        if request.method != method:
-            return http.method_not_allowed([method])
-        # Look for a dispatcher.
-        dispatcher = _best_dispatcher([(self.func, match)], request)
-        if dispatcher is not None:
-            return _dispatch(request, match, self.func)
-        # No dispatcher.
-        return http.not_acceptable([('Content-Type', 'text/plain')], \
-                                   '406 Not Acceptable')
-        
-
-class DELETE(MethodDecorator):
-    """ http DELETE method """
-    method = 'DELETE'
-
-
-class GET(MethodDecorator):
-    """ http GET method """
-    method = 'GET'
-
-
-class POST(MethodDecorator):
-    """ http POST method """
-    method = 'POST'
-
-
-class PUT(MethodDecorator):
-    """ http PUT method """
-    method = 'PUT'
-
-
-def _normalise_mimetype(mimetype):
-    """
-    Expand any shortcut mimetype names into a full mimetype
-    """
-    if '/' in mimetype:
-        return mimetype
-    # Try mimetypes module, by extension.
-    real = mimetypes.guess_type('filename.%s'%mimetype)[0]
-    if real is not None:
-        return real
-    # Try extra extension mapping.
-    real = SHORT_CONTENT_TYPE_EXTRA.get(mimetype)
-    if real is not None:
-        return real
-    # Oh well.
-    return mimetype
-

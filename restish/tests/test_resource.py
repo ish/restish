@@ -98,6 +98,28 @@ class TestResource(unittest.TestCase):
         assert app.get('/', headers={'Accept': 'text/plain'}, status=200).body == 'Derived'
         assert app.get('/', headers={'Accept': 'text/html'}, status=200).body == 'Base'
 
+    def test_default_head(self):
+        class Resource(resource.Resource):
+            @resource.GET()
+            def text(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'text')
+        get_response = Resource()(http.Request.blank('/', environ={'REQUEST_METHOD': 'GET'}))
+        head_response = Resource()(http.Request.blank('/', environ={'REQUEST_METHOD': 'HEAD'}))
+        assert head_response.headers['content-length'] == get_response.headers['content-length']
+        assert head_response.body == ''
+
+    def test_specialised_head(self):
+        class Resource(resource.Resource):
+            @resource.GET()
+            def text(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'text')
+            @resource.HEAD()
+            def head(self, request):
+                return http.ok([('Content-Type', 'text/plain'), ('Content-Length', '100')], None)
+        head_response = Resource()(http.Request.blank('/', environ={'REQUEST_METHOD': 'HEAD'}))
+        assert head_response.headers['content-length'] == '100'
+        assert head_response.body == ''
+
 
 class TestChildLookup(unittest.TestCase):
 
