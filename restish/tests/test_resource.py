@@ -65,6 +65,39 @@ class TestResource(unittest.TestCase):
             response = getattr(app, method.lower())('/', status=200)
             assert response.body == method
 
+    def test_derived(self):
+        class Base(resource.Resource):
+            @resource.GET(accept='text')
+            def text(self, request):
+                return http.ok([], 'Base')
+            @resource.GET(accept='html')
+            def html(self, request):
+                return http.ok([], '<p>Base</p>')
+        class Derived(Base):
+            @resource.GET(accept='html')
+            def html(self, request):
+                return http.ok([], '<p>Derived</p>')
+            @resource.GET(accept='json')
+            def json(self, request):
+                return http.ok([], '"Derived"')
+        app = make_app(Derived())
+        assert app.get('/', headers={'Accept': 'text/plain'}, status=200).body == 'Base'
+        assert app.get('/', headers={'Accept': 'text/html'}, status=200).body == '<p>Derived</p>'
+        assert app.get('/', headers={'Accept': 'application/json'}, status=200).body == '"Derived"'
+
+    def test_derived_specificity(self):
+        class Base(resource.Resource):
+            @resource.GET(accept='text/*')
+            def text(self, request):
+                return http.ok([('Content-Type', 'text/html')], 'Base')
+        class Derived(Base):
+            @resource.GET(accept='text/plain')
+            def html(self, request):
+                return http.ok([], 'Derived')
+        app = make_app(Derived())
+        assert app.get('/', headers={'Accept': 'text/plain'}, status=200).body == 'Derived'
+        assert app.get('/', headers={'Accept': 'text/html'}, status=200).body == 'Base'
+
 
 class TestChildLookup(unittest.TestCase):
 

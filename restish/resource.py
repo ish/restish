@@ -1,6 +1,8 @@
 """
 Base Resource class and associates methods for children and content negotiation
 """
+
+import inspect
 import mimetypes
 import re
 import mimeparse
@@ -24,22 +26,24 @@ class _metaResource(type):
     """
     def __new__(cls, name, bases, clsattrs):
         cls = type.__new__(cls, name, bases, clsattrs)
-        _gather_request_dispatchers(cls, clsattrs)
+        _gather_request_dispatchers(cls)
         _gather_child_factories(cls, clsattrs)
         return cls
 
 
-def _gather_request_dispatchers(cls, clsattrs):
+def _gather_request_dispatchers(cls):
     """
     Gather any request handler -annotated methods and add them to the class's
     request_dispatchers attribute.
     """
-    # Copy the super class's 'request_dispatchers' dict (if any) to this class.
-    cls.request_dispatchers = dict(getattr(cls, 'request_dispatchers', {}))
-    for wrapper in _find_annotated_funcs(clsattrs, _RESTISH_METHOD):
-        method = getattr(wrapper, _RESTISH_METHOD, None)
-        match = getattr(wrapper, _RESTISH_MATCH)
-        cls.request_dispatchers.setdefault(method, []).append((wrapper.func, match))
+    cls.request_dispatchers = dispatchers = {}
+    for cls in inspect.getmro(cls):
+        for (name, wrapper) in inspect.getmembers(cls):
+            method = getattr(wrapper, _RESTISH_METHOD, None)
+            if not method:
+                continue
+            match = getattr(wrapper, _RESTISH_MATCH)
+            dispatchers.setdefault(method, []).append((wrapper.func, match))
 
 
 def _gather_child_factories(cls, clsattrs):
