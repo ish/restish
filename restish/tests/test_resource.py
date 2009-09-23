@@ -77,6 +77,17 @@ class TestResourceMetaclass(unittest.TestCase):
         assert len(Derived1.child_factories) == 1
         assert len(Derived2.child_factories) == 2
 
+    def test_non_accumulation(self):
+        # Check request handlers from base handlers are not duplicated during
+        # request handler collection.
+        class Base(resource.Resource):
+            @resource.GET()
+            def json(self, request):
+                pass
+        class Derived(Base):
+            pass
+        assert len(Derived.request_dispatchers['GET']) == 1
+
 
 class TestResource(unittest.TestCase):
 
