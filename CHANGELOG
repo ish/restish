@@ -5,6 +5,8 @@ Changelog
 0.10 (unreleased)
 -----------------
 
+* Fixed serious bug that caused Resource's request handlers to leak into other
+  Resources.
 * Added default HEAD implementation (calls GET, discards content) with ability
   for Resource subclasses to specialise when necessary.
 * Fixed http.created signature. If there's a body there has to be a content
