@@ -14,6 +14,8 @@ Changelog
 * Extend the @resource.GET et al decorators so they can be used on functions
   (i.e. not methods) to benefit from request method checking and content
   negotiation checking.
+* Extend the @templating.page decorator to allow the decorated methods to
+  return just the args (a dict) or a (headers, args) tuple.
 * Fix "method not allowed" response when the Resource has no handlers for the
   request's method.
 * Add support for resources that are WSGI applications.

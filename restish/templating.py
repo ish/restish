@@ -113,7 +113,8 @@ def render_page(request, page, template, args={}, encoding='utf-8'):
 
 
 def render_response(request, page, template, args={},
-                    type='text/html', encoding='utf-8'):
+                    type='text/html', encoding='utf-8',
+                    headers=[]):
     """
     Render a page, using the template and args, and return a '200 OK'
     response.  The response's Content-Type header will be constructed from
@@ -131,8 +132,14 @@ def render_response(request, page, template, args={},
         Optional mime type of content, defaults to 'text/html'
     :arg encoding:
         Optional encoding of output, default to 'utf-8'.
+    :arg headers:
+        Optional extra HTTP headers for the output, default to []
     """
-    return http.ok([('Content-Type', "%s; charset=%s"%(type, encoding))],
+    # Copy the headers to avoid changing the arg default or the list passed by
+    # the caller.
+    headers = list(headers)
+    headers.extend([('Content-Type', '%s; charset=%s' % (type, encoding))])
+    return http.ok(headers,
                    render_page(request, page, template, args,
                                encoding=encoding))
 
@@ -160,9 +167,15 @@ def page(template, type='text/html', encoding='utf-8'):
     """
     def decorator(func):
         def decorated(page, request, *a, **k):
-            args = func(page, request, *a, **k)
+            result = func(page, request, *a, **k)
+            # The returned value can be either a (headers, args) tuple or just
+            # an args dict.
+            if isinstance(result, tuple):
+                headers, args = result
+            else:
+                headers, args = [], result
             return render_response(request, page, template, args, type=type,
-                                   encoding=encoding)
+                                   encoding=encoding, headers=headers)
         return decorated
     return decorator
 

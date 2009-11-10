@@ -168,6 +168,28 @@ class TestPage(unittest.TestCase):
         response = Resource({'foo': 'bar'})(request)
         assert response.status.startswith('200')
         assert response.body == '<p>test.html {\'foo\': \'bar\'}</p>'
+    
+    def test_page_decorator_with_custom_headers(self):
+        def renderer(template, args, encoding=None):
+            return args['body']
+        
+        class Resource(resource.Resource):
+            @resource.GET()
+            @templating.page('page')
+            def get(self, request):
+                # See this link for the following use case:
+                # http://sites.google.com/a/snaplog.com/wiki/short_url
+                return [('Link', '<http://sho.rt/1>; rel=shorturl'),
+                        ('X-Foo', 'Bar')], \
+                       {'body': 'Hello World!'}
+
+        environ = {'restish.templating': templating.Templating(renderer)}
+        request = http.Request.blank('/', environ=environ)
+        response = Resource()(request)
+        assert response.status.startswith('200')
+        assert response.body == 'Hello World!'
+        assert response.headers.get('Link') == '<http://sho.rt/1>; rel=shorturl'
+        assert response.headers.get('X-Foo') == 'Bar'
 
 
 if __name__ == '__main__':
