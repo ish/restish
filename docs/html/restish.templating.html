@@ -198,7 +198,7 @@ unicode (or unicode-safe).</li>
 
 <dl class="function">
 <dt id="restish.templating.render_response">
-<!--[restish.templating.render_response]--><tt class="descclassname">restish.templating.</tt><tt class="descname">render_response</tt><big>(</big><em>request</em>, <em>page</em>, <em>template</em>, <em>args={}</em>, <em>type='text/html'</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#restish.templating.render_response" title="Permalink to this definition">¶</a></dt>
+<!--[restish.templating.render_response]--><tt class="descclassname">restish.templating.</tt><tt class="descname">render_response</tt><big>(</big><em>request</em>, <em>page</em>, <em>template</em>, <em>args={}</em>, <em>type='text/html'</em>, <em>encoding='utf-8'</em>, <em>headers=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#restish.templating.render_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render a page, using the template and args, and return a &#8216;200 OK&#8217;
 response.  The response&#8217;s Content-Type header will be constructed from
 the type and encoding.</p>
@@ -213,6 +213,7 @@ the type and encoding.</p>
 <li><em>args</em> &#8211; Dictionary of args to pass to the template renderer.</li>
 <li><em>type</em> &#8211; Optional mime type of content, defaults to &#8216;text/html&#8217;</li>
 <li><em>encoding</em> &#8211; Optional encoding of output, default to &#8216;utf-8&#8217;.</li>
+<li><em>headers</em> &#8211; Optional extra HTTP headers for the output, default to []</li>
 </ul>
 </td>
 </tr>

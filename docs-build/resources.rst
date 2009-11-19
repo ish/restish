@@ -126,7 +126,7 @@ you can pass an explicit child name to the ``resource.child`` decorator.
 Chaining Resources
 ------------------
 
-Most applications will handled nested resources.
+Most applications will handle nested resources.
 
 We're showing a contrived example where the url ``/blog/entries/28`` get's
 passed down from resource to resource.
@@ -170,7 +170,7 @@ If you want to handle the url matching yourself then you can use the resource.an
 
     class Root(resources.Resource):
 
-        @resource.child(resource.any):
+        @resource.child(resource.any)
         def child(self, request, segments):
             # At his point segments contains all the segments
             if segments[0] == 'mymatchingsegment':
@@ -374,7 +374,7 @@ Request Handlers
 At some point, all of the segments will have been consumed. The final resource
 is then called in order to get the contents. If this resource is a restish
 resource, a series of tests are done to find out which method to use.  Firstly
-the request type is used to find out which handler to. 
+the request type is used to find out which handler to use. 
 
 The resource class also carries most of our resource decorators and can be used
 for url handling or http procesing. Here were are have decorated a method of
@@ -437,7 +437,7 @@ Content Negotiation
 ===================
 
 Resources can perform content negotiation in a few different ways. The example
-above where ``GET()`` had not arguments accepts any (or no) content type. If we
+above where ``GET()`` did not have any arguments accepts any (or no) content type. If we
 wanted to explictly return different types of document depending on the accept
 headers we can include this as a GET argument.
 
@@ -468,7 +468,7 @@ e.g.
 We can also use file suffixes and let the mimetypes module work out what
 content type to use. e.g. ``html``, ``xml``, ``pdf``. We've also added ``json``
 as we think you might (should) be using this one a lot! If you want to respond
-to multiple encodings, give it a list (e.g. GET(acept=['html','xml'])
+to multiple encodings, give it a list (e.g. GET(accept=['html','xml'])
 
 Wildcard content type matching also works. e.g. ``text/*``
 

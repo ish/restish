@@ -2,7 +2,7 @@
 Access Control using Guard
 **************************
 
-Restish supplies a module called ``guard`` which makes applying access control easy to apply to 
+Restish supplies a module called ``guard`` which makes applying access control easy to apply to resources or methods.
 
 Basic Auth using repoze.who
 ---------------------------

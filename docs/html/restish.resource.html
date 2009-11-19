@@ -83,6 +83,13 @@ list of segments unchanged.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="restish.resource.HEAD">
+<!--[restish.resource.HEAD]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">HEAD</tt><big>(</big><em>accept='*/*'</em>, <em>content_type='*/*'</em><big>)</big><a class="headerlink" href="#restish.resource.HEAD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="restish.resource.MethodDecorator" class="reference internal" href="#restish.resource.MethodDecorator"><tt class="xref docutils literal"><span class="pre">restish.resource.MethodDecorator</span></tt></a></p>
+<p>http HEAD method</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="restish.resource.MethodDecorator">
 <!--[restish.resource.MethodDecorator]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">MethodDecorator</tt><big>(</big><em>accept='*/*'</em>, <em>content_type='*/*'</em><big>)</big><a class="headerlink" href="#restish.resource.MethodDecorator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
@@ -112,10 +119,37 @@ list of segments unchanged.</p>
 segments) and __call__(request)), possibly dispatching to annotated methods
 of the class (using metaclass magic).</p>
 <dl class="method">
+<dt id="restish.resource.Resource.head">
+<!--[restish.resource.Resource.head]--><tt class="descname">head</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.resource.Resource.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps a &#64;resource.GET etc -decorated function to ensure the function is
+only called with a matching request. If the request does not match then an
+HTTP error response is returned.</p>
+<p>Implementation note: The wrapper class is always added to decorated
+functions. However, the wrapper is discarded for Resource methods at the
+time the annotated methods are collected by the metaclass. This is because
+the Resource._call__ is already doing basicall the same work, only it has a
+whole suite of dispatchers to worry about.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="restish.resource.Resource.resource_child">
 <!--[restish.resource.Resource.resource_child]--><tt class="descname">resource_child</tt><big>(</big><em>request</em>, <em>segments</em><big>)</big><a class="headerlink" href="#restish.resource.Resource.resource_child" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="restish.resource.ResourceMethodWrapper">
+<!--[restish.resource.ResourceMethodWrapper]-->class <tt class="descclassname">restish.resource.</tt><tt class="descname">ResourceMethodWrapper</tt><big>(</big><em>func</em><big>)</big><a class="headerlink" href="#restish.resource.ResourceMethodWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Wraps a &#64;resource.GET etc -decorated function to ensure the function is
+only called with a matching request. If the request does not match then an
+HTTP error response is returned.</p>
+<p>Implementation note: The wrapper class is always added to decorated
+functions. However, the wrapper is discarded for Resource methods at the
+time the annotated methods are collected by the metaclass. This is because
+the Resource._call__ is already doing basicall the same work, only it has a
+whole suite of dispatchers to worry about.</p>
 </dd></dl>
 
 <dl class="class">

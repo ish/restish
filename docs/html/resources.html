@@ -70,8 +70,8 @@
 <div class="section" id="our-project-resource">
 <h2>Our project resource<a class="headerlink" href="#our-project-resource" title="Permalink to this headline">¶</a></h2>
 <p>The root resource in your project looks like this</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
-<span class="k">from</span> <span class="nn">restish</span> <span class="k">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">restish</span> <span class="kn">import</span> <span class="n">http</span><span class="p">,</span> <span class="n">resource</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -86,7 +86,7 @@
 <p>This is just an example to get you going. Lets take a look at what it does.</p>
 <div class="section" id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">logging</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -167,7 +167,7 @@ you can pass an explicit child name to the <tt class="docutils literal"><span cl
 </div>
 <div class="section" id="chaining-resources">
 <h3>Chaining Resources<a class="headerlink" href="#chaining-resources" title="Permalink to this headline">¶</a></h3>
-<p>Most applications will handled nested resources.</p>
+<p>Most applications will handle nested resources.</p>
 <p>We&#8217;re showing a contrived example where the url <tt class="docutils literal"><span class="pre">/blog/entries/28</span></tt> get&#8217;s
 passed down from resource to resource.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
@@ -205,14 +205,15 @@ passed down from resource to resource.</p>
 <div class="section" id="handling-it-yourself">
 <h3>Handling it yourself<a class="headerlink" href="#handling-it-yourself" title="Permalink to this headline">¶</a></h3>
 <p>If you want to handle the url matching yourself then you can use the resource.any matcher. This literally matches any pattern and consumes nothing. This means you have to work out what path segments you want to pass on to the next child. (in this case <tt class="docutils literal"><span class="pre">,</span> <span class="pre">segments[1:]</span></tt>)</p>
-<div class="highlight-python"><pre>class Root(resources.Resource):
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resources</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
 
-    @resource.child(resource.any):
-    def child(self, request, segments):
-        # At his point segments contains all the segments
-        if segments[0] == 'mymatchingsegment':
-            # now I've matched a segment, I need to return the rest as follows
-            return MyMatchingResource(), segments[1:]</pre>
+    <span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">any</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
+        <span class="c"># At his point segments contains all the segments</span>
+        <span class="k">if</span> <span class="n">segments</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;mymatchingsegment&#39;</span><span class="p">:</span>
+            <span class="c"># now I&#39;ve matched a segment, I need to return the rest as follows</span>
+            <span class="k">return</span> <span class="n">MyMatchingResource</span><span class="p">(),</span> <span class="n">segments</span><span class="p">[</span><span class="mf">1</span><span class="p">:]</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="template-resource-matchers">
@@ -377,7 +378,7 @@ resource to have available)</p>
 <p>At some point, all of the segments will have been consumed. The final resource
 is then called in order to get the contents. If this resource is a restish
 resource, a series of tests are done to find out which method to use.  Firstly
-the request type is used to find out which handler to.</p>
+the request type is used to find out which handler to use.</p>
 <p>The resource class also carries most of our resource decorators and can be used
 for url handling or http procesing. Here were are have decorated a method of
 our Root resource with a resource.GET().  This tells the resource to use this
@@ -432,7 +433,7 @@ server.</p>
 
 <dl class="function">
 <dt id="restish.http.created">
-<!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>body</em>, <em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
+<!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
 <dd><p>201 Created</p>
 <p>The request has been fulfilled and resulted in a new resource being
 created. The newly created resource can be referenced by the URI(s)
@@ -666,7 +667,7 @@ format defined by the response Content-Type.</p>
 <div class="section" id="content-negotiation">
 <h2>Content Negotiation<a class="headerlink" href="#content-negotiation" title="Permalink to this headline">¶</a></h2>
 <p>Resources can perform content negotiation in a few different ways. The example
-above where <tt class="docutils literal"><span class="pre">GET()</span></tt> had not arguments accepts any (or no) content type. If we
+above where <tt class="docutils literal"><span class="pre">GET()</span></tt> did not have any arguments accepts any (or no) content type. If we
 wanted to explictly return different types of document depending on the accept
 headers we can include this as a GET argument.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
@@ -691,7 +692,7 @@ e.g.</p>
 <p>We can also use file suffixes and let the mimetypes module work out what
 content type to use. e.g. <tt class="docutils literal"><span class="pre">html</span></tt>, <tt class="docutils literal"><span class="pre">xml</span></tt>, <tt class="docutils literal"><span class="pre">pdf</span></tt>. We&#8217;ve also added <tt class="docutils literal"><span class="pre">json</span></tt>
 as we think you might (should) be using this one a lot! If you want to respond
-to multiple encodings, give it a list (e.g. GET(acept=[&#8216;html&#8217;,&#8217;xml&#8217;])</p>
+to multiple encodings, give it a list (e.g. GET(accept=[&#8216;html&#8217;,&#8217;xml&#8217;])</p>
 <p>Wildcard content type matching also works. e.g. <tt class="docutils literal"><span class="pre">text/*</span></tt></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>

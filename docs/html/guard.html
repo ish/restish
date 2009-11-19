@@ -67,7 +67,7 @@
   
   <div class="section" id="access-control-using-guard">
 <h1>Access Control using Guard<a class="headerlink" href="#access-control-using-guard" title="Permalink to this headline">¶</a></h1>
-<p>Restish supplies a module called <tt class="docutils literal"><span class="pre">guard</span></tt> which makes applying access control easy to apply to</p>
+<p>Restish supplies a module called <tt class="docutils literal"><span class="pre">guard</span></tt> which makes applying access control easy to apply to resources or methods.</p>
 <div class="section" id="basic-auth-using-repoze-who">
 <h2>Basic Auth using repoze.who<a class="headerlink" href="#basic-auth-using-repoze-who" title="Permalink to this headline">¶</a></h2>
 <p>A short example of implementing repoze.who as a guard using htpasswd files and basic http authentication.</p>
@@ -79,7 +79,7 @@
 </pre></div>
 </div>
 <p>Add the repoze middle ware by adding these lines to wsgiapp.py</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">import</span> <span class="nn">repoze.who.config</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">repoze.who.config</span>
 <span class="o">...</span>
 <span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">RestishApp</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Root</span><span class="p">())</span>

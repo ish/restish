@@ -73,9 +73,9 @@
 <p>The wsgiapp is shown below.</p>
 <p><tt class="docutils literal"><span class="pre">make_app</span></tt> is set up to define the restish app by passing the root resource to it. The restish app is then passed to the setup_environ function</p>
 <p><tt class="docutils literal"><span class="pre">setup_environ</span></tt> can be used to set any attributes on the environ you may wish. In this case templating is setup by creating a Templating instance.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">from</span> <span class="nn">restish.app</span> <span class="k">import</span> <span class="n">RestishApp</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">restish.app</span> <span class="kn">import</span> <span class="n">RestishApp</span>
 
-<span class="k">from</span> <span class="nn">myproject.resource</span> <span class="k">import</span> <span class="n">root</span>
+<span class="kn">from</span> <span class="nn">myproject.resource</span> <span class="kn">import</span> <span class="n">root</span>
 
 
 <span class="k">def</span> <span class="nf">make_app</span><span class="p">(</span><span class="n">global_conf</span><span class="p">,</span> <span class="o">**</span><span class="n">app_conf</span><span class="p">):</span>
@@ -98,7 +98,7 @@
 
     <span class="c"># Create any objects that should exist for the lifetime of the application</span>
     <span class="c"># here. Don&#39;t forget to actually include them in the environ below!</span>
-    <span class="k">from</span> <span class="nn">myproject.lib.templating</span> <span class="k">import</span> <span class="n">Templating</span>
+    <span class="kn">from</span> <span class="nn">myproject.lib.templating</span> <span class="kn">import</span> <span class="n">Templating</span>
     <span class="n">templating</span> <span class="o">=</span> <span class="n">Templating</span><span class="p">(</span><span class="n">app_conf</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
