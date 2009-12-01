@@ -2,7 +2,6 @@
 Base Resource class and associates methods for children and content negotiation
 """
 
-import inspect
 import mimetypes
 import re
 import mimeparse
@@ -29,21 +28,6 @@ class _metaResource(type):
         _gather_request_dispatchers(cls, clsattrs)
         _gather_child_factories(cls, clsattrs)
         return cls
-
-
-def _gather_request_dispatchers(cls):
-    """
-    Gather any request handler -annotated methods and add them to the class's
-    request_dispatchers attribute.
-    """
-    cls.request_dispatchers = dispatchers = {}
-    for cls in inspect.getmro(cls):
-        for (name, wrapper) in inspect.getmembers(cls):
-            method = getattr(wrapper, _RESTISH_METHOD, None)
-            if not method:
-                continue
-            match = getattr(wrapper, _RESTISH_MATCH)
-            dispatchers.setdefault(method, []).append((wrapper.func, match))
 
 
 def _gather_request_dispatchers(cls, clsattrs):
