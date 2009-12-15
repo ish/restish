@@ -276,6 +276,16 @@ class TestChildLookup(unittest.TestCase):
         assert R.status.startswith('200')
         assert R.body == 'foo/bar/a/b/c'
 
+    def test_match_names_with_regex_chars(self):
+        class Resource(resource.Resource):
+            @resource.child('[0-9]*+')
+            def static_child(self, request, segments):
+                return http.ok([('Content-Type', 'text/plain')], 'static')
+        A = app.RestishApp(Resource())
+        R = webtest.TestApp(A).get('/[0-9]*+')
+        assert R.status.startswith('200')
+        assert R.body == 'static'
+
     def test_dynamic_match(self):
         class Resource(resource.Resource):
             def __init__(self, segments=[], args={}):

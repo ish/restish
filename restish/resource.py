@@ -340,7 +340,7 @@ class TemplateChildMatcher(object):
                    segment[0] == '{' and segment[-1] == '}':
                     yield '(?P<%s>.*?)' % segment[1:-1]
                 else:
-                    yield segment
+                    yield re.escape(segment)
         segments = self.pattern.split('/')
         self._count = len(segments)
         self._regex = re.compile('^' + '\\/'.join(re_segments(segments)) + '$')
