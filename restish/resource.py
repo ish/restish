@@ -262,35 +262,36 @@ def _best_dispatcher(dispatchers, request):
     """
     # Use content negotation to filter the dispatchers to an ordered list of
     # only those that match.
-    if request.headers.get('content-type'):
-        dispatchers = _filter_dispatchers_on_content_type(dispatchers, request)
-    if request.headers.get('accept'):
-        dispatchers = _filter_dispatchers_on_accept(dispatchers, request)
+    content_type = request.headers.get('content-type')
+    if content_type:
+        dispatchers = _filter_dispatchers_on_content_type(dispatchers, str(content_type))
+    accept = request.headers.get('accept')
+    if accept:
+        dispatchers = _filter_dispatchers_on_accept(dispatchers, str(accept))
     # Return the best match or None
     if dispatchers:
         return dispatchers[0]
     else:
         return None
 
-def _filter_dispatchers_on_content_type(dispatchers, request):
+def _filter_dispatchers_on_content_type(dispatchers, content_type):
     # Build an ordered list of the supported types.
     supported = []
     for d in dispatchers:
         supported.extend(d[1]['content_type'])
     # Find the best type.
-    best_match = mimeparse.best_match(supported, \
-                                      str(request.headers['content-type']))
+    best_match = mimeparse.best_match(supported, content_type)
     # Return the matching dispatchers
     return [d for d in dispatchers if best_match in d[1]['content_type']]
 
 
-def _filter_dispatchers_on_accept(dispatchers, request):
+def _filter_dispatchers_on_accept(dispatchers, accept):
     # Build an ordered list of the supported types.
     supported = []
     for d in dispatchers:
         supported.extend(d[1]['accept'])
     # Find the best accept type
-    best_match = mimeparse.best_match(supported, str(request.accept))
+    best_match = mimeparse.best_match(supported, accept)
     # Return the matching dispatchers
     return [d for d in dispatchers if best_match in d[1]['accept']]
 
