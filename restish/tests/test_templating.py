@@ -101,6 +101,13 @@ class TestArgs(unittest.TestCase):
 
 class TestRendering(unittest.TestCase):
 
+    def test_unconfigured(self):
+        try:
+            templating.Templating(None).render(http.Request.blank('/'),
+                                               'foo.html')
+        except TypeError, e:
+            assert 'renderer' in unicode(e)
+
     def test_render(self):
         def renderer(template, args, encoding=None):
             return "%s %r" % (template, sorted(args))
