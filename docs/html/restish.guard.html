@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>restish.guard &mdash; Restish v0.9 documentation</title>
+    <title>restish.guard &amp;mdash; Restish v0.10 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '0.9',
+          URL_ROOT:    '#',
+          VERSION:     '0.10',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.9 documentation" href="index.html" /> 
+    <link rel="top" title="Restish v0.10 documentation" href="index.html" /> 
 
 
   <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,7 +56,6 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="module-restish.guard">
 <h1>restish.guard<a class="headerlink" href="#module-restish.guard" title="Permalink to this headline">¶</a></h1>
 <p>Resource and method guards (the basis of access control).</p>
@@ -80,32 +79,32 @@ authenticated user as the REMOTE_USER:</p>
 </blockquote>
 <dl class="exception">
 <dt id="restish.guard.GuardError">
-<!--[restish.guard.GuardError]-->exception <tt class="descclassname">restish.guard.</tt><tt class="descname">GuardError</tt><a class="headerlink" href="#restish.guard.GuardError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.guard.</tt><tt class="descname">GuardError</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#restish.guard.GuardError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></p>
 <p>Guard check failure.</p>
 <dl class="attribute">
 <dt id="restish.guard.GuardError.message">
-<!--[restish.guard.GuardError.message]--><tt class="descname">message</tt><a class="headerlink" href="#restish.guard.GuardError.message" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">message</tt><a class="headerlink" href="#restish.guard.GuardError.message" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="restish.guard.GuardResource">
-<!--[restish.guard.GuardResource]-->class <tt class="descclassname">restish.guard.</tt><tt class="descname">GuardResource</tt><big>(</big><em>resource</em>, <em>*checkers</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.guard.GuardResource" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">restish.guard.</tt><tt class="descname">GuardResource</tt><big>(</big><em>resource</em>, <em>*checkers</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.guard.GuardResource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
 <p>Resource wrapper that guards access to a resource by calling each checker
 before calling the wrapped resource&#8217;s methods.</p>
 <dl class="method">
 <dt id="restish.guard.GuardResource.resource_child">
-<!--[restish.guard.GuardResource.resource_child]--><tt class="descname">resource_child</tt><big>(</big><em>request</em>, <em>segments</em><big>)</big><a class="headerlink" href="#restish.guard.GuardResource.resource_child" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">resource_child</tt><big>(</big><em>request</em>, <em>segments</em><big>)</big><a class="headerlink" href="#restish.guard.GuardResource.resource_child" title="Permalink to this definition">¶</a></dt>
 <dd>Check the guard methods and raise error handler if errors</dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="restish.guard.guard">
-<!--[restish.guard.guard]--><tt class="descclassname">restish.guard.</tt><tt class="descname">guard</tt><big>(</big><em>*checkers</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.guard.guard" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.guard.</tt><tt class="descname">guard</tt><big>(</big><em>*checkers</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.guard.guard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator that guards a function by calling each checker function before
 calling the decorated function.</p>
 <p>The only requirement is that the decorated function takes the request as
@@ -143,7 +142,7 @@ the first positional arg.</p>
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

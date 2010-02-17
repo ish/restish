@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Access Control using Guard &mdash; Restish v0.9 documentation</title>
+    <title>Access Control using Guard &amp;mdash; Restish v0.10 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '0.9',
+          URL_ROOT:    '#',
+          VERSION:     '0.10',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.9 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.10 documentation" href="index.html" />
     <link rel="next" title="How to work with WSGI Apps" href="wsgiapps.html" />
     <link rel="prev" title="Templating in Restish" href="templating.html" /> 
 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="templating.html" title="Templating in Restish"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,7 +64,6 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="access-control-using-guard">
 <h1>Access Control using Guard<a class="headerlink" href="#access-control-using-guard" title="Permalink to this headline">¶</a></h1>
 <p>Restish supplies a module called <tt class="docutils literal"><span class="pre">guard</span></tt> which makes applying access control easy to apply to resources or methods.</p>
@@ -91,8 +90,8 @@
 <p>The default restish guard in <tt class="docutils literal"><span class="pre">{projectname}/lib</span></tt> includes an <tt class="docutils literal"><span class="pre">authenticated</span></tt> decorator that checks for a <tt class="docutils literal"><span class="pre">REMOTE_USER</span></tt> cookie. We can use this to decorate children or accept headers.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">Resource</span><span class="p">):</span>
 
-    <span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
-    <span class="nd">@guard</span><span class="o">.</span><span class="n">guard</span><span class="p">(</span><span class="n">guard</span><span class="o">.</span><span class="n">authenticated</span><span class="p">)</span>
+    <span class="nd">@resource.GET</span><span class="p">()</span>
+    <span class="nd">@guard.guard</span><span class="p">(</span><span class="n">guard</span><span class="o">.</span><span class="n">authenticated</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;text/html&#39;</span><span class="p">)],</span>
             <span class="s">&quot;&lt;p&gt;Hello from foo!&lt;/p&gt;&quot;</span><span class="p">)</span>
@@ -141,7 +140,7 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">Access Control using Guard</a><ul>
+<li><a class="reference external" href="#">Access Control using Guard</a><ul>
 <li><a class="reference external" href="#basic-auth-using-repoze-who">Basic Auth using repoze.who</a></li>
 </ul>
 </li>
@@ -180,7 +179,7 @@
         <li class="right" >
           <a href="templating.html" title="Templating in Restish"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

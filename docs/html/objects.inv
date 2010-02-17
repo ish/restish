@@ -1,6 +1,6 @@
 # Sphinx inventory version 1
 # Project: Restish
-# Version: 0.9
+# Version: 0.10
 restish.page mod restish.page.html
 restish.guard mod restish.guard.html
 restish.resource mod restish.resource.html
@@ -13,7 +13,7 @@ restish.templating.Templating.args method restish.templating.html
 restish.resource.POST class restish.resource.html
 restish.http.gateway_timeout function restish.http.html
 restish.url.URL.sibling method templating.html
-restish.http.NotAcceptableError.response_factory attribute restish.http.html
+restish.http.NotAcceptableError.response_factory staticmethod restish.http.html
 restish.url.URL.remove_query method templating.html
 restish.http.Request.host_url attribute restish.http.html
 restish.http.see_other function restish.http.html
@@ -21,7 +21,9 @@ restish.url.URL.add_queries method templating.html
 restish.url.URL.path_qs attribute templating.html
 restish.http.conflict function restish.http.html
 restish.http.ConflictError exception restish.http.html
-restish.http.BadRequestError.response_factory attribute restish.http.html
+restish.http.BadRequestError.response_factory staticmethod restish.http.html
+restish.guard.GuardError.message attribute restish.guard.html
+restish.resource.ResourceMethodWrapper class restish.resource.html
 restish.app.RestishApp class restish.app.html
 restish.url.URL.query_list attribute templating.html
 restish.url.split_path function restish.url.html
@@ -29,14 +31,14 @@ restish.url.URLAccessor.url attribute templating.html
 restish.resource.GET class restish.resource.html
 restish.url.URL.path_segments attribute templating.html
 restish.http.Request.path attribute restish.http.html
-restish.http.InternalServerError.response_factory attribute restish.http.html
+restish.http.InternalServerError.response_factory staticmethod restish.http.html
 restish.url.join_query function restish.url.html
-restish.http.UnauthorizedError.response_factory attribute restish.http.html
+restish.http.UnauthorizedError.response_factory staticmethod restish.http.html
 restish.templating.page function restish.templating.html
 restish.url.URLAccessor.application_path attribute restish.url.html
 restish.http.Response class restish.http.html
 restish.http.NotFoundError exception restish.http.html
-restish.http.ForbiddenError.response_factory attribute restish.http.html
+restish.http.ForbiddenError.response_factory staticmethod restish.http.html
 restish.error.HTTPError.make_response method restish.error.html
 restish.http.internal_server_error function restish.http.html
 restish.app.RestishApp.get_response method restish.app.html
@@ -46,10 +48,10 @@ restish.guard.GuardResource.resource_child method restish.guard.html
 restish.url.URL.fragment attribute templating.html
 restish.resource.Resource class restish.resource.html
 restish.resource.MethodDecorator class restish.resource.html
-restish.http.MethodNotAllowedError.response_factory attribute restish.http.html
+restish.http.MethodNotAllowedError.response_factory staticmethod restish.http.html
 restish.page.ElementMixin.element method restish.page.html
 restish.http.NotAcceptableError exception restish.http.html
-restish.http.BadGatewayError.response_factory attribute restish.http.html
+restish.http.BadGatewayError.response_factory staticmethod restish.http.html
 restish.templating.Templating.page_args method restish.templating.html
 restish.url.URLAccessor class restish.url.html
 restish.page.ElementMixin class restish.page.html
@@ -72,8 +74,9 @@ restish.url.URL.root method templating.html
 restish.templating.render_element function restish.templating.html
 restish.http.ForbiddenError exception restish.http.html
 restish.templating.Templating.element_args method restish.templating.html
-restish.http.NotFoundError.response_factory attribute restish.http.html
+restish.http.NotFoundError.response_factory staticmethod restish.http.html
 restish.http.ok function restish.http.html
+restish.resource.HEAD class restish.resource.html
 restish.url.URLAccessor.host_url attribute templating.html
 restish.url.URLAccessor.path_qs attribute templating.html
 restish.guard.GuardError exception restish.guard.html
@@ -86,11 +89,11 @@ restish.http.moved_permanently function restish.http.html
 restish.error.HTTPServerError exception restish.error.html
 restish.resource.Resource.resource_child method restish.resource.html
 restish.url.URL.scheme attribute templating.html
-restish.http.GatewayTimeoutError.response_factory attribute restish.http.html
+restish.http.GatewayTimeoutError.response_factory staticmethod restish.http.html
 restish.app.RestishApp.locate_resource method restish.app.html
 restish.http.BadRequestError exception restish.http.html
 restish.guard.GuardResource class restish.guard.html
-restish.http.ServiceUnavailableError.response_factory attribute restish.http.html
+restish.http.ServiceUnavailableError.response_factory staticmethod restish.http.html
 restish.http.Request.path_qs attribute restish.http.html
 restish.url.URL class restish.url.html
 restish.url.URLAccessor.path_url attribute templating.html
@@ -129,6 +132,6 @@ restish.http.UnauthorizedError exception restish.http.html
 restish.templating.Templating.render method restish.templating.html
 restish.http.forbidden function restish.http.html
 restish.http.Request.application_path attribute restish.http.html
-restish.http.ConflictError.response_factory attribute restish.http.html
+restish.http.ConflictError.response_factory staticmethod restish.http.html
 restish.templating.element function restish.templating.html
 restish.http.BadGatewayError exception restish.http.html

@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>An Introduction to Restish &mdash; Restish v0.9 documentation</title>
+    <title>An Introduction to Restish &amp;mdash; Restish v0.10 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '0.9',
+          URL_ROOT:    '#',
+          VERSION:     '0.10',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.9 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.10 documentation" href="index.html" />
     <link rel="next" title="Restish Resources" href="resources.html" />
     <link rel="prev" title="Table of Contents" href="index.html" /> 
 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="index.html" title="Table of Contents"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,7 +64,6 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="an-introduction-to-restish">
 <h1>An Introduction to Restish<a class="headerlink" href="#an-introduction-to-restish" title="Permalink to this headline">¶</a></h1>
 <p>Restish is a simple to use, lightweight WSGI web framework and library with a
@@ -111,60 +110,60 @@ http.request and response)</p>
 <div class="section" id="executive-summary-for-coders">
 <h3>Executive Summary for Coders<a class="headerlink" href="#executive-summary-for-coders" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># implicit resource locator</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">()</span>
+<span class="nd">@resource.child</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">blog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">BlogResource</span><span class="p">()</span>
 
 <span class="c"># explicit resource locator</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;blog&#39;</span><span class="p">)</span>
+<span class="nd">@resource.child</span><span class="p">(</span><span class="s">&#39;blog&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">whatever</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">BlogResource</span><span class="p">()</span>
 
 <span class="c"># templated resource locator</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;blog/{entry}&#39;</span><span class="p">)</span>
+<span class="nd">@resource.child</span><span class="p">(</span><span class="s">&#39;blog/{entry}&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">whatever</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">BlogEntry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
 
 <span class="c"># templated resource locator with partial match</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;blog/entry-{id}&#39;</span><span class="p">)</span>
+<span class="nd">@resource.child</span><span class="p">(</span><span class="s">&#39;blog/entry-{id}&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">whatever</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">BlogEntry</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 
 <span class="c"># accept anything and return a 200 OK with content</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+<span class="nd">@resource.GET</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">([(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="s">&#39;&lt;p&gt;Hello Wolrd&lt;/p&gt;&#39;</span> <span class="p">)</span>
 
 <span class="c"># match json only and return 200 OK (system works out content type)</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;text/json&#39;</span><span class="p">)</span>
+<span class="nd">@resource.GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;text/json&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[],</span> <span class="s">&#39;{&quot;foo&quot;: &quot;bar&quot;}&#39;</span> <span class="p">)</span>
 
 <span class="c"># short cut for accept code</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">)</span>
+<span class="nd">@resource.GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[],</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;foo&#39;</span><span class="p">:</span> <span class="s">&#39;bar&#39;</span><span class="p">})</span> <span class="p">)</span>
 
 <span class="c"># accept html and build a template explicitly</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;text/html&#39;</span><span class="p">)</span>
+<span class="nd">@resource.GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;text/html&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="n">content</span> <span class="o">=</span> <span class="n">templating</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;mytemplate.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tim&#39;</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s">&#39;text/html&#39;</span><span class="p">)],</span> <span class="n">content</span> <span class="p">)</span>
 
 <span class="c"># short cut accept html and use templating decorator</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">)</span>
-<span class="nd">@templating</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="s">&#39;mypage.html&#39;</span><span class="p">)</span>
+<span class="nd">@resource.GET</span><span class="p">(</span><span class="n">accept</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">)</span>
+<span class="nd">@templating.page</span><span class="p">(</span><span class="s">&#39;mypage.html&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Tim&#39;</span><span class="p">}</span>
 
 <span class="c"># accept anything and use url module to build a redirect</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">GET</span><span class="p">()</span>
+<span class="nd">@resource.GET</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
     <span class="n">current_url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path_qs</span>
     <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">see_other</span><span class="p">(</span> <span class="n">current_url</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;othersegment&#39;</span><span class="p">)</span> <span class="p">)</span>
 
 <span class="c"># match a search pattern and redirect to google</span>
-<span class="nd">@resource</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">&#39;search/{query}&#39;</span><span class="p">)</span>
+<span class="nd">@resource.child</span><span class="p">(</span><span class="s">&#39;search/{query}&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
     <span class="n">google_url</span> <span class="o">=</span> <span class="n">url</span><span class="p">(</span><span class="s">&quot;http://google.com&quot;</span><span class="p">)</span>
     <span class="n">http</span><span class="o">.</span><span class="n">see_other</span><span class="p">(</span> <span class="n">google_url</span><span class="o">.</span><span class="n">add_query</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">,</span><span class="n">query</span><span class="p">)</span> <span class="p">)</span>
@@ -330,7 +329,7 @@ serving on http://127.0.0.1:8080</pre>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">An Introduction to Restish</a><ul>
+<li><a class="reference external" href="#">An Introduction to Restish</a><ul>
 <li><a class="reference external" href="#why-restish">Why Restish?</a><ul>
 <li><a class="reference external" href="#background">Background</a></li>
 <li><a class="reference external" href="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
@@ -388,7 +387,7 @@ serving on http://127.0.0.1:8080</pre>
         <li class="right" >
           <a href="index.html" title="Table of Contents"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

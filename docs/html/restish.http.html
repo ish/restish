@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>restish.http &mdash; Restish v0.9 documentation</title>
+    <title>restish.http &amp;mdash; Restish v0.10 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '0.9',
+          URL_ROOT:    '#',
+          VERSION:     '0.10',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.9 documentation" href="index.html" /> 
+    <link rel="top" title="Restish v0.10 documentation" href="index.html" /> 
 
 
   <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,19 +56,18 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="module-restish.http">
 <h1>restish.http<a class="headerlink" href="#module-restish.http" title="Permalink to this headline">¶</a></h1>
 <p>HTTP Request and Response objects, simple Response factories and exceptions
 types for common HTTP errors.</p>
 <dl class="exception">
 <dt id="restish.http.BadGatewayError">
-<!--[restish.http.BadGatewayError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">BadGatewayError</tt><a class="headerlink" href="#restish.http.BadGatewayError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">BadGatewayError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.BadGatewayError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPServerError" class="reference external" href="restish.error.html#restish.error.HTTPServerError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPServerError</span></tt></a></p>
 <p>502 Bad Gateway exception.</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.BadGatewayError.response_factory">
-<!--[restish.http.BadGatewayError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.BadGatewayError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.BadGatewayError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>502 Bad Gateway.</p>
 <p>The server, while acting as a gateway or proxy, received an invalid
 response from the upstream server it accessed in attempting to fulfill the
@@ -79,12 +78,12 @@ request.</p>
 
 <dl class="exception">
 <dt id="restish.http.BadRequestError">
-<!--[restish.http.BadRequestError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">BadRequestError</tt><a class="headerlink" href="#restish.http.BadRequestError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">BadRequestError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.BadRequestError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPClientError" class="reference external" href="restish.error.html#restish.error.HTTPClientError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPClientError</span></tt></a></p>
 <p>Exception for the 400 http code</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.BadRequestError.response_factory">
-<!--[restish.http.BadRequestError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.BadRequestError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.BadRequestError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>400 Bad Request</p>
 <p>The request could not be understood by the server due to malformed syntax.
 The client SHOULD NOT repeat the request without modifications.</p>
@@ -94,12 +93,12 @@ The client SHOULD NOT repeat the request without modifications.</p>
 
 <dl class="exception">
 <dt id="restish.http.ConflictError">
-<!--[restish.http.ConflictError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">ConflictError</tt><a class="headerlink" href="#restish.http.ConflictError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">ConflictError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.ConflictError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPClientError" class="reference external" href="restish.error.html#restish.error.HTTPClientError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPClientError</span></tt></a></p>
 <p>Exception for the 409 http code</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.ConflictError.response_factory">
-<!--[restish.http.ConflictError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.ConflictError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ConflictError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>409 Conflict</p>
 <p>The request could not be completed due to a conflict with the current state
 of the resource. This code is only allowed in situations where it is
@@ -121,12 +120,12 @@ format defined by the response Content-Type.</p>
 
 <dl class="exception">
 <dt id="restish.http.ForbiddenError">
-<!--[restish.http.ForbiddenError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">ForbiddenError</tt><a class="headerlink" href="#restish.http.ForbiddenError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">ForbiddenError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.ForbiddenError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPClientError" class="reference external" href="restish.error.html#restish.error.HTTPClientError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPClientError</span></tt></a></p>
 <p>Exception for the 403 http code</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.ForbiddenError.response_factory">
-<!--[restish.http.ForbiddenError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.ForbiddenError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.ForbiddenError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>403 Forbidden</p>
 <p>The server understood the request, but is refusing to fulfill it.
 Authorization will not help and the request SHOULD NOT be repeated. If the
@@ -141,12 +140,12 @@ instead.</p>
 
 <dl class="exception">
 <dt id="restish.http.GatewayTimeoutError">
-<!--[restish.http.GatewayTimeoutError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">GatewayTimeoutError</tt><a class="headerlink" href="#restish.http.GatewayTimeoutError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">GatewayTimeoutError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.GatewayTimeoutError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPServerError" class="reference external" href="restish.error.html#restish.error.HTTPServerError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPServerError</span></tt></a></p>
 <p>504 Gateway Timeout exception.</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.GatewayTimeoutError.response_factory">
-<!--[restish.http.GatewayTimeoutError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.GatewayTimeoutError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.GatewayTimeoutError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>504 Gateway Timeout.</p>
 <p>The server, while acting as a gateway or proxy, did not receive a timely
 response from the upstream server specified by the URI (e.g. HTTP, FTP,
@@ -158,12 +157,12 @@ attempting to complete the request.</p>
 
 <dl class="exception">
 <dt id="restish.http.InternalServerError">
-<!--[restish.http.InternalServerError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">InternalServerError</tt><a class="headerlink" href="#restish.http.InternalServerError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">InternalServerError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.InternalServerError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPServerError" class="reference external" href="restish.error.html#restish.error.HTTPServerError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPServerError</span></tt></a></p>
 <p>500 Internal Server Error exception.</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.InternalServerError.response_factory">
-<!--[restish.http.InternalServerError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.InternalServerError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.InternalServerError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>500 Internal Server Error.</p>
 <p>The server encountered an unexpected condition which prevented it from
 fulfilling the request.</p>
@@ -173,12 +172,12 @@ fulfilling the request.</p>
 
 <dl class="exception">
 <dt id="restish.http.MethodNotAllowedError">
-<!--[restish.http.MethodNotAllowedError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">MethodNotAllowedError</tt><a class="headerlink" href="#restish.http.MethodNotAllowedError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">MethodNotAllowedError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.MethodNotAllowedError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPClientError" class="reference external" href="restish.error.html#restish.error.HTTPClientError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPClientError</span></tt></a></p>
 <p>Exception for the 405 http code</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.MethodNotAllowedError.response_factory">
-<!--[restish.http.MethodNotAllowedError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.MethodNotAllowedError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>allow</em><big>)</big><a class="headerlink" href="#restish.http.MethodNotAllowedError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>405 Not Allowed</p>
 <p>The method specified in the Request-Line is not allowed for the resource
 identified by the Request-URI. The response MUST include an Allow header
@@ -189,12 +188,12 @@ containing a list of valid methods for the requested resource.</p>
 
 <dl class="exception">
 <dt id="restish.http.NotAcceptableError">
-<!--[restish.http.NotAcceptableError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">NotAcceptableError</tt><a class="headerlink" href="#restish.http.NotAcceptableError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">NotAcceptableError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.NotAcceptableError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPClientError" class="reference external" href="restish.error.html#restish.error.HTTPClientError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPClientError</span></tt></a></p>
 <p>Exception for the 406 http code</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.NotAcceptableError.response_factory">
-<!--[restish.http.NotAcceptableError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.NotAcceptableError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.NotAcceptableError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>406 Not Acceptable</p>
 <p>The resource identified by the request is only capable of generating
 response entities which have content characteristics not acceptable
@@ -220,12 +219,12 @@ receipt of more data and query the user for a decision on further actions.</p>
 
 <dl class="exception">
 <dt id="restish.http.NotFoundError">
-<!--[restish.http.NotFoundError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">NotFoundError</tt><a class="headerlink" href="#restish.http.NotFoundError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">NotFoundError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.NotFoundError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPClientError" class="reference external" href="restish.error.html#restish.error.HTTPClientError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPClientError</span></tt></a></p>
 <p>Exception for the 404 http code</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.NotFoundError.response_factory">
-<!--[restish.http.NotFoundError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.NotFoundError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.NotFoundError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>404 Not Found</p>
 <p>The server has not found anything matching the Request-URI. No indication
 is given of whether the condition is temporary or permanent. The 410 (Gone)
@@ -240,7 +239,7 @@ when no other response is applicable.</p>
 
 <dl class="class">
 <dt id="restish.http.Request">
-<!--[restish.http.Request]-->class <tt class="descclassname">restish.http.</tt><tt class="descname">Request</tt><big>(</big><em>environ</em><big>)</big><a class="headerlink" href="#restish.http.Request" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">restish.http.</tt><tt class="descname">Request</tt><big>(</big><em>environ</em><big>)</big><a class="headerlink" href="#restish.http.Request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref docutils literal"><span class="pre">webob.Request</span></tt></p>
 <p>HTTP request class.</p>
 <p>The request represents the request from the client and is created by
@@ -250,46 +249,46 @@ url-like properties are represented as url.URL instances to allow them
 to manipulated easily and safely.</p>
 <dl class="attribute">
 <dt id="restish.http.Request.application_path">
-<!--[restish.http.Request.application_path]--><tt class="descname">application_path</tt><a class="headerlink" href="#restish.http.Request.application_path" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">application_path</tt><a class="headerlink" href="#restish.http.Request.application_path" title="Permalink to this definition">¶</a></dt>
 <dd>Return the path part of the WSGI application&#8217;s URL.</dd></dl>
 
 <dl class="attribute">
 <dt id="restish.http.Request.application_url">
-<!--[restish.http.Request.application_url]--><tt class="descname">application_url</tt><a class="headerlink" href="#restish.http.Request.application_url" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">application_url</tt><a class="headerlink" href="#restish.http.Request.application_url" title="Permalink to this definition">¶</a></dt>
 <dd>Return the WSGI application&#8217;s URL.</dd></dl>
 
 <dl class="attribute">
 <dt id="restish.http.Request.host_url">
-<!--[restish.http.Request.host_url]--><tt class="descname">host_url</tt><a class="headerlink" href="#restish.http.Request.host_url" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">host_url</tt><a class="headerlink" href="#restish.http.Request.host_url" title="Permalink to this definition">¶</a></dt>
 <dd>Return the host&#8217;s URL, i.e. the URL of the HTTP server.</dd></dl>
 
 <dl class="attribute">
 <dt id="restish.http.Request.path">
-<!--[restish.http.Request.path]--><tt class="descname">path</tt><a class="headerlink" href="#restish.http.Request.path" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">path</tt><a class="headerlink" href="#restish.http.Request.path" title="Permalink to this definition">¶</a></dt>
 <dd>Return the path part of the current URL, relative to the root of the
 web server.</dd></dl>
 
 <dl class="attribute">
 <dt id="restish.http.Request.path_qs">
-<!--[restish.http.Request.path_qs]--><tt class="descname">path_qs</tt><a class="headerlink" href="#restish.http.Request.path_qs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">path_qs</tt><a class="headerlink" href="#restish.http.Request.path_qs" title="Permalink to this definition">¶</a></dt>
 <dd>Return the path of the current URL, relative to the root of the web
 server, and the query string.</dd></dl>
 
 <dl class="attribute">
 <dt id="restish.http.Request.path_url">
-<!--[restish.http.Request.path_url]--><tt class="descname">path_url</tt><a class="headerlink" href="#restish.http.Request.path_url" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">path_url</tt><a class="headerlink" href="#restish.http.Request.path_url" title="Permalink to this definition">¶</a></dt>
 <dd>Return the path&#8217;s URL, i.e. the current URL without the query string.</dd></dl>
 
 <dl class="attribute">
 <dt id="restish.http.Request.url">
-<!--[restish.http.Request.url]--><tt class="descname">url</tt><a class="headerlink" href="#restish.http.Request.url" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">url</tt><a class="headerlink" href="#restish.http.Request.url" title="Permalink to this definition">¶</a></dt>
 <dd>Return the full current (i.e. requested), URL.</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="restish.http.Response">
-<!--[restish.http.Response]-->class <tt class="descclassname">restish.http.</tt><tt class="descname">Response</tt><big>(</big><em>status</em>, <em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.Response" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">restish.http.</tt><tt class="descname">Response</tt><big>(</big><em>status</em>, <em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.Response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref docutils literal"><span class="pre">webob.Response</span></tt></p>
 <p>HTTP response class.</p>
 <p>A Response instance represents the response that will be sent to the client
@@ -301,12 +300,12 @@ less implicit behaviour.</p>
 
 <dl class="exception">
 <dt id="restish.http.ServiceUnavailableError">
-<!--[restish.http.ServiceUnavailableError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">ServiceUnavailableError</tt><a class="headerlink" href="#restish.http.ServiceUnavailableError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">ServiceUnavailableError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.ServiceUnavailableError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPServerError" class="reference external" href="restish.error.html#restish.error.HTTPServerError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPServerError</span></tt></a></p>
 <p>503 Service Unavailable exception.</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.ServiceUnavailableError.response_factory">
-<!--[restish.http.ServiceUnavailableError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.ServiceUnavailableError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.ServiceUnavailableError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>503 Service Unavailable.</p>
 <p>The server is currently unable to handle the request due to a temporary
 overloading or maintenance of the server. The implication is that this is a
@@ -320,12 +319,12 @@ a 500 response.</p>
 
 <dl class="exception">
 <dt id="restish.http.UnauthorizedError">
-<!--[restish.http.UnauthorizedError]-->exception <tt class="descclassname">restish.http.</tt><tt class="descname">UnauthorizedError</tt><a class="headerlink" href="#restish.http.UnauthorizedError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">restish.http.</tt><tt class="descname">UnauthorizedError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.http.UnauthorizedError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a title="restish.error.HTTPClientError" class="reference external" href="restish.error.html#restish.error.HTTPClientError"><tt class="xref docutils literal"><span class="pre">restish.error.HTTPClientError</span></tt></a></p>
 <p>Exception for the 401 http code</p>
-<dl class="attribute">
+<dl class="staticmethod">
 <dt id="restish.http.UnauthorizedError.response_factory">
-<!--[restish.http.UnauthorizedError.response_factory]--><tt class="descname">response_factory</tt><a class="headerlink" href="#restish.http.UnauthorizedError.response_factory" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">response_factory</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.UnauthorizedError.response_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>401 Unauthorized</p>
 <p>The request requires user authentication. The response MUST include a
 WWW-Authenticate header field (section 14.47) containing a challenge
@@ -345,7 +344,7 @@ Access Authentication&#8221; [43].</p>
 
 <dl class="function">
 <dt id="restish.http.bad_gateway">
-<!--[restish.http.bad_gateway]--><tt class="descclassname">restish.http.</tt><tt class="descname">bad_gateway</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.bad_gateway" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">bad_gateway</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.bad_gateway" title="Permalink to this definition">¶</a></dt>
 <dd><p>502 Bad Gateway.</p>
 <p>The server, while acting as a gateway or proxy, received an invalid
 response from the upstream server it accessed in attempting to fulfill the
@@ -354,7 +353,7 @@ request.</p>
 
 <dl class="function">
 <dt id="restish.http.bad_request">
-<!--[restish.http.bad_request]--><tt class="descclassname">restish.http.</tt><tt class="descname">bad_request</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.bad_request" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">bad_request</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.bad_request" title="Permalink to this definition">¶</a></dt>
 <dd><p>400 Bad Request</p>
 <p>The request could not be understood by the server due to malformed syntax.
 The client SHOULD NOT repeat the request without modifications.</p>
@@ -362,7 +361,7 @@ The client SHOULD NOT repeat the request without modifications.</p>
 
 <dl class="function">
 <dt id="restish.http.conflict">
-<!--[restish.http.conflict]--><tt class="descclassname">restish.http.</tt><tt class="descname">conflict</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.conflict" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">conflict</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.conflict" title="Permalink to this definition">¶</a></dt>
 <dd><p>409 Conflict</p>
 <p>The request could not be completed due to a conflict with the current state
 of the resource. This code is only allowed in situations where it is
@@ -382,7 +381,7 @@ format defined by the response Content-Type.</p>
 
 <dl class="function">
 <dt id="restish.http.created">
-<!--[restish.http.created]--><tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">created</tt><big>(</big><em>location</em>, <em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.created" title="Permalink to this definition">¶</a></dt>
 <dd><p>201 Created</p>
 <p>The request has been fulfilled and resulted in a new resource being
 created. The newly created resource can be referenced by the URI(s)
@@ -401,7 +400,7 @@ section 14.19.</p>
 
 <dl class="function">
 <dt id="restish.http.forbidden">
-<!--[restish.http.forbidden]--><tt class="descclassname">restish.http.</tt><tt class="descname">forbidden</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.forbidden" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">forbidden</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.forbidden" title="Permalink to this definition">¶</a></dt>
 <dd><p>403 Forbidden</p>
 <p>The server understood the request, but is refusing to fulfill it.
 Authorization will not help and the request SHOULD NOT be repeated. If the
@@ -414,7 +413,7 @@ instead.</p>
 
 <dl class="function">
 <dt id="restish.http.found">
-<!--[restish.http.found]--><tt class="descclassname">restish.http.</tt><tt class="descname">found</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.found" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">found</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.found" title="Permalink to this definition">¶</a></dt>
 <dd><p>302 Found</p>
 <p>The requested resource resides temporarily under a different URI. Since the
 redirection might be altered on occasion, the client SHOULD continue to use
@@ -437,7 +436,7 @@ unambiguously clear which kind of reaction is expected of the client.</p>
 
 <dl class="function">
 <dt id="restish.http.gateway_timeout">
-<!--[restish.http.gateway_timeout]--><tt class="descclassname">restish.http.</tt><tt class="descname">gateway_timeout</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.gateway_timeout" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">gateway_timeout</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.gateway_timeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>504 Gateway Timeout.</p>
 <p>The server, while acting as a gateway or proxy, did not receive a timely
 response from the upstream server specified by the URI (e.g. HTTP, FTP,
@@ -447,7 +446,7 @@ attempting to complete the request.</p>
 
 <dl class="function">
 <dt id="restish.http.internal_server_error">
-<!--[restish.http.internal_server_error]--><tt class="descclassname">restish.http.</tt><tt class="descname">internal_server_error</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.internal_server_error" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">internal_server_error</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.internal_server_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>500 Internal Server Error.</p>
 <p>The server encountered an unexpected condition which prevented it from
 fulfilling the request.</p>
@@ -455,7 +454,7 @@ fulfilling the request.</p>
 
 <dl class="function">
 <dt id="restish.http.method_not_allowed">
-<!--[restish.http.method_not_allowed]--><tt class="descclassname">restish.http.</tt><tt class="descname">method_not_allowed</tt><big>(</big><em>allow</em><big>)</big><a class="headerlink" href="#restish.http.method_not_allowed" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">method_not_allowed</tt><big>(</big><em>allow</em><big>)</big><a class="headerlink" href="#restish.http.method_not_allowed" title="Permalink to this definition">¶</a></dt>
 <dd><p>405 Not Allowed</p>
 <p>The method specified in the Request-Line is not allowed for the resource
 identified by the Request-URI. The response MUST include an Allow header
@@ -464,7 +463,7 @@ containing a list of valid methods for the requested resource.</p>
 
 <dl class="function">
 <dt id="restish.http.moved_permanently">
-<!--[restish.http.moved_permanently]--><tt class="descclassname">restish.http.</tt><tt class="descname">moved_permanently</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.moved_permanently" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">moved_permanently</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.moved_permanently" title="Permalink to this definition">¶</a></dt>
 <dd><p>301 Moved Permanently</p>
 <p>The requested resource has been assigned a new permanent URI and any
 future references to this resource SHOULD use one of the returned URIs.
@@ -486,7 +485,7 @@ erroneously change it into a GET request.</p>
 
 <dl class="function">
 <dt id="restish.http.not_acceptable">
-<!--[restish.http.not_acceptable]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_acceptable</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.not_acceptable" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">not_acceptable</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.not_acceptable" title="Permalink to this definition">¶</a></dt>
 <dd><p>406 Not Acceptable</p>
 <p>The resource identified by the request is only capable of generating
 response entities which have content characteristics not acceptable
@@ -510,7 +509,7 @@ receipt of more data and query the user for a decision on further actions.</p>
 
 <dl class="function">
 <dt id="restish.http.not_found">
-<!--[restish.http.not_found]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_found</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.not_found" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">not_found</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.not_found" title="Permalink to this definition">¶</a></dt>
 <dd><p>404 Not Found</p>
 <p>The server has not found anything matching the Request-URI. No indication
 is given of whether the condition is temporary or permanent. The 410 (Gone)
@@ -523,7 +522,7 @@ when no other response is applicable.</p>
 
 <dl class="function">
 <dt id="restish.http.not_modified">
-<!--[restish.http.not_modified]--><tt class="descclassname">restish.http.</tt><tt class="descname">not_modified</tt><big>(</big><em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.not_modified" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">not_modified</tt><big>(</big><em>headers=None</em><big>)</big><a class="headerlink" href="#restish.http.not_modified" title="Permalink to this definition">¶</a></dt>
 <dd><p>304 Not Modified</p>
 <p>If the client has performed a conditional GET request and access is
 allowed, but the document has not been modified, the server SHOULD respond
@@ -565,7 +564,7 @@ response.</p>
 
 <dl class="function">
 <dt id="restish.http.ok">
-<!--[restish.http.ok]--><tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">ok</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.ok" title="Permalink to this definition">¶</a></dt>
 <dd><p>200 OK</p>
 <p>The request has succeeded. The information returned with the response
 is dependent on the method used in the request, for example:</p>
@@ -580,7 +579,7 @@ server.</p>
 
 <dl class="function">
 <dt id="restish.http.see_other">
-<!--[restish.http.see_other]--><tt class="descclassname">restish.http.</tt><tt class="descname">see_other</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.see_other" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">see_other</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#restish.http.see_other" title="Permalink to this definition">¶</a></dt>
 <dd><p>303 See Other</p>
 <p>The response to the request can be found under a different URI and SHOULD
 be retrieved using a GET method on that resource. This method exists
@@ -600,7 +599,7 @@ here for 303.</p>
 
 <dl class="function">
 <dt id="restish.http.service_unavailable">
-<!--[restish.http.service_unavailable]--><tt class="descclassname">restish.http.</tt><tt class="descname">service_unavailable</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.service_unavailable" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">service_unavailable</tt><big>(</big><em>headers=None</em>, <em>body=None</em><big>)</big><a class="headerlink" href="#restish.http.service_unavailable" title="Permalink to this definition">¶</a></dt>
 <dd><p>503 Service Unavailable.</p>
 <p>The server is currently unable to handle the request due to a temporary
 overloading or maintenance of the server. The implication is that this is a
@@ -612,7 +611,7 @@ a 500 response.</p>
 
 <dl class="function">
 <dt id="restish.http.unauthorized">
-<!--[restish.http.unauthorized]--><tt class="descclassname">restish.http.</tt><tt class="descname">unauthorized</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.unauthorized" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">restish.http.</tt><tt class="descname">unauthorized</tt><big>(</big><em>headers</em>, <em>body</em><big>)</big><a class="headerlink" href="#restish.http.unauthorized" title="Permalink to this definition">¶</a></dt>
 <dd><p>401 Unauthorized</p>
 <p>The request requires user authentication. The response MUST include a
 WWW-Authenticate header field (section 14.47) containing a challenge
@@ -659,7 +658,7 @@ Access Authentication&#8221; [43].</p>
         <li class="right" >
           <a href="modindex.html" title="Global Module Index"
              accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>How to work with WSGI Apps &mdash; Restish v0.9 documentation</title>
+    <title>How to work with WSGI Apps &amp;mdash; Restish v0.10 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-          URL_ROOT:    '',
-          VERSION:     '0.9',
+          URL_ROOT:    '#',
+          VERSION:     '0.10',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.9 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.10 documentation" href="index.html" />
     <link rel="next" title="Core restish Modules" href="modules.html" />
     <link rel="prev" title="Access Control using Guard" href="guard.html" /> 
 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="guard.html" title="Access Control using Guard"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,7 +64,6 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
   <div class="section" id="how-to-work-with-wsgi-apps">
 <h1>How to work with WSGI Apps<a class="headerlink" href="#how-to-work-with-wsgi-apps" title="Permalink to this headline">¶</a></h1>
 <p>This isn&#8217;t a guide to how wsgi works but should help you if you want to plug wsgi stuff into a restish app.</p>
@@ -152,8 +151,8 @@
             <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
             <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;SCRIPT_NAME&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="s">&#39;/&#39;</span>
             <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;expires&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0</span>
-                <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;max-age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0</span>
+                <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;expires&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">cookie</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;max-age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">cookie</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cookie</span> <span class="o">=</span> <span class="n">cookie</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -221,7 +220,7 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="">How to work with WSGI Apps</a><ul>
+<li><a class="reference external" href="#">How to work with WSGI Apps</a><ul>
 <li><a class="reference external" href="#whats-in-the-wsgiapp-py">Whats in the wsgiapp.py?</a></li>
 <li><a class="reference external" href="#adding-a-wsgi-app-to-our-project">Adding a WSGI app to our project</a></li>
 <li><a class="reference external" href="#can-i-see-an-example-of-middleware-please">Can I see an example of middleware please?</a><ul>
@@ -265,7 +264,7 @@
         <li class="right" >
           <a href="guard.html" title="Access Control using Guard"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.9 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
