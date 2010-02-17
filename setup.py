@@ -4,7 +4,7 @@ use_setuptools()
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.10'
+version = '0.11dev'
 
 setup(name='restish',
       version=version,
