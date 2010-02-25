@@ -4,3 +4,4 @@ dist
 .*.swp
 .coverage
 docs/doctrees
+*.egg-info
