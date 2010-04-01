@@ -97,6 +97,14 @@ class TestRedirectionResponseFactories(unittest.TestCase):
         assert '301 Moved Permanently' in r.body
         assert cgi.escape(location) in r.body
 
+    def test_moved_permanently_headers(self):
+        r = http.moved_permanently('/', headers=[('Set-Cookie', 'name=value')])
+        # Pass through WebTest for lint-like checks
+        webtest.TestApp(app.RestishApp(r)).get('/')
+        # Test response details.
+        assert r.headers['Location'] == '/'
+        assert r.headers['Set-Cookie'] == 'name=value'
+
     def test_found(self):
         location = 'http://localhost/abc?a=1&b=2'
         r = http.found(location)
@@ -109,6 +117,14 @@ class TestRedirectionResponseFactories(unittest.TestCase):
         assert '302 Found' in r.body
         assert cgi.escape(location) in r.body
 
+    def test_found_headers(self):
+        r = http.found('/', [('Set-Cookie', 'name=value')])
+        # Pass through WebTest for lint-like checks
+        webtest.TestApp(app.RestishApp(r)).get('/')
+        # Test response details.
+        assert r.headers['Location'] ==  '/'
+        assert r.headers['Set-Cookie'] == 'name=value'
+
     def test_see_other(self):
         location = 'http://localhost/abc?a=1&b=2'
         r = http.see_other(location)
@@ -120,6 +136,14 @@ class TestRedirectionResponseFactories(unittest.TestCase):
         assert r.headers['Content-Length']
         assert '303 See Other' in r.body
         assert cgi.escape(location) in r.body
+
+    def test_see_other_headers(self):
+        r = http.see_other('/', [('Set-Cookie', 'name=value')])
+        # Pass through WebTest for lint-like checks
+        webtest.TestApp(app.RestishApp(r)).get('/')
+        # Test response details.
+        assert r.headers['Location'] == '/'
+        assert r.headers['Set-Cookie'] == 'name=value'
 
     def test_not_modified(self):
         r = http.not_modified()
