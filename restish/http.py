@@ -170,7 +170,7 @@ _REDIRECTION_PAGE = """<html>
 </body>
 </html>"""
 
-def _redirect(status, location, body=None):
+def _redirect(status, location):
     """
     Creating a standard HTML content for the common redirects:
      * 301 Moved Permanently
