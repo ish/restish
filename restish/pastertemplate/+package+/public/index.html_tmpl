@@ -1,16 +1,89 @@
 <html>
   <head>
     <title>${project}</title>
+    <style type="text/css">
+    body {
+      font-family: serif;
+      text-align: center;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: sans-serif;
+    }
+    #container {
+      width: 800px;
+      text-align: left;
+      margin: 0 auto;
+    }
+    .info {
+      border: 1px solid;
+      margin: 1em;
+      padding: 1em 1.5em;
+      color: #00529B;
+      background-color: #BDE5F8;
+    }
+    .proj-dir {
+      margin: 0 2em;
+      line-height: 100%;
+    }
+    .proj-dir span.path {
+      font-family: monospace;
+      font-weight: bold;
+      color: #009;
+    }
+    .proj-dir span.desc {
+      color: #999;
+      font-size: small;
+      margin-left: 1em;
+    }
+    </style>
   </head>
   <body>
-    <h1>${project}</h1>
-    <p>This is the default page for the ${project} project.</p>
-    <p>The page is called index.html and is part of your application's package,
-    ${package}, inside the public/ directory, i.e. ${project}/public/index.html.</p>
-    <p>Any files you add to the public directory will be served in preference
-    to your application's dynamic resources.</p>
-    <p>When you're ready simply delete index.html and your root resource will
-    be returned for this URL instead.</p>
+    <div id="container">
+      <h1>Welcome to ${project}</h1>
+      <div class="info">
+        You are currently reading ${package}/public/index.html. Please remember
+        to remove the file when you're ready to expose your root resource.
+      </div>
+      <p>Congratulations, you've created a new restish project using the paster
+      template. The template is meant to provide a reasonable starting point
+      for an application.</p>
+      <p>The basic structure of the project directory is:</p>
+      <div class="proj-dir">
+        <span class="path">${project}</span> <span class="desc">project's main directory</span><br />
+        <span class="path">|-- development.ini</span> <span class="desc">paste deploy .ini file for development</span><br />
+        <span class="path">|-- live.ini</span> <span class="desc">paste deploy .ini file for live</span><br />
+        <span class="path">|-- ${package}</span> <span class="desc">package directory</span><br />
+        <span class="path">|   |-- lib</span> <span class="desc">package for general purpose modules</span><br />
+        <span class="path">|   |   |-- __init__.py</span> <span class="desc"></span><br />
+        <span class="path">|   |   |-- guard.py</span> <span class="desc">guard utilities for access control</span><br />
+        <span class="path">|   |   |-- templating.py</span> <span class="desc">templating configuration</span><br />
+        <span class="path">|   |-- public</span> <span class="desc">directory of static, unprotected resources (CSS, images, JS, etc)</span><br />
+        <span class="path">|   |   |-- index.html</span> <span class="desc">default home page (you're reading it now)</span><br />
+        <span class="path">|   |-- resource</span> <span class="desc">package of resource classes</span><br />
+        <span class="path">|   |   |-- __init__.py</span> <span class="desc"></span><br />
+        <span class="path">|   |   |-- root.py</span> <span class="desc">module containing a default root resource</span><br />
+        <span class="path">|   |-- tests</span> <span class="desc">package of application unit tests</span><br />
+        <span class="path">|   |   |-- __init__.py</span> <span class="desc"></span><br />
+        <span class="path">|   |   |-- base.py</span> <span class="desc">unit test support and helpers</span><br />
+        <span class="path">|   |   `-- test_root.py</span> <span class="desc">example unit test</span><br />
+        <span class="path">|   |-- websetup.py</span> <span class="desc">paste deploy setup-app support</span><br />
+        <span class="path">|   |-- wsgiapp.py</span> <span class="desc">WSGI application and environ configuration</span><br />
+        <span class="path">|-- ${package}.ini</span> <span class="desc">application's .ini file</span><br />
+        <span class="path">|-- setup.py</span> <span class="desc">package setup script</span><br />
+        <span class="path">`-- test.ini</span> <span class="desc">paste deploy .ini file for unit test support</span><br />
+      </div>
+      <p>Possible next steps:</p>
+      <ul>
+        <li><em>Dynamic "root" resource</em>. Delete this file
+        (${package}/public/index.html) to expose the example root resource in
+        ${package}/resource/root.py.</li>
+        <li><em>Templating</em>. If you will be generating content from
+        templates then edit ${package}/lib/templating.py to enable and
+        configure your preferred templating engine.</li>
+        <li><em>WSGI middleware</em>. Configure any WSGI middleware required by
+        your application in ${package}/wsgiapp.py.</li>
+      </ul>
+    </div>
   </body>
 </html>
 
