@@ -2,6 +2,15 @@
 Changelog
 =========
 
+0.11 (2010-04-27)
+-----------------
+
+* Raise useful error message when templating has not been configured.
+* Support additonal headers in restish.http redirect funcs.
+* Improved paster-generated projects.
+* Remove setuptools dependency for those that prefer distribute.
+
+
 0.10 (2010-02-17)
 -----------------
 

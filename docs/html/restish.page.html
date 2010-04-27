@@ -3,13 +3,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>restish.page &amp;mdash; Restish v0.10 documentation</title>
+    <title>restish.page &amp;mdash; Restish v0.11 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '#',
-          VERSION:     '0.10',
+          VERSION:     '0.11',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.10 documentation" href="index.html" /> 
+    <link rel="top" title="Restish v0.11 documentation" href="index.html" /> 
 
 
   <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
@@ -38,10 +38,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,48 +53,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-restish.page">
-<h1>restish.page<a class="headerlink" href="#module-restish.page" title="Permalink to this headline">¶</a></h1>
-<p>Page resource.</p>
-<dl class="class">
-<dt id="restish.page.Element">
-<em class="property">class </em><tt class="descclassname">restish.page.</tt><tt class="descname">Element</tt><a class="headerlink" href="#restish.page.Element" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a title="restish.page.ElementMixin" class="reference internal" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
-<p>Define a base Element type that is just an element</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="restish.page.ElementMixin">
-<em class="property">class </em><tt class="descclassname">restish.page.</tt><tt class="descname">ElementMixin</tt><a class="headerlink" href="#restish.page.ElementMixin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
-<p>Mixin to allow the use of element lookups on the resource</p>
-<dl class="method">
-<dt id="restish.page.ElementMixin.element">
-<tt class="descname">element</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="headerlink" href="#restish.page.ElementMixin.element" title="Permalink to this definition">¶</a></dt>
-<dd><p>Locate an element by name.</p>
-<p>The element is cached for the duration of the request to ensure that
-the same object is returned if the element is located again later.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="restish.page.ElementNotFound">
-<em class="property">exception </em><tt class="descclassname">restish.page.</tt><tt class="descname">ElementNotFound</tt><a class="headerlink" href="#restish.page.ElementNotFound" title="Permalink to this definition">¶</a></dt>
-<dd>Bases: <a title="(in Python v2.7)" class="reference external" href="http://docs.python.org/dev/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></dd></dl>
-
-<dl class="class">
-<dt id="restish.page.Page">
-<em class="property">class </em><tt class="descclassname">restish.page.</tt><tt class="descname">Page</tt><a class="headerlink" href="#restish.page.Page" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a title="restish.page.ElementMixin" class="reference internal" href="#restish.page.ElementMixin"><tt class="xref docutils literal"><span class="pre">restish.page.ElementMixin</span></tt></a>, <a title="restish.resource.Resource" class="reference external" href="restish.resource.html#restish.resource.Resource"><tt class="xref docutils literal"><span class="pre">restish.resource.Resource</span></tt></a></p>
-<p>Define a base Page type that includes elements</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="restish.page.element">
-<tt class="descclassname">restish.page.</tt><tt class="descname">element</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#restish.page.element" title="Permalink to this definition">¶</a></dt>
-<dd>Decorator to mark a method as an element factory.</dd></dl>
-
+  <div class="section" id="restish-page">
+<h1>restish.page<a class="headerlink" href="#restish-page" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -126,10 +83,7 @@ the same object is returned if the element is located again later.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
-        <li><a href="index.html">Restish v0.10 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

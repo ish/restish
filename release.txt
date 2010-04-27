@@ -4,12 +4,11 @@ Basic Release Procedure
 1. Edit setup.py, set version string.
 2. Edit docs-build/conf.py, set version and release.
 3. Rebuild docs.
-4. Run python setup.py egg_info
-5. Add version, docs and egg-info changes to commit.
-6. Check egg in a fresh virtualenv (create new project and check it runs).
-7. Tag release.
-8. Push release commit and tag.
-9. Build dists and push to PyPI.
-10. Edit setup.py, set dev version string.
-11. Edit docs-build/conf.py, set dev version and release.
+4. Add version and docs changes to commit.
+5. Check egg in a fresh virtualenv (create new project and check it runs).
+6. Tag release.
+7. Push release commit and tag.
+8. Build dists and push to PyPI.
+9. Edit setup.py, set dev version string.
+10. Edit docs-build/conf.py, set dev version and release.
 
