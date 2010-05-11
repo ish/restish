@@ -175,11 +175,11 @@ class TestPage(unittest.TestCase):
         response = Resource({'foo': 'bar'})(request)
         assert response.status.startswith('200')
         assert response.body == '<p>test.html {\'foo\': \'bar\'}</p>'
-    
+
     def test_page_decorator_with_custom_headers(self):
         def renderer(template, args, encoding=None):
             return args['body']
-        
+
         class Resource(resource.Resource):
             @resource.GET()
             @templating.page('page')

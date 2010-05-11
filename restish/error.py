@@ -11,7 +11,7 @@ class HTTPError(RestishException):
 
     Each error response factory defined in restish.http is mirrored by an
     exception type derived from HTTPException.
-    
+
     The derived exception class is expected to override response_factory (None
     by default), providing a callable that accepts all the positional and
     keyword args and returns an http.Response instance.  Typically,
@@ -37,6 +37,7 @@ class HTTPClientError(HTTPError):
     """
     Base class for all HTTP client (4xx) errors.
     """
+
 
 class HTTPServerError(HTTPError):
     """

@@ -15,7 +15,6 @@ authenticated user as the REMOTE_USER:
     def authenticated_checker(request, obj):
         if request.environ.get('REMOTE_USER') is None:
             raise guard.GuardError("No authenticated user.")
-        
 """
 
 import decorator
@@ -51,7 +50,8 @@ def guard(*checkers, **kwargs):
     # args so we'll have to handle it ourselves for now.
     error_handler = kwargs.pop('error_handler', _default_error_handler)
     if kwargs:
-        raise TypeError('guard() got unexpected keyword arguments %r' % ('.'.join(kwargs),))
+        raise TypeError('guard() got unexpected keyword arguments %r' %
+                        ('.'.join(kwargs),))
 
     def call(func, obj, request, *a, **k):
         """ Iterate checkers accumulating errors """
@@ -70,8 +70,8 @@ class GuardResource(object):
     """
 
     def __init__(self, resource, *checkers, **kwargs):
-        # Bah, silly Python doesn't (yet) support explicit positional vs keyword
-        # args so we'll have to handle it ourselves for now.
+        # Bah, silly Python doesn't (yet) support explicit positional vs
+        # keyword args so we'll have to handle it ourselves for now.
         error_handler = kwargs.pop('error_handler', _default_error_handler)
         if kwargs:
             raise TypeError('guard() got unexpected' \
@@ -118,5 +118,5 @@ def _default_error_handler(request, obj, errors):
     errors_text = '\n'.join(errors)
     raise http.UnauthorizedError(
             [('Content-Type', 'text/plain')],
-            """401 Unauthorized\n\n%s\n"""%errors_text)
+            """401 Unauthorized\n\n%s\n""" % errors_text)
 

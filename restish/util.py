@@ -67,7 +67,7 @@ class RequestBoundCallable(object):
 
     def __getattr__(self, name):
         return getattr(self.callable, name)
-    
+
     def __getitem__(self, name):
         return self.callable[name]
 

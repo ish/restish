@@ -122,7 +122,7 @@ class TestRedirectionResponseFactories(unittest.TestCase):
         # Pass through WebTest for lint-like checks
         webtest.TestApp(app.RestishApp(r)).get('/')
         # Test response details.
-        assert r.headers['Location'] ==  '/'
+        assert r.headers['Location'] == '/'
         assert r.headers['Set-Cookie'] == 'name=value'
 
     def test_see_other(self):

@@ -7,7 +7,8 @@ templating.Templating instance that is added to the WSGI environ.
 
 Recommended setup:
 
-  * load templates from a directory of data files inside the application package
+  * load templates from a directory of data files inside the application
+    package
   * variable substitutions are converted to unicode instances and automatically
     HTML escaped.
 

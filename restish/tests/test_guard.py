@@ -6,7 +6,7 @@ from restish import guard, http
 def make_checker(allow, checker_num=1):
     def checker(request, obj):
         if not allow:
-            raise guard.GuardError("checker #%d failed"%checker_num)
+            raise guard.GuardError("checker #%d failed" % checker_num)
     return checker
 
 

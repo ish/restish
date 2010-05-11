@@ -7,7 +7,7 @@ from restish.page import Element
 
 
 class Templating(object):
-    
+
     def __init__(self, renderer):
         self.renderer = renderer or _missing_renderer
 

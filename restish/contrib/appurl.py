@@ -1,7 +1,7 @@
 """
 A typical application has a set of fixed or canonical URLs for its resources.
 ApplicationURLAccessor is designed to be added as a templating arg and will
-expose all "public" URL creation functions in a module. 
+expose all "public" URL creation functions in a module.
 
 The intended use is to define a module in your application that provides
 functions to build a canonical URLs. The functions can be as simple or as
@@ -30,7 +30,7 @@ functions can also be made easily available to templates.
 Since the request is bound to the call (templates don't have access to the
 request by default anyway) the template does not need to pass a request to the
 function, e.g.
-                                        
+
     <a href="{{app_urls.news_item(3)}}">News item #3</a>.
 
 """

@@ -26,7 +26,8 @@ e.g.
     from django.conf import settings
     from restish.contrib.djangorenderer import DjangoRenderer
     settings.configure()
-    settings.TEMPLATE_DIRS = [pkg_resources.resource_filename('yourpackage', 'template')]
+    settings.TEMPLATE_DIRS = [pkg_resources.resource_filename('yourpackage',
+                                                              'template')]
     environ['restish.templating'] = templating.Templating(DjangoRenderer())
 """
 

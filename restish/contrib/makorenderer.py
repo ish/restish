@@ -7,7 +7,8 @@ templating.Templating instance that is added to the WSGI environ.
 
 Recommended setup:
 
-  * load templates from a directory of data files inside the application package
+  * load templates from a directory of data files inside the application
+    package
   * the disk templates and generated content are UTF-8 encoded
   * variable substitutions are converted to unicode instances and automatically
     HTML escaped.
@@ -16,7 +17,8 @@ e.g.
 
     environ['restish.templating'] = templating.Templating(
         MakoRenderer(
-            directories=[pkg_resources.resource_filename('yourpackage', 'templates')],
+            directories=[pkg_resources.resource_filename('yourpackage',
+                                                         'templates')],
             module_directory=os.path.join(cache_dir, 'templates'),
             input_encoding='utf-8', output_encoding='utf-8',
             default_filters=['unicode', 'h']

@@ -238,7 +238,7 @@ class TestChildLookup(unittest.TestCase):
         R = webtest.TestApp(A).get(url.join_path([u'éxpliçítly_nämed_child_with_unicøde']))
         assert R.status.startswith('200')
         assert R.body == 'explicitly_named_child_with_unicode'
-    
+
     def test_segment_consumption(self):
         class Resource(resource.Resource):
             def __init__(self, segments=[]):
@@ -572,8 +572,8 @@ class TestAcceptContentNegotiation(unittest.TestCase):
             def aaa(self, request):
                 return http.ok([('Content-Type', 'application/json')], '')
         response = make_app(Resource()).get('/', headers={'Accept': '*/*, application/json, text/javascript'})
-        self.assertEquals(response.status,"200 OK")
-        self.assertEquals(response.headers['Content-Type'],'application/json')
+        self.assertEquals(response.status, "200 OK")
+        self.assertEquals(response.headers['Content-Type'], 'application/json')
 
     def test_no_subtype_match_2(self):
         """
@@ -588,14 +588,14 @@ class TestAcceptContentNegotiation(unittest.TestCase):
             def html(self, request):
                 return http.ok([('Content-Type', 'text/plain')], 'Hello!')
         response = make_app(Resource()).get('/', headers={'Accept': 'text/plain'})
-        self.assertEquals(response.status,"200 OK")
-        self.assertEquals(response.headers['Content-Type'],'text/plain')
-        self.assertEquals(response.app_iter,['Hello!'])
+        self.assertEquals(response.status, "200 OK")
+        self.assertEquals(response.headers['Content-Type'], 'text/plain')
+        self.assertEquals(response.app_iter, ['Hello!'])
 
         response = make_app(Resource()).get('/', headers={'Accept': 'application/xml'})
-        self.assertEquals(response.status,"200 OK")
-        self.assertEquals(response.headers['Content-Type'],'text/html')
-        self.assertEquals(response.app_iter,['<p>Hello!</p>'])
+        self.assertEquals(response.status, "200 OK")
+        self.assertEquals(response.headers['Content-Type'], 'text/html')
+        self.assertEquals(response.app_iter, ['<p>Hello!</p>'])
 
 
 class TestContentTypeContentNegotiation(unittest.TestCase):

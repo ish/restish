@@ -37,8 +37,9 @@ class TempitaFileSystemLoader(object):
         filename = os.path.abspath(filename)
         if os.path.commonprefix([filename, self.directory]) != self.directory:
             raise Exception("Illegal template: outside template directory")
-        return tempita.Template.from_filename(filename, encoding=self.encoding,
-                                              get_template=self._tempita_get_template)
+        return tempita.Template.from_filename(
+            filename, encoding=self.encoding,
+            get_template=self._tempita_get_template)
 
     def _tempita_get_template(self, name, from_template):
         if name.startswith('/'):

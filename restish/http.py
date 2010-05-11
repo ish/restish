@@ -151,7 +151,7 @@ def created(location, headers, body):
 
     A 201 response MAY contain an ETag response header field indicating the
     current value of the entity tag for the requested variant just created, see
-    section 14.19. 
+    section 14.19.
     """
     headers.append(('Location', location))
     return Response("201 Created", headers, body)
@@ -169,6 +169,7 @@ _REDIRECTION_PAGE = """<html>
 <p>This document has moved to <a href="%(location)s">%(location)s</a>.</p>
 </body>
 </html>"""
+
 
 def _redirect(status, location, headers=None):
     """
@@ -300,7 +301,7 @@ def not_modified(headers=None):
 
     If a cache uses a received 304 response to update a cache entry, the cache
     MUST update the entry to reflect any new field values given in the
-    response. 
+    response.
     """
     if headers is None:
         headers = []
@@ -342,7 +343,7 @@ def unauthorized(headers, body):
     SHOULD be presented the entity that was given in the response, since that
     entity might include relevant diagnostic information. HTTP access
     authentication is explained in "HTTP Authentication: Basic and Digest
-    Access Authentication" [43]. 
+    Access Authentication" [43].
     """
     return Response("401 Unauthorized", headers, body)
 
@@ -362,7 +363,7 @@ def forbidden(headers=None, body=None):
     request has not been fulfilled, it SHOULD describe the reason for the
     refusal in the entity. If the server does not wish to make this information
     available to the client, the status code 404 (Not Found) can be used
-    instead. 
+    instead.
     """
     if headers is None and body is None:
         headers = [('Content-Type', 'text/plain')]
@@ -385,7 +386,7 @@ def not_found(headers=None, body=None):
     configurable mechanism, that an old resource is permanently unavailable and
     has no forwarding address. This status code is commonly used when the
     server does not wish to reveal exactly why the request has been refused, or
-    when no other response is applicable. 
+    when no other response is applicable.
     """
     if headers is None and body is None:
         headers = [('Content-Type', 'text/plain')]
@@ -442,7 +443,7 @@ def not_acceptable(headers, body):
     if it is acceptable.
 
     If the response could be unacceptable, a user agent SHOULD temporarily stop
-    receipt of more data and query the user for a decision on further actions. 
+    receipt of more data and query the user for a decision on further actions.
     """
     return Response('406 Not Acceptable', headers, body)
 
@@ -470,7 +471,7 @@ def conflict(headers, body):
     (third-party) request, the server might use the 409 response to indicate
     that it can't complete the request. In this case, the response entity would
     likely contain a list of the differences between the two versions in a
-    format defined by the response Content-Type. 
+    format defined by the response Content-Type.
     """
     return Response("409 Conflict", headers, body)
 
@@ -487,7 +488,7 @@ def internal_server_error(headers=None, body=None):
     500 Internal Server Error.
 
     The server encountered an unexpected condition which prevented it from
-    fulfilling the request. 
+    fulfilling the request.
     """
     if headers is None and body is None:
         headers = [('Content-Type', 'text/plain')]
@@ -532,7 +533,7 @@ def service_unavailable(headers=None, body=None):
     temporary condition which will be alleviated after some delay. If known,
     the length of the delay MAY be indicated in a Retry-After header. If no
     Retry-After is given, the client SHOULD handle the response as it would for
-    a 500 response. 
+    a 500 response.
     """
     if headers is None and body is None:
         headers = [('Content-Type', 'text/plain')]
@@ -554,7 +555,7 @@ def gateway_timeout(headers=None, body=None):
     The server, while acting as a gateway or proxy, did not receive a timely
     response from the upstream server specified by the URI (e.g. HTTP, FTP,
     LDAP) or some other auxiliary server (e.g. DNS) it needed to access in
-    attempting to complete the request. 
+    attempting to complete the request.
     """
     if headers is None and body is None:
         headers = [('Content-Type', 'text/plain')]
