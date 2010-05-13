@@ -475,6 +475,10 @@ class TestURLAccessor(unittest.TestCase):
         self.assertEquals(self.url_accessor.host_url, self.host_url)
         self.assertTrue(isinstance(self.url_accessor.host_url, url.URL))
 
+    def test_application_url(self):
+        self.assertEquals(self.url_accessor.application_url, self.application_url)
+        self.assertTrue(isinstance(self.url_accessor.application_url, url.URL))
+
     def test_application_path(self):
         self.assertEquals(self.url_accessor.application_path, '/app')
         self.assertTrue(isinstance(self.url_accessor.application_path, url.URL))
