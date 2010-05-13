@@ -320,35 +320,42 @@ class TestChildLookup(unittest.TestCase):
         """
         Check the child match specificity.
         """
-        def make_resource(body):
-            def resource(request):
-                return http.ok([('Content-Type', 'text/plain')], body)
-            return resource
+        class Capture(object):
+            def __init__(self, segments):
+                self.segments = segments
+            def resource_child(self, request, segments):
+                return self.__class__(self.segments+segments), []
+            def __call__(self, request):
+                return http.ok([('Content-Type', 'text/plain')],
+                               '/'.join(self.segments))
         class Resource(resource.Resource):
             @resource.child('a/b/c')
             def _1(self, request, segments):
-                return make_resource('a/b/c'), []
+                return Capture(['a', 'b', 'c'])
             @resource.child('a/b/{c}')
             def _2(self, request, segments, c):
-                return make_resource('a/b/{c}'), []
+                return Capture(['a', 'b', '{c}'])
             @resource.child('a/{b}/c/{d}')
             def _3(self, request, segments, b, d):
-                return make_resource('a/{b}/c/{d}'), []
+                return Capture(['a', '{b}', 'c', '{d}'])
             @resource.child('a/b/{c}/{d}')
             def _4(self, request, segments, c, d):
-                return make_resource('a/b/{c}/{d}'), []
+                return Capture(['a', 'b', '{c}', '{d}'])
             @resource.child('a/{b}/{c}')
             def _5(self, request, segments, b, c):
-                return make_resource('a/{b}/{c}'), []
+                return Capture(['a', '{b}', '{c}'])
             @resource.child('a')
             def _6(self, request, segments):
-                return make_resource('a'), []
+                return Capture(['a'])
             @resource.child('{a}/b/c')
             def _7(self, request, segments, a):
-                return make_resource('{a}/b/c'), []
+                return Capture(['{a}', 'b', 'c'])
+            @resource.child('fixed/{dynamic}')
+            def _8(self, request, segments, dynamic):
+                return Capture(['fixed', '{dynamic}'])
             @resource.child(resource.any)
             def any(self, request, segments):
-                return make_resource('any'), []
+                return Capture(['<any>'])
         tests = [
                 ('/a/b/c', 'a/b/c'),
                 ('/a/b/foo', 'a/b/{c}'),
@@ -357,7 +364,8 @@ class TestChildLookup(unittest.TestCase):
                 ('/a/foo/bar', 'a/{b}/{c}'),
                 ('/a', 'a'),
                 ('/foo/b/c', '{a}/b/c'),
-                ('/foo', 'any'),
+                ('/fixed/123/foo', 'fixed/{dynamic}/foo'),
+                ('/foo', '<any>/foo'),
                 ]
         A = app.RestishApp(Resource())
         for path, expected in tests:
