@@ -83,6 +83,7 @@ def join_query(query_list):
         if V is None:
             return _quote(_encode(K), SAFE_QUERY_NAME)
         else:
+            V = unicode(V)
             return '%s=%s' % (_quote(_encode(K), SAFE_QUERY_NAME), \
                               _quote(_encode(V), SAFE_QUERY_VALUE))
     return '&'.join(one(KV) for KV in query_list)
@@ -264,8 +265,6 @@ class URL(str):
         :arg value: The query value. None means do not use a value. e.g.
                     ``?key=``
         """
-        if value is not None:
-            value = unicode(value)
         q = list(self.query_list)
         q.append((name, value))
         return self.clone(query=join_query(q))
