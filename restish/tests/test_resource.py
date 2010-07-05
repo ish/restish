@@ -168,6 +168,14 @@ class TestResource(unittest.TestCase):
         assert head_response.headers['content-length'] == '100'
         assert head_response.body == ''
 
+    def test_bad_accept(self):
+        class Resource(resource.Resource):
+            @resource.GET()
+            def text(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'text')
+        app = make_app(Resource())
+        assert app.get('/', headers={'Accept': 'text/html, text/plain,'}, status=200).body == 'text'
+
 
 class TestChildLookup(unittest.TestCase):
 
