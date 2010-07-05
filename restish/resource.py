@@ -106,8 +106,8 @@ class ResourceMethodWrapper(object):
     Implementation note: The wrapper class is always added to decorated
     functions. However, the wrapper is discarded for Resource methods at the
     time the annotated methods are collected by the metaclass. This is because
-    the Resource._call__ is already doing basicall the same work, only it has a
-    whole suite of dispatchers to worry about.
+    the Resource._call__ is already doing basically the same work, only it has
+    a whole suite of dispatchers to worry about.
     """
 
     def __init__(self, func):
