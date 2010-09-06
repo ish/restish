@@ -156,6 +156,22 @@ class TestResource(unittest.TestCase):
         assert head_response.headers['content-length'] == get_response.headers['content-length']
         assert head_response.body == ''
 
+    def test_default_head_forwards(self):
+        # Check that the default HEAD implementation handles forwarding to a
+        # 2nd resource returned from a call to the 1st resource.
+        class First(resource.Resource):
+            @resource.GET()
+            def GET(self, request):
+                return Second()
+        class Second(resource.Resource):
+            @resource.GET()
+            def GET(self, request):
+                return http.ok([('Content-Type', 'text/plain')], 'text')
+        head_response = First()(http.Request.blank('/', environ={'REQUEST_METHOD': 'HEAD'}))
+        assert head_response.status == '200 OK'
+        assert head_response.headers['content-length'] == '4'
+        assert head_response.body == ''
+
     def test_specialised_head(self):
         class Resource(resource.Resource):
             @resource.GET()

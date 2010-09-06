@@ -228,7 +228,10 @@ class Resource(object):
         resource's class that includes a Content-Length header but no body.
         """
         request.method = 'GET'
+        # Loop until we get an actual response to support resource forwarding.
         response = self(request)
+        while not isinstance(response, http.Response):
+            response = response(request)
         content_length = response.headers.get('content-length')
         response.body = ''
         if content_length is not None:
