@@ -271,7 +271,7 @@ class TestChildLookup(unittest.TestCase):
             def first(self, request, segments):
                 return self.__class__(self.segments + ['first'] + segments), []
             def __call__(self, request):
-                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
+                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments).encode('utf-8'))
         A = app.RestishApp(Resource())
         R = webtest.TestApp(A).get('/first')
         assert R.status.startswith('200')
@@ -291,7 +291,7 @@ class TestChildLookup(unittest.TestCase):
             def static_child(self, request, segments):
                 return self.__class__(self.segments + ['foo', 'bar'] + segments), []
             def __call__(self, request):
-                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments))
+                return http.ok([('Content-Type', 'text/plain')], '/'.join(self.segments).encode('utf-8'))
         A = app.RestishApp(Resource())
         R = webtest.TestApp(A).get('/foo/bar')
         assert R.status.startswith('200')
@@ -351,7 +351,7 @@ class TestChildLookup(unittest.TestCase):
                 return self.__class__(self.segments+segments), []
             def __call__(self, request):
                 return http.ok([('Content-Type', 'text/plain')],
-                               '/'.join(self.segments))
+                               '/'.join(self.segments).encode('utf-8'))
         class Resource(resource.Resource):
             @resource.child('a/b/c')
             def _1(self, request, segments):
