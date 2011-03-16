@@ -254,7 +254,8 @@ def _dispatch(request, match, func):
         if not accept and len(match['accept']) == 1:
             best_match = match['accept'][0]
         else:
-            best_match = mimeparse.best_match(match['accept'], accept)
+            # XXX mimeparse picks *last* matching item so we reverse.
+            best_match = mimeparse.best_match(match['accept'][::-1], accept)
         if '*' not in best_match:
             response.headers['content-type'] = best_match
     return response
@@ -287,6 +288,8 @@ def _filter_dispatchers_on_content_type(dispatchers, content_type):
     for d in dispatchers:
         supported.extend(d[1]['content_type'])
     # Find the best type.
+    # XXX mimeparse picks *last* matching item so we reverse.
+    supported.reverse()
     best_match = mimeparse.best_match(supported, content_type)
     # Return the matching dispatchers
     return [d for d in dispatchers if best_match in d[1]['content_type']]
@@ -298,6 +301,8 @@ def _filter_dispatchers_on_accept(dispatchers, accept):
     for d in dispatchers:
         supported.extend(d[1]['accept'])
     # Find the best accept type
+    # XXX mimeparse picks *last* matching item so we reverse.
+    supported.reverse()
     best_match = mimeparse.best_match(supported, accept)
     # Return the matching dispatchers
     return [d for d in dispatchers if best_match in d[1]['accept']]
