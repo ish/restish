@@ -1,24 +1,26 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>restish.guard &amp;mdash; Restish v0.11 documentation</title>
+    <title>restish.guard &amp;mdash; Restish v0.12 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '#',
-          VERSION:     '0.11',
+          VERSION:     '0.12',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.11 documentation" href="index.html" /> 
+    <link rel="top" title="Restish v0.12 documentation" href="index.html" /> 
 
 
   <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
@@ -38,7 +40,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,8 +58,62 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="restish-guard">
-<h1>restish.guard<a class="headerlink" href="#restish-guard" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-restish.guard">
+<span id="restish-guard"></span><h1>restish.guard<a class="headerlink" href="#module-restish.guard" title="Permalink to this headline">¶</a></h1>
+<p>Resource and method guards (the basis of access control).</p>
+<p>This module consists of a decorator (guard) and a resource wrapper
+(GuardResource) that iterate through a list of checker functions before
+allowing access to the application.</p>
+<p>A checker function is a callable that takes the request and the object being
+protected as the two positional arguments. The checker function should raise an
+HTTP exception to block access.</p>
+<p>For example, the following checker tests if the request contains the name of an
+authenticated user as the REMOTE_USER:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>def authenticated_checker(request, obj):</dt>
+<dd><dl class="first last docutils">
+<dt>if request.environ.get(&#8216;REMOTE_USER&#8217;) is None:</dt>
+<dd>raise guard.GuardError(&#8220;No authenticated user.&#8221;)</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="exception">
+<dt id="restish.guard.GuardError">
+<em class="property">exception </em><tt class="descclassname">restish.guard.</tt><tt class="descname">GuardError</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#restish.guard.GuardError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Guard check failure.</p>
+<dl class="attribute">
+<dt id="restish.guard.GuardError.message">
+<tt class="descname">message</tt><a class="headerlink" href="#restish.guard.GuardError.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="restish.guard.GuardResource">
+<em class="property">class </em><tt class="descclassname">restish.guard.</tt><tt class="descname">GuardResource</tt><big>(</big><em>resource</em>, <em>*checkers</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.guard.GuardResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Resource wrapper that guards access to a resource by calling each checker
+before calling the wrapped resource&#8217;s methods.</p>
+<dl class="method">
+<dt id="restish.guard.GuardResource.resource_child">
+<tt class="descname">resource_child</tt><big>(</big><em>request</em>, <em>segments</em><big>)</big><a class="headerlink" href="#restish.guard.GuardResource.resource_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the guard methods and raise error handler if errors</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="restish.guard.guard">
+<tt class="descclassname">restish.guard.</tt><tt class="descname">guard</tt><big>(</big><em>*checkers</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.guard.guard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator that guards a function by calling each checker function before
+calling the decorated function.</p>
+<p>The only requirement is that the decorated function takes the request as
+the first positional arg.</p>
+</dd></dl>
+
 </div>
 
 
@@ -83,7 +142,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

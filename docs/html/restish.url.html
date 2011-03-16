@@ -1,24 +1,26 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>restish.url &amp;mdash; Restish v0.11 documentation</title>
+    <title>restish.url &amp;mdash; Restish v0.12 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '#',
-          VERSION:     '0.11',
+          VERSION:     '0.12',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.11 documentation" href="index.html" /> 
+    <link rel="top" title="Restish v0.12 documentation" href="index.html" /> 
 
 
   <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
@@ -38,7 +40,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,8 +58,330 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="restish-url">
-<h1>restish.url<a class="headerlink" href="#restish-url" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-restish.url">
+<span id="restish-url"></span><h1>restish.url<a class="headerlink" href="#module-restish.url" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="restish.url.URL">
+<em class="property">class </em><tt class="descclassname">restish.url.</tt><tt class="descname">URL</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#restish.url.URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+<p>URL class.</p>
+<p>A URL instance is a smart string (Python str). URL instances mostly behave
+the same as a str instance (with the possible exception of the equality
+operation) but include attributes to access specific parts of the URL.</p>
+<p>URL instances also include methods to manipulate a URL. Each time a URL is
+modified a new URL instance is resturned.</p>
+<p>The URL class tries to be unicode-aware. Unicode path segments and query
+components are UTF-8 encoded on the way in and always returned as unicode
+instances. Note however that the URL itself is a byte string.</p>
+<p>Create a new URL instance from a str URL.</p>
+<dl class="method">
+<dt id="restish.url.URL.add_queries">
+<tt class="descname">add_queries</tt><big>(</big><em>query_list</em><big>)</big><a class="headerlink" href="#restish.url.URL.add_queries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add multiple query args from a list of tuples</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>query_list</strong> &#8211; list of tuple (key, value) pairs</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.add_query">
+<tt class="descname">add_query</tt><big>(</big><em>name</em>, <em>value=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.add_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a query argument with the given value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> &#8211; the query key</li>
+<li><strong>value</strong> &#8211; The query value. None means do not use a value. e.g.
+<tt class="docutils literal"><span class="pre">?key=</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.anchor">
+<tt class="descname">anchor</tt><big>(</big><em>anchor=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.anchor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the fragment/anchor and return a new URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>anchor</strong> &#8211; An anchor of None (the default) or &#8216;&#8217; will remove the
+current anchor.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.child">
+<tt class="descname">child</tt><big>(</big><em>*path</em><big>)</big><a class="headerlink" href="#restish.url.URL.child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a url where the given path segment is a child of this url</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.clear_queries">
+<tt class="descname">clear_queries</tt><big>(</big><em>name=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.clear_queries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all existing query arguments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name of the query arguments to remove, defaults to
+removing all</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.click">
+<tt class="descname">click</tt><big>(</big><em>href</em><big>)</big><a class="headerlink" href="#restish.url.URL.click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the path as if <tt class="docutils literal"><span class="pre">href</span></tt> were clicked</p>
+<p>Create a url as if the current url was given by <tt class="docutils literal"><span class="pre">self</span></tt> and <tt class="docutils literal"><span class="pre">href</span></tt>
+was clicked on</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.clone">
+<tt class="descname">clone</tt><big>(</big><em>scheme=&lt;object object at 0x403aba80&gt;</em>, <em>netloc=&lt;object object at 0x403aba80&gt;</em>, <em>path=&lt;object object at 0x403aba80&gt;</em>, <em>query=&lt;object object at 0x403aba80&gt;</em>, <em>fragment=&lt;object object at 0x403aba80&gt;</em><big>)</big><a class="headerlink" href="#restish.url.URL.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a new instance of self, passing along the given
+arguments to its constructor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>scheme</strong> &#8211; </li>
+<li><strong>netloc</strong> &#8211; </li>
+<li><strong>path</strong> &#8211; </li>
+<li><strong>query</strong> &#8211; </li>
+<li><strong>fragment</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.fragment">
+<tt class="descname">fragment</tt><a class="headerlink" href="#restish.url.URL.fragment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The url fragment (e.g. #anchor)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.netloc">
+<tt class="descname">netloc</tt><a class="headerlink" href="#restish.url.URL.netloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The domain or network location</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.parent">
+<tt class="descname">parent</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.url.URL.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop a URL segment from this url.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.path">
+<tt class="descname">path</tt><a class="headerlink" href="#restish.url.URL.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path of the url without query string or fragment</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.path_qs">
+<tt class="descname">path_qs</tt><a class="headerlink" href="#restish.url.URL.path_qs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path, query string and fragment</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.path_segments">
+<tt class="descname">path_segments</tt><a class="headerlink" href="#restish.url.URL.path_segments" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of url segments</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.query">
+<tt class="descname">query</tt><a class="headerlink" href="#restish.url.URL.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>The query parameters as a string</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.query_list">
+<tt class="descname">query_list</tt><a class="headerlink" href="#restish.url.URL.query_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>The query parameters as a list of tuples</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.remove_query">
+<tt class="descname">remove_query</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#restish.url.URL.remove_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all query arguments with the given name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name of the query arguments to remove</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.replace_query">
+<tt class="descname">replace_query</tt><big>(</big><em>name</em>, <em>value=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.replace_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all existing occurrences of the query argument &#8216;name&#8217;, <em>if it
+exists</em>, then add the argument with the given value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> &#8211; the query key</li>
+<li><strong>value</strong> &#8211; The query value. None means do not use a value. e.g.
+<tt class="docutils literal"><span class="pre">?key=</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.root">
+<tt class="descname">root</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.url.URL.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contruct a URL to the root of the web server.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URL.scheme">
+<tt class="descname">scheme</tt><a class="headerlink" href="#restish.url.URL.scheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>The url scheme (http, https, etc)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.secure">
+<tt class="descname">secure</tt><big>(</big><em>secure=True</em>, <em>port=None</em><big>)</big><a class="headerlink" href="#restish.url.URL.secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the scheme to https/http and return the new URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>secure</strong> &#8211; choose between https and http, default to True (https)</li>
+<li><strong>port</strong> &#8211; port, override the scheme&#8217;s normal port</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URL.sibling">
+<tt class="descname">sibling</tt><big>(</big><em>segment</em><big>)</big><a class="headerlink" href="#restish.url.URL.sibling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a url where the given path segment is a sibling of this url</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="restish.url.URLAccessor">
+<em class="property">class </em><tt class="descclassname">restish.url.</tt><tt class="descname">URLAccessor</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#restish.url.URLAccessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>URL accessor, provides access to useful URLs, often constructed from the
+accessor&#8217;s request.</p>
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.application_path">
+<tt class="descname">application_path</tt><a class="headerlink" href="#restish.url.URLAccessor.application_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path part of the application&#8217;s URL.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.application_url">
+<tt class="descname">application_url</tt><a class="headerlink" href="#restish.url.URLAccessor.application_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the WSGI application&#8217;s URL.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.host_url">
+<tt class="descname">host_url</tt><a class="headerlink" href="#restish.url.URLAccessor.host_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the host&#8217;s URL, i.e. the URL of the HTTP server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="restish.url.URLAccessor.new">
+<tt class="descname">new</tt><big>(</big><em>url</em><big>)</big><a class="headerlink" href="#restish.url.URLAccessor.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new URL instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.path">
+<tt class="descname">path</tt><a class="headerlink" href="#restish.url.URLAccessor.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path part of the current URL, relative to the root of the
+web server.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.path_qs">
+<tt class="descname">path_qs</tt><a class="headerlink" href="#restish.url.URLAccessor.path_qs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path of the current URL, relative to the root of the web
+server, and the query string.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.path_url">
+<tt class="descname">path_url</tt><a class="headerlink" href="#restish.url.URLAccessor.path_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path&#8217;s URL, i.e. the current URL without the query string.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="restish.url.URLAccessor.url">
+<tt class="descname">url</tt><a class="headerlink" href="#restish.url.URLAccessor.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full current (i.e. requested), URL.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="restish.url.join_path">
+<tt class="descclassname">restish.url.</tt><tt class="descname">join_path</tt><big>(</big><em>path_segments</em><big>)</big><a class="headerlink" href="#restish.url.join_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine a sequence of path segments into a single str.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="restish.url.join_query">
+<tt class="descclassname">restish.url.</tt><tt class="descname">join_query</tt><big>(</big><em>query_list</em><big>)</big><a class="headerlink" href="#restish.url.join_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join a sequence of (name, value) tuples into a single str.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="restish.url.normalise_path">
+<tt class="descclassname">restish.url.</tt><tt class="descname">normalise_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restish.url.normalise_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalise the URL path by resolving segments of &#8216;.&#8217; and &#8216;..&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="restish.url.split_path">
+<tt class="descclassname">restish.url.</tt><tt class="descname">split_path</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#restish.url.split_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split a path of type str into a sequence of unicode segments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="restish.url.split_query">
+<tt class="descclassname">restish.url.</tt><tt class="descname">split_query</tt><big>(</big><em>query</em><big>)</big><a class="headerlink" href="#restish.url.split_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split a query string (str) into a sequence of (name, value) tuples where
+name and value are unicode instances.</p>
+</dd></dl>
+
 </div>
 
 
@@ -83,7 +410,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

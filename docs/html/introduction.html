@@ -1,24 +1,26 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>An Introduction to Restish &amp;mdash; Restish v0.11 documentation</title>
+    <title>An Introduction to Restish &amp;mdash; Restish v0.12 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '#',
-          VERSION:     '0.11',
+          VERSION:     '0.12',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.11 documentation" href="index.html" />
+    <link rel="top" title="Restish v0.12 documentation" href="index.html" />
     <link rel="next" title="Restish Resources" href="resources.html" />
     <link rel="prev" title="Table of Contents" href="index.html" /> 
 
@@ -41,12 +43,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li class="right" >
           <a href="resources.html" title="Restish Resources"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Table of Contents"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -326,25 +331,25 @@ serving on http://127.0.0.1:8080</pre>
         <div class="sphinxsidebarwrapper">
             <h3><a href="index.html">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="#">An Introduction to Restish</a><ul>
-<li><a class="reference external" href="#why-restish">Why Restish?</a><ul>
-<li><a class="reference external" href="#background">Background</a></li>
-<li><a class="reference external" href="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
-<li><a class="reference external" href="#executive-summary-for-coders">Executive Summary for Coders</a></li>
+<li><a class="reference internal" href="#">An Introduction to Restish</a><ul>
+<li><a class="reference internal" href="#why-restish">Why Restish?</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
+<li><a class="reference internal" href="#executive-summary-for-coders">Executive Summary for Coders</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#how-to-start-a-restish-project">How to start a restish project</a><ul>
-<li><a class="reference external" href="#using-paster-create">Using paster create</a></li>
-<li><a class="reference external" href="#what-is-in-the-template-project">What is in the template project</a><ul>
-<li><a class="reference external" href="#the-ini-files">The ini files</a></li>
-<li><a class="reference external" href="#the-lib-directory">The <tt class="docutils literal"><span class="pre">lib</span></tt> directory</a></li>
-<li><a class="reference external" href="#the-public-directory">The <tt class="docutils literal"><span class="pre">public</span></tt> directory</a></li>
-<li><a class="reference external" href="#the-resource-directory">The <tt class="docutils literal"><span class="pre">resource</span></tt> directory</a></li>
-<li><a class="reference external" href="#the-wsgi-setup">The WSGI setup</a></li>
+<li><a class="reference internal" href="#how-to-start-a-restish-project">How to start a restish project</a><ul>
+<li><a class="reference internal" href="#using-paster-create">Using paster create</a></li>
+<li><a class="reference internal" href="#what-is-in-the-template-project">What is in the template project</a><ul>
+<li><a class="reference internal" href="#the-ini-files">The ini files</a></li>
+<li><a class="reference internal" href="#the-lib-directory">The <tt class="docutils literal"><span class="pre">lib</span></tt> directory</a></li>
+<li><a class="reference internal" href="#the-public-directory">The <tt class="docutils literal"><span class="pre">public</span></tt> directory</a></li>
+<li><a class="reference internal" href="#the-resource-directory">The <tt class="docutils literal"><span class="pre">resource</span></tt> directory</a></li>
+<li><a class="reference internal" href="#the-wsgi-setup">The WSGI setup</a></li>
 </ul>
 </li>
-<li><a class="reference external" href="#starting-a-server">Starting a server</a></li>
-<li><a class="reference external" href="#next-steps">Next Steps..</a></li>
+<li><a class="reference internal" href="#starting-a-server">Starting a server</a></li>
+<li><a class="reference internal" href="#next-steps">Next Steps..</a></li>
 </ul>
 </li>
 </ul>
@@ -376,12 +381,15 @@ serving on http://127.0.0.1:8080</pre>
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li class="right" >
           <a href="resources.html" title="Restish Resources"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Table of Contents"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -1,24 +1,26 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>restish.error &amp;mdash; Restish v0.11 documentation</title>
+    <title>restish.error &amp;mdash; Restish v0.12 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '#',
-          VERSION:     '0.11',
+          VERSION:     '0.12',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Restish v0.11 documentation" href="index.html" /> 
+    <link rel="top" title="Restish v0.12 documentation" href="index.html" /> 
 
 
   <link media="screen" href="_static/css/screen.css" type="text/css" rel="stylesheet" />
@@ -38,7 +40,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,8 +58,49 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="restish-error">
-<h1>restish.error<a class="headerlink" href="#restish-error" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-restish.error">
+<span id="restish-error"></span><h1>restish.error<a class="headerlink" href="#module-restish.error" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="restish.error.HTTPClientError">
+<em class="property">exception </em><tt class="descclassname">restish.error.</tt><tt class="descname">HTTPClientError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.error.HTTPClientError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#restish.error.HTTPError" title="restish.error.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">restish.error.HTTPError</span></tt></a></p>
+<p>Base class for all HTTP client (4xx) errors.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="restish.error.HTTPError">
+<em class="property">exception </em><tt class="descclassname">restish.error.</tt><tt class="descname">HTTPError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.error.HTTPError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#restish.error.RestishException" title="restish.error.RestishException"><tt class="xref py py-class docutils literal"><span class="pre">restish.error.RestishException</span></tt></a></p>
+<p>Base class for all HTTP (4xx and 5xx) errors.</p>
+<p>Each error response factory defined in restish.http is mirrored by an
+exception type derived from HTTPException.</p>
+<p>The derived exception class is expected to override response_factory (None
+by default), providing a callable that accepts all the positional and
+keyword args and returns an http.Response instance.  Typically,
+response_factory can be set to one of the HTTP response convenience
+functions in the http module.</p>
+<dl class="method">
+<dt id="restish.error.HTTPError.make_response">
+<tt class="descname">make_response</tt><big>(</big><big>)</big><a class="headerlink" href="#restish.error.HTTPError.make_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an HTTP response for this exception type.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="restish.error.HTTPServerError">
+<em class="property">exception </em><tt class="descclassname">restish.error.</tt><tt class="descname">HTTPServerError</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#restish.error.HTTPServerError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#restish.error.HTTPError" title="restish.error.HTTPError"><tt class="xref py py-class docutils literal"><span class="pre">restish.error.HTTPError</span></tt></a></p>
+<p>Base class for all HTTP server (5xx) errors.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="restish.error.RestishException">
+<em class="property">exception </em><tt class="descclassname">restish.error.</tt><tt class="descname">RestishException</tt><a class="headerlink" href="#restish.error.RestishException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>Base class for all restish exceptions.</p>
+</dd></dl>
+
 </div>
 
 
@@ -83,7 +129,10 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="index.html">Restish v0.11 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             accesskey="">modules</a> |</li>
+        <li><a href="index.html">Restish v0.12 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
