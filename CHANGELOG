@@ -2,6 +2,20 @@
 Changelog
 =========
 
+0.12.1 (2011-03-16)
+-------------------
+
+* Updated CHANGELOG for 0.12.x release.
+
+0.12 (never released, see also 0.12.1)
+--------------------------------------
+
+* Bad 'Accept' headers are now sanitized.
+* Default HEAD implementation now forwards to a returned resource.
+* 'Accept' match order fixed for latest mimeparse (mimeparse >= 0.1.13 now
+  required).
+* Improved tests and coverage.
+
 0.11 (2010-04-27)
 -----------------
 
