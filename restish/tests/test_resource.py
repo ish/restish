@@ -191,6 +191,7 @@ class TestResource(unittest.TestCase):
                 return http.ok([('Content-Type', 'text/plain')], 'text')
         app = make_app(Resource())
         assert app.get('/', headers={'Accept': 'text/html, text/plain,'}, status=200).body == 'text'
+        assert app.get('/', headers={'Accept': 'text/html, text/plain;'}, status=200).body == 'text'
 
 
 class TestChildLookup(unittest.TestCase):

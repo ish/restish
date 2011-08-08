@@ -271,9 +271,8 @@ def _best_dispatcher(dispatchers, request):
     if content_type:
         dispatchers = _filter_dispatchers_on_content_type(dispatchers,
                                                           str(content_type))
-    accept = request.headers.get('accept')
+    accept = str(request.accept)
     if accept:
-        accept = accept.strip(', ') # Some clients send bad accept headers
         dispatchers = _filter_dispatchers_on_accept(dispatchers, accept)
     # Return the best match or None
     if dispatchers:
