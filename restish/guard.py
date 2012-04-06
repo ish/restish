@@ -39,8 +39,8 @@ class GuardError(Exception):
 
 def guard(*checkers, **kwargs):
     """
-    Decorator that guards a function by calling each checker function before
-    calling the decorated function.
+    Create a decorator to guard a function by calling each checker function
+    before calling the decorated function.
 
     The only requirement is that the decorated function takes the request as
     the first positional arg.
