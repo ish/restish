@@ -37,7 +37,6 @@ or database engine.
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
-          'decorator',
           'mimeparse>=0.1.3',
           'WebOb',
       ],

@@ -17,7 +17,7 @@ authenticated user as the REMOTE_USER:
             raise guard.GuardError("No authenticated user.")
 """
 
-import decorator
+import functools
 
 from restish import http
 
@@ -53,14 +53,17 @@ def guard(*checkers, **kwargs):
         raise TypeError('guard() got unexpected keyword arguments %r' %
                         ('.'.join(kwargs),))
 
-    def call(func, obj, request, *a, **k):
-        """ Iterate checkers accumulating errors """
-        errors = _run_guard_checkers(checkers, request, obj, error_handler)
-        if errors:
-            return error_handler(request, obj, errors)
-        return func(obj, request, *a, **k)
+    def decorator(func):
+        @functools.wraps(func)
+        def call(obj, request, *a, **k):
+            """ Iterate checkers accumulating errors """
+            errors = _run_guard_checkers(checkers, request, obj, error_handler)
+            if errors:
+                return error_handler(request, obj, errors)
+            return func(obj, request, *a, **k)
+        return call
 
-    return decorator.decorator(call)
+    return decorator
 
 
 class GuardResource(object):
