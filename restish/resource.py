@@ -282,29 +282,24 @@ def _best_dispatcher(dispatchers, request):
 
 
 def _filter_dispatchers_on_content_type(dispatchers, content_type):
-    # Build an ordered list of the supported types.
-    supported = []
-    for d in dispatchers:
-        supported.extend(d[1]['content_type'])
-    # Find the best type.
-    # XXX mimeparse picks *last* matching item so we reverse.
-    supported.reverse()
-    best_match = mimeparse.best_match(supported, content_type)
-    # Return the matching dispatchers
-    return [d for d in dispatchers if best_match in d[1]['content_type']]
+    return _filter_dispatchers_on_match(dispatchers, 'content_type', content_type)
 
 
 def _filter_dispatchers_on_accept(dispatchers, accept):
+    return _filter_dispatchers_on_match(dispatchers, 'accept', accept)
+
+
+def _filter_dispatchers_on_match(dispatchers, match, value):
     # Build an ordered list of the supported types.
     supported = []
     for d in dispatchers:
-        supported.extend(d[1]['accept'])
-    # Find the best accept type
+        supported.extend(d[1][match])
+    # Find the best match
     # XXX mimeparse picks *last* matching item so we reverse.
     supported.reverse()
-    best_match = mimeparse.best_match(supported, accept)
+    best_match = mimeparse.best_match(supported, value)
     # Return the matching dispatchers
-    return [d for d in dispatchers if best_match in d[1]['accept']]
+    return [d for d in dispatchers if best_match in d[1][match]]
 
 
 def child(matcher=None):
