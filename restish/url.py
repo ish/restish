@@ -323,6 +323,14 @@ class URL(str):
             q = filter(lambda x: x[0] != name, self.query_list)
         return self.clone(query=join_query(q))
 
+    def q(self, name, value=None):
+        """Convenience alias for replace_query."""
+        return self.replace_query(name, value)
+
+    def rmq(self, name):
+        """Convenience alias for remove_query."""
+        return self.remove_query(name)
+
     ## scheme manipulation ##
 
     def secure(self, secure=True, port=None):

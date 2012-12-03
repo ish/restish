@@ -435,6 +435,16 @@ class TestURL(unittest.TestCase):
         assert isinstance(path_qs, url.URL)
         assert path_qs == '/foo?a=b#c'
 
+    def test_q(self):
+        """Check q is an alias for replace_query"""
+        u = url.URL("http://localhost:1234/path?p=foo")
+        assert u.q("p", "bar") == "http://localhost:1234/path?p=bar"
+
+    def test_rmq(self):
+        """Check rmq is an alias for remove_query"""
+        u = url.URL("http://localhost:1234/path?p1=foo&p2=bar")
+        assert u.rmq("p1") == "http://localhost:1234/path?p2=bar"
+
 
 class Serialization(unittest.TestCase):
 
