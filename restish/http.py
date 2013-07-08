@@ -157,6 +157,11 @@ def created(location, headers, body):
     return Response("201 Created", headers, body)
 
 
+def no_content():
+    """204 No Content."""
+    return Response('204 No Content', [], None)
+
+
 # Redirection 3xx
 
 _REDIRECTION_PAGE = """<html>

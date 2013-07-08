@@ -82,6 +82,11 @@ class TestSuccessResponseFactories(unittest.TestCase):
         assert r.headers['Location'] == location
         assert r.body == location
 
+    def test_no_content(self):
+        r = http.no_content()
+        assert r.status.startswith('204')
+        assert r.headers.get('Content-Type') is None
+
 
 class TestRedirectionResponseFactories(unittest.TestCase):
 
