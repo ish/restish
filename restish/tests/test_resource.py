@@ -773,6 +773,9 @@ class TestAcceptLists(unittest.TestCase):
             @resource.GET(accept=['text/html', 'application/xhtml+xml'])
             def html(self, request):
                 return http.ok([], '<html />')
+            @resource.GET(accept='json')
+            def json(self, request):
+                return http.no_content()
         # Check specific accept type.
         response = make_app(Resource()).get('/', headers={'Accept': 'text/html'})
         assert response.headers['content-type'] == 'text/html'
@@ -791,6 +794,9 @@ class TestAcceptLists(unittest.TestCase):
         # Client accepts both but prefers other.
         response = make_app(Resource()).get('/', headers={'Accept': 'text/html;q=0.9,application/xhtml+xml'})
         assert response.headers['content-type'] == 'application/xhtml+xml'
+        # HTTP 204 has no message-body, and thus no content-type
+        response = make_app(Resource()).get('/', headers={'Accept': 'application/json'})
+        assert 'content-type' not in response.headers
 
 
 class TestShortAccepts(unittest.TestCase):
