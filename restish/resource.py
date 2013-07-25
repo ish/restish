@@ -249,6 +249,7 @@ def _dispatch(request, match, func):
     # the best match if not a wildcard then we know what content-type
     # should be.
     if isinstance(response, http.Response) and \
+            response.status_int not in http.NO_BODY_RESPONSE_CODES and \
             not response.headers.get('content-type'):
         accept = str(request.accept)
         if not accept and len(match['accept']) == 1:
