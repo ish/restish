@@ -121,12 +121,11 @@ class ResourceMethodWrapper(object):
         if request.method != method:
             return http.method_not_allowed([method])
         # Look for a dispatcher.
-        dispatcher = _best_dispatcher([(self.func, match)], request)
+        dispatcher, reason = _best_dispatcher([(self.func, match)], request)
         if dispatcher is not None:
             return _dispatch(request, match, self.func)
         # No dispatcher.
-        return http.not_acceptable([('Content-Type', 'text/plain')], \
-                                   '406 Not Acceptable')
+        return _best_dispatcher_error_response(reason)
 
 
 def _normalise_mimetype(mimetype):
@@ -206,13 +205,12 @@ class Resource(object):
         if dispatchers is None:
             return http.method_not_allowed(', '.join(self.request_dispatchers))
         # Look up the best dispatcher
-        dispatcher = _best_dispatcher(dispatchers, request)
+        dispatcher, reason = _best_dispatcher(dispatchers, request)
         if dispatcher is not None:
             (callable, match) = dispatcher
             return _dispatch(request, match, lambda r: callable(self, r))
-        # No match, send 406
-        return http.not_acceptable([('Content-Type', 'text/plain')], \
-                                   '406 Not Acceptable')
+        # No match
+        return _best_dispatcher_error_response(reason)
 
     @HEAD()
     def head(self, request):
@@ -264,22 +262,39 @@ def _dispatch(request, match, func):
 
 def _best_dispatcher(dispatchers, request):
     """
-    Find the best dispatcher for the request.
+    Find the best dispatcher for the request. If no dispatcher is found a
+    reason, in the form of the relevant status code, is also returned.
     """
     # Use content negotation to filter the dispatchers to an ordered list of
     # only those that match.
+
+    # For content type.
     content_type = request.headers.get('content-type')
     if content_type:
         dispatchers = _filter_dispatchers_on_content_type(dispatchers,
                                                           str(content_type))
+    if not dispatchers:
+        return None, 415
+
+    # For accept.
     accept = str(request.accept)
     if accept:
         dispatchers = _filter_dispatchers_on_accept(dispatchers, accept)
-    # Return the best match or None
-    if dispatchers:
-        return dispatchers[0]
-    else:
-        return None
+    if not dispatchers:
+        return None, 406
+
+    # Return the best match.
+    return dispatchers[0], None
+
+
+def _best_dispatcher_error_response(reason):
+    """ Create an HTTP response for a _best_dispatcher failure. """
+    if reason == 406:
+        return http.not_acceptable([('Content-Type', 'text/plain')], \
+                                    '406 Not Acceptable')
+    elif reason == 415:
+        return http.unsupported_media_type([('Content-Type', 'text/plain')], \
+                                           '415 Unsupported Media Type')
 
 
 def _filter_dispatchers_on_content_type(dispatchers, content_type):

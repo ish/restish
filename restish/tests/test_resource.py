@@ -630,6 +630,15 @@ class TestAcceptContentNegotiation(unittest.TestCase):
         self.assertEquals(response.headers['Content-Type'], 'text/html')
         self.assertEquals(response.app_iter, ['<p>Hello!</p>'])
 
+    def test_no_match_after_no_content_type_match(self):
+        class Resource(resource.Resource):
+            @resource.GET(content_type="appliction/json")
+            def anything(self, request):
+                pass
+        response = make_app(Resource()).get('/', headers={'Content-Type': 'application/xml',
+                                                          'Accept': 'text/plain'},
+                                            status=415)
+
 
 class TestContentTypeContentNegotiation(unittest.TestCase):
 
@@ -696,7 +705,7 @@ class TestContentTypeContentNegotiation(unittest.TestCase):
             def json(self, request):
                 return http.ok([('Content-Type', 'application/json')], 'json')
         response = make_app(Resource()).post('/', headers={'Content-Type': 'application/xml'},
-                                             status=406)
+                                             status=415)
 
     def test_specificity(self):
         """
