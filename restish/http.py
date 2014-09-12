@@ -507,6 +507,22 @@ class ConflictError(error.HTTPClientError):
     response_factory = staticmethod(conflict)
 
 
+def unsupported_media_type(headers, body):
+    """
+    415 Unsupported Media Type
+
+    The server is refusing to service the request because the entity of the
+    request is in a format not supported by the requested resource for the
+    requested method.
+    """
+    return Response('415 Unsupported Media Type', headers, body)
+
+
+class UnsupportedMediaType(error.HTTPClientError):
+    """ Exception for the 415 http code """
+    response_factory = staticmethod(unsupported_media_type)
+
+
 # Server Error 5xx
 
 def internal_server_error(headers=None, body=None):

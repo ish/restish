@@ -239,6 +239,15 @@ class TestClientErrorResponseFactories(unittest.TestCase):
         r = exc.make_response()
         assert r.status.startswith('409')
 
+    def test_unsupported_media_type(self):
+        r = http.unsupported_media_type([('Content-Type', 'text/plain')], '415 Unsupported Media Type')
+        assert r.status.startswith('415')
+        assert r.headers['Content-Type'] == 'text/plain'
+        assert '415 Unsupported Media Type' in r.body
+        exc = http.UnsupportedMediaType([('Content-Type', 'text/plain')], '415 Unsupported Media Type')
+        r = exc.make_response()
+        assert r.status.startswith('415')
+
 
 class TestServerErrorResponseFactories(unittest.TestCase):
 
