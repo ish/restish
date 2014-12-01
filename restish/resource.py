@@ -76,7 +76,7 @@ def _find_annotated_funcs(clsattrs, annotation):
 
 class MethodDecorator(object):
     """
-    content negotition decorator base class. See DELETE, GET, PUT, POST
+    content negotiation decorator base class. See DELETE, GET, PUT, POST, PATCH
     """
 
     method = None
