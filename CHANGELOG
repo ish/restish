@@ -2,6 +2,20 @@
 Changelog
 =========
 
+0.13.0 (2015-02-04)
+-------------------
+
+* Fix handling of Accept header with param separator but no actual param.
+* A Content-Type header is no longer automatically set for 204 & 304 responses.
+* Improved error responses:
+    * "400 Bad Request" if the URL cannot be parsed.
+    * "415 Unsupported Media Type" after failing to match on content type.
+* Added URL aliases for common ops: q->replace_query, rmq->remove_query.
+* Added response helpers for "204 No Content" and "415 Unsupported Media Type".
+* Removed decorator dependency.
+* Various docstring fixes and improvements.
+* Disabled django template support tests (for now).
+
 0.12.1 (2011-03-16)
 -------------------
 
