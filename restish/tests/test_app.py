@@ -160,6 +160,12 @@ class TestApp(unittest.TestCase):
         A = app.RestishApp(resource)
         assert webtest.TestApp(A).get('/').body == 'Three ... two ... one ... BANG!'
 
+    def test_badly_encoded_url(self):
+        def resource(request):
+            return http.ok([], "")
+        A = app.RestishApp(resource)
+        assert webtest.TestApp(A).get('/..%C0%AF..%C0%AF..%C0%AF', status=400)
+
 
 class CallableResource(object):
     def __call__(self, request):

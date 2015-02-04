@@ -30,7 +30,10 @@ class RestishApp(object):
         # Calculate the path segments relative to the application,
         # special-casing requests for the the root segment (because we already
         # have a reference to the root resource).
-        segments = url.split_path(request.environ['PATH_INFO'])
+        try:
+            segments = url.split_path(request.environ['PATH_INFO'])
+        except UnicodeDecodeError:
+            return http.bad_request()
         if segments == ['']:
             segments = []
         # Recurse into the resource hierarchy until we run out of segments or
