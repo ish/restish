@@ -1,0 +1,3 @@
+include *.txt AUTHORS CHANGELOG FAQ INSTALL NEWS README THANKS
+recursive-include examples *.py *.ini README *.html
+recursive-include docs-build *
