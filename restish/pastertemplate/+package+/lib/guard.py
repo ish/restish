@@ -17,4 +17,3 @@ def authenticated(request, obj):
     """
     if not request.environ.get('REMOTE_USER'):
         raise GuardError("Not authenticated.")
-

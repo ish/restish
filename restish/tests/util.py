@@ -11,4 +11,3 @@ def wsgi_out(app, environ):
     if hasattr(result, 'close'):
         result.close()
     return out
-

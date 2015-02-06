@@ -610,4 +610,3 @@ class GatewayTimeoutError(error.HTTPServerError):
     504 Gateway Timeout exception.
     """
     response_factory = staticmethod(gateway_timeout)
-

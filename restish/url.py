@@ -453,4 +453,3 @@ def normalise_path(path):
         segs.append('')
 
     return join_path(segs)
-

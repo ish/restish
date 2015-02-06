@@ -67,4 +67,3 @@ class ApplicationURLAccessor(object):
         # the request as the 1st positional arg.
         func = getattr(self.module, name)
         return lambda *args, **kwargs: func(self.request, *args, **kwargs)
-

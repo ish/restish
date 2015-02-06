@@ -43,4 +43,3 @@ class HTTPServerError(HTTPError):
     """
     Base class for all HTTP server (5xx) errors.
     """
-

@@ -107,4 +107,3 @@ def _element_cache(request, parent):
     """
     cache = request.environ.setdefault('restish.page.element_cache', {})
     return cache.setdefault(parent, {})
-

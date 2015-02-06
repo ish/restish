@@ -55,4 +55,3 @@ class TestStreaming(unittest.TestCase):
         assert R.body == 'file'
         assert f.closed
         os.remove(filename)
-

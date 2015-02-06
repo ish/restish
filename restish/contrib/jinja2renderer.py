@@ -35,4 +35,3 @@ class Jinja2Renderer(object):
         if encoding is None:
             return template.render(**args)
         return template.render(**args).encode(encoding)
-

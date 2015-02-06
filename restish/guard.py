@@ -122,4 +122,3 @@ def _default_error_handler(request, obj, errors):
     raise http.UnauthorizedError(
             [('Content-Type', 'text/plain')],
             """401 Unauthorized\n\n%s\n""" % errors_text)
-

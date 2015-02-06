@@ -49,4 +49,3 @@ class TempitaFileSystemLoader(object):
             basedir = os.path.dirname(from_template.name)
         filename = os.path.join(basedir, name)
         return self._get_template(filename)
-

@@ -209,4 +209,3 @@ def _missing_renderer(*a, **k):
     """
     raise TypeError("Please configure templating with a renderer before "
                     "using it.")
-

@@ -42,4 +42,3 @@ class TestWSGI(unittest.TestCase):
         response = testapp.get('/foo/bar', status=200)
         assert response.headers['Content-Type'] == 'text/plain'
         assert response.body == 'SCRIPT_NAME: /foo, PATH_INFO: /bar'
-

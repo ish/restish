@@ -34,4 +34,3 @@ class GenshiRenderer(object):
     def __call__(self, template, args={}, encoding=None):
         return self.loader.load(template).generate(**args).render(
             encoding=encoding)
-

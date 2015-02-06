@@ -41,4 +41,3 @@ class DjangoRenderer(object):
         if encoding is None:
             return  content
         return content.encode(encoding)
-

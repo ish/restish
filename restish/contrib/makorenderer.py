@@ -46,4 +46,3 @@ class MakoRenderer(object):
             return template.render_unicode(**args).encode(encoding)
         else:
             return template.render(**args)
-

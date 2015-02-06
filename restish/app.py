@@ -67,4 +67,3 @@ class RestishApp(object):
         while not isinstance(resource_or_response, http.Response):
             resource_or_response = resource_or_response(request)
         return resource_or_response
-
