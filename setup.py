@@ -33,7 +33,9 @@ or database engine.
       url='http://ish.io/projects/show/restish',
       license='BSD',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-      include_package_data=True,
+      package_data={
+          'restish': ['restish/pastertemplate/*'],
+      },
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
