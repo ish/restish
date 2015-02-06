@@ -2,6 +2,11 @@
 Changelog
 =========
 
+0.13.2 (2015-02-06)
+-------------------
+
+* Really include all source files in dist - paster template app was missing.
+
 0.13.1 (2015-02-04)
 -------------------
 
