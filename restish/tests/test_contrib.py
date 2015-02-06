@@ -175,9 +175,7 @@ try:
             # Configure Django's global config a bit. Yuck, yuck, yuck!
             if not settings.configured:
                 settings.configure(
-                    TEMPLATE_LOADERS=[
-                    'django.template.loaders.filesystem.Loader'],
-#                    'django.template.loaders.filesystem.load_template_source'],
+                    TEMPLATE_LOADERS=['django.template.loaders.filesystem.Loader'],
                 )
             # Configure the per-test settings.
             settings.TEMPLATE_DIRS = [self.tmpdir]
