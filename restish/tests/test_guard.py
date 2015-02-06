@@ -40,7 +40,7 @@ class TestGuard(unittest.TestCase):
         request = http.Request.blank('/')
         try:
             Resource().denied(request)
-        except http.UnauthorizedError, e:
+        except http.UnauthorizedError as e:
             response = e.make_response()
             assert response.headers['Content-Type'] == 'text/plain'
             assert response.body == """401 Unauthorized\n\nchecker #1 failed\n"""
@@ -72,7 +72,7 @@ class TestGuard(unittest.TestCase):
                 pass
         try:
             Resource()(http.Request.blank('/'))
-        except http.UnauthorizedError, e:
+        except http.UnauthorizedError as e:
             response = e.make_response()
             assert response.headers['Content-Type'] == 'text/plain'
             assert response.body == """401 Unauthorized\n\nchecker #1 failed\nchecker #2 failed\n"""

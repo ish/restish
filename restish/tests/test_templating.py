@@ -105,7 +105,7 @@ class TestRendering(unittest.TestCase):
         try:
             templating.Templating(None).render(http.Request.blank('/'),
                                                'foo.html')
-        except TypeError, e:
+        except TypeError as e:
             assert 'renderer' in unicode(e)
 
     def test_render(self):

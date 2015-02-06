@@ -109,7 +109,7 @@ def _run_guard_checkers(checkers, request, obj, error_handler):
     for checker in checkers:
         try:
             checker(request, obj)
-        except GuardError, e:
+        except GuardError as e:
             errors.append(e.message)
     return errors
 

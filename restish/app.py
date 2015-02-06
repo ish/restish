@@ -16,7 +16,7 @@ class RestishApp(object):
             # Locate the resource and convert it to a response.
             resource_or_response = self.locate_resource(request)
             response = self.get_response(request, resource_or_response)
-        except error.HTTPError, e:
+        except error.HTTPError as e:
             response = e.make_response()
         # Send the response to the WSGI parent.
         start_response(response.status, response.headerlist)
