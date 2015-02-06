@@ -632,7 +632,7 @@ class TestAcceptContentNegotiation(unittest.TestCase):
 
     def test_no_match_after_no_content_type_match(self):
         class Resource(resource.Resource):
-            @resource.GET(content_type="appliction/json")
+            @resource.GET(content_type="application/json")
             def anything(self, request):
                 pass
         response = make_app(Resource()).get('/', headers={'Content-Type': 'application/xml',
